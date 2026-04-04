@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Mi Español</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#D62828">
+<meta name="theme-color" content="#7B5EA7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mi Español">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{
-  --red:#D62828;--red-dark:#B71C1C;--orange:#F77F00;--yellow:#FCBF49;
-  --bg:#FFF8F0;--white:#FFFFFF;--text:#2D2D2D;--muted:#777;
-  --green:#2E7D32;--green-bg:#E8F5E9;--err:#C62828;--err-bg:#FFEBEE;
-  --blue:#1565C0;--blue-bg:#E3F2FD;
-  --border:#E0D5C8;--shadow:0 2px 10px rgba(0,0,0,0.09);
+  --purple:#7B5EA7;--purple-dark:#5D4087;--purple-light:#EDE7F6;--purple-mid:#A07DC8;
+  --gold:#F5C842;--gold-dark:#D4A800;
+  --bg:#FAF8FF;--white:#FFFFFF;--text:#2C1E52;--muted:#9B8EC4;
+  --green:#52A87C;--green-bg:#EAF6EF;--err:#DC5F74;--err-bg:#FDECEF;
+  --blue:#4A7FBF;--blue-bg:#EBF3FD;
+  --border:#DDD4F5;--shadow:0 3px 14px rgba(123,94,167,0.13);
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
 body{max-width:480px;margin:0 auto;}
 
 /* ── HEADER ── */
-.hdr{background:var(--red);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.2);}
-.hdr-title{font-size:18px;font-weight:700;flex:1;}
+.hdr{background:var(--purple);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(93,64,135,.3);}
+.hdr-title{font-size:18px;font-weight:800;flex:1;letter-spacing:-.2px;}
 .hdr-sub{font-size:12px;opacity:.8;margin-top:1px;}
 .back{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px;line-height:1;flex-shrink:0;}
 
@@ -31,100 +32,106 @@ body{max-width:480px;margin:0 auto;}
 .scr{display:none;padding:18px;min-height:calc(100vh - 54px);}
 .scr.on{display:block;}
 
-/* ── HOME ── */
-.hero{background:linear-gradient(135deg,var(--red),var(--orange));border-radius:18px;padding:22px;color:#fff;margin-bottom:16px;}
-.hero-title{font-size:22px;font-weight:800;margin-bottom:4px;}
-.hero-sub{font-size:13px;opacity:.85;}
-.hero-stats{display:flex;gap:10px;margin-top:14px;}
-.stat{background:rgba(255,255,255,.2);border-radius:10px;padding:8px 12px;text-align:center;flex:1;}
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-mid) 60%,#C49DE8 100%);border-radius:22px;padding:22px 22px 0;color:#fff;margin-bottom:16px;overflow:hidden;position:relative;}
+.hero-title{font-size:22px;font-weight:800;margin-bottom:3px;}
+.hero-sub{font-size:13px;opacity:.85;margin-bottom:14px;}
+.hero-stats{display:flex;gap:10px;margin-bottom:0;position:relative;z-index:1;}
+.stat{background:rgba(255,255,255,.18);border-radius:12px;padding:8px 12px;text-align:center;flex:1;backdrop-filter:blur(4px);}
 .stat-n{font-size:20px;font-weight:800;}
-.stat-l{font-size:10px;opacity:.85;}
+.stat-l{font-size:10px;opacity:.85;margin-top:1px;}
+.hero-flowers{position:absolute;bottom:0;right:0;width:160px;height:90px;opacity:.35;}
 
 /* ── DUE CARD ── */
-.due-card{background:var(--blue-bg);border:2px solid var(--blue);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.due-card{background:var(--blue-bg);border:2px solid var(--blue);border-radius:16px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
 .due-card.hidden{display:none;}
-.due-icon{font-size:28px;flex-shrink:0;}
+.due-icon{font-size:26px;flex-shrink:0;}
 .due-text{flex:1;}
 .due-title{font-size:14px;font-weight:700;color:var(--blue);}
 .due-sub{font-size:12px;color:var(--muted);margin-top:2px;}
 .due-btn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}
 
-.lesson-card{background:var(--white);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
+/* ── LESSON CARD ── */
+.lesson-card{background:var(--white);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
 .lc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
-.lc-title{font-size:16px;font-weight:700;color:var(--red);}
+.lc-title{font-size:16px;font-weight:800;color:var(--purple);}
 .lc-date{font-size:12px;color:var(--muted);}
-.lc-badge{background:var(--yellow);color:#5a3e00;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;}
+.lc-badge{background:var(--gold);color:#5a3e00;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;}
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.mbtn{background:var(--bg);border:2px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none;}
-.mbtn:active{transform:scale(.95);}
+.mbtn{background:var(--bg);border:2px solid var(--border);border-radius:16px;padding:16px 10px;text-align:center;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none;}
+.mbtn:active{transform:scale(.95);background:var(--purple-light);}
 .mbtn-icon{font-size:24px;margin-bottom:6px;}
 .mbtn-label{font-size:11px;font-weight:700;color:var(--text);line-height:1.3;}
 
 /* ── PROGRESS ── */
-.prog-wrap{height:5px;background:var(--border);border-radius:3px;margin-bottom:14px;overflow:hidden;}
-.prog-bar{height:100%;background:var(--red);border-radius:3px;transition:width .3s;}
+.prog-wrap{height:6px;background:var(--border);border-radius:3px;margin-bottom:14px;overflow:hidden;}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--purple),var(--purple-mid));border-radius:3px;transition:width .35s;}
 .prog-label{text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px;}
 
-/* ── SPEAK BUTTON ── */
-.speak-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:4px 6px;border-radius:8px;transition:background .15s;color:var(--red);flex-shrink:0;}
-.speak-btn:active{background:rgba(214,40,40,.1);}
-.speak-btn.speaking{animation:pulse 0.8s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+/* ── NAV ROW (prev/next) ── */
+.nav-row{display:flex;gap:8px;margin-bottom:14px;}
+.nav-btn{flex:1;padding:10px;border:2px solid var(--border);border-radius:12px;background:var(--white);color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;}
+.nav-btn:disabled{opacity:.3;cursor:default;}
+.nav-btn:not(:disabled):active{transform:scale(.96);}
+.nav-btn.fwd{background:var(--purple);color:#fff;border-color:var(--purple);}
+
+/* ── SPEAK BTN ── */
+.speak-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:4px 6px;border-radius:8px;transition:background .15s;color:var(--purple);flex-shrink:0;}
+.speak-btn:active{background:rgba(123,94,167,.12);}
 
 /* ── FLASHCARD ── */
-.fc-wrap{position:relative;}
-.fc{background:var(--white);border-radius:22px;min-height:200px;padding:32px 24px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.11);margin-bottom:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .15s;}
+.fc{background:var(--white);border-radius:24px;min-height:200px;padding:32px 24px;text-align:center;box-shadow:var(--shadow);margin-bottom:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .15s;cursor:pointer;border:2px solid transparent;}
 .fc:active{transform:scale(.98);}
+.fc.review-mode{border-color:var(--purple-light);cursor:default;}
 .fc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;}
 .fc-word-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
-.fc-word{font-size:36px;font-weight:800;color:var(--red);}
+.fc-word{font-size:36px;font-weight:800;color:var(--purple);}
 .fc-article{font-size:14px;color:var(--muted);margin-bottom:12px;}
 .fc-answer{font-size:24px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;margin-top:10px;}
 .fc-answer.show{opacity:1;}
 .fc-hint{font-size:13px;color:var(--muted);margin-top:16px;}
 .fc-hint.hide{display:none;}
+.fc-review-tag{font-size:12px;color:var(--purple);background:var(--purple-light);padding:4px 10px;border-radius:20px;margin-top:10px;display:none;}
+.fc-review-tag.show{display:inline-block;}
 
-/* ── SR VERDICT BUTTONS ── */
+/* ── VERDICT BUTTONS ── */
 .vbtn-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;}
-.vbtn-row.two{grid-template-columns:1fr 1fr;}
 .vbtn-row.hidden{display:none;}
-.vbtn{padding:12px 4px;border:2px solid;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;transition:transform .15s;text-align:center;}
+.vbtn{padding:12px 4px;border:2px solid;border-radius:14px;font-size:13px;font-weight:700;cursor:pointer;transition:transform .15s;text-align:center;}
 .vbtn:active{transform:scale(.95);}
 .vbtn.great{background:var(--green-bg);color:var(--green);border-color:var(--green);}
-.vbtn.ok{background:#FFF8E1;color:#F57F17;border-color:#F9A825;}
+.vbtn.ok{background:#FFF8E1;color:#C68A00;border-color:#F0C030;}
 .vbtn.no{background:var(--err-bg);color:var(--err);border-color:var(--err);}
 .vbtn-hint{font-size:10px;display:block;margin-top:2px;opacity:.7;font-weight:400;}
 
-/* ── SR BADGE ── */
-.sr-badge{display:inline-block;background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
-
 /* ── FILL IN BLANK ── */
-.ex-card{background:var(--white);border-radius:16px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px;}
-.ex-verb-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:10px;}
+.ex-card{background:var(--white);border-radius:20px;padding:22px;box-shadow:var(--shadow);margin-bottom:14px;}
+.ex-verb-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--purple-mid);margin-bottom:10px;}
 .ex-sentence{font-size:17px;line-height:1.8;margin-bottom:16px;}
-.blank-ph{display:inline-block;min-width:80px;border-bottom:2.5px solid var(--red);margin:0 3px;border-radius:3px;background:rgba(214,40,40,.07);padding:0 6px;}
+.blank-ph{display:inline-block;min-width:80px;border-bottom:2.5px solid var(--purple);margin:0 3px;border-radius:3px;background:rgba(123,94,167,.07);padding:0 6px;}
 .choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
 .choice-btn{padding:14px 8px;border:2px solid var(--border);border-radius:14px;font-size:15px;font-weight:700;background:var(--white);cursor:pointer;transition:all .15s;color:var(--text);-webkit-user-select:none;user-select:none;}
-.choice-btn:active{transform:scale(.95);}
+.choice-btn:not(:disabled):active{transform:scale(.95);}
 .choice-btn.correct{background:var(--green-bg);border-color:var(--green);color:var(--green);}
 .choice-btn.wrong{background:var(--err-bg);border-color:var(--err);color:var(--err);}
 .choice-btn:disabled{cursor:default;transform:none;}
-.ex-reveal{background:var(--blue-bg);border:1.5px solid var(--blue);border-radius:12px;padding:14px 16px;margin-bottom:4px;display:none;}
+.ex-reveal{background:var(--blue-bg);border:1.5px solid var(--blue);border-radius:14px;padding:14px 16px;margin-bottom:4px;display:none;}
 .ex-reveal.show{display:block;}
 .ex-reveal-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:6px;}
 .ex-reveal-es{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:5px;line-height:1.5;}
 .ex-reveal-en{font-size:13px;color:var(--muted);font-style:italic;}
 
 /* ── BUTTONS ── */
-.primary-btn{width:100%;padding:15px;background:var(--red);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;}
-.primary-btn:active{background:var(--red-dark);transform:scale(.98);}
-.secondary-btn{width:100%;padding:13px;background:transparent;color:var(--red);border:2px solid var(--red);border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
-.orange-btn{background:var(--orange);}
+.primary-btn{width:100%;padding:15px;background:var(--purple);color:#fff;border:none;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;}
+.primary-btn:active{background:var(--purple-dark);transform:scale(.98);}
+.secondary-btn{width:100%;padding:13px;background:transparent;color:var(--purple);border:2px solid var(--purple);border-radius:16px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.gold-btn{background:var(--gold);color:var(--text);}
+.gold-btn:active{background:var(--gold-dark);}
 
 /* ── CONVERSATION ── */
-.conv-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
-.conv-ctx{font-size:12px;color:var(--muted);background:var(--bg);border-radius:8px;padding:6px 10px;margin-bottom:10px;}
-.conv-bubble{background:var(--red);color:#fff;padding:16px 18px;border-radius:18px 18px 4px 18px;font-size:18px;line-height:1.5;flex:1;}
+.conv-ctx{font-size:12px;color:var(--muted);background:var(--purple-light);border-radius:10px;padding:6px 12px;margin-bottom:10px;display:inline-block;}
+.conv-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px;}
+.conv-bubble{background:var(--purple);color:#fff;padding:16px 18px;border-radius:18px 18px 4px 18px;font-size:18px;line-height:1.5;flex:1;}
 .conv-en{font-size:13px;color:var(--muted);margin-bottom:14px;padding-left:4px;font-style:italic;}
 .conv-reveal{background:var(--green-bg);border:2px solid var(--green);border-radius:4px 18px 18px 18px;padding:15px 18px;margin-top:12px;display:none;}
 .conv-reveal.show{display:block;}
@@ -140,55 +147,68 @@ body{max-width:480px;margin:0 auto;}
 .score-emoji{font-size:64px;margin-bottom:14px;}
 .score-title{font-size:24px;font-weight:800;margin-bottom:6px;}
 .score-sub{font-size:15px;color:var(--muted);margin-bottom:24px;}
-.score-row{display:flex;gap:12px;margin-bottom:24px;}
-.score-box{flex:1;border-radius:14px;padding:16px;text-align:center;}
+.score-row{display:flex;gap:12px;margin-bottom:18px;}
+.score-box{flex:1;border-radius:16px;padding:16px;text-align:center;}
 .score-box.c{background:var(--green-bg);color:var(--green);}
 .score-box.w{background:var(--err-bg);color:var(--err);}
 .score-n{font-size:30px;font-weight:800;}
 .score-l{font-size:12px;font-weight:600;margin-top:2px;}
-.sr-info{background:var(--blue-bg);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--blue);text-align:left;}
+.sr-info{background:var(--purple-light);border-radius:12px;padding:14px;margin-bottom:18px;font-size:13px;color:var(--purple-dark);text-align:left;line-height:1.6;}
+
+/* ── BACKUP CARD ── */
+.backup-card{background:var(--white);border-radius:18px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;}
+.backup-icon{font-size:28px;flex-shrink:0;}
+.backup-text{flex:1;}
+.backup-title{font-size:14px;font-weight:800;color:var(--text);}
+.backup-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.backup-btns{display:flex;gap:8px;flex-shrink:0;}
+.backup-btn{background:var(--purple-light);color:var(--purple-dark);border:none;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.backup-btn:active{background:var(--border);}
+.backup-btn.imp{background:var(--gold);color:#5a3e00;}
+.backup-btn.imp:active{background:var(--gold-dark);}
+
+/* ── RESUME MODAL ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(44,30,82,.5);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-backdrop.show{display:flex;}
+.modal-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:26px 22px 36px;width:100%;max-width:480px;}
+.modal-title{font-size:19px;font-weight:800;margin-bottom:6px;color:var(--text);}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.5;}
 
 /* ── NOTES ── */
-.note-section{background:var(--white);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px;}
-.note-section h3{font-size:13px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+.note-section{background:var(--white);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px;}
+.note-section h3{font-size:13px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
 .vocab-list{display:flex;flex-direction:column;gap:6px;}
-.vocab-item{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;}
+.vocab-item{background:var(--bg);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;}
 .vocab-text{flex:1;}
-.vocab-es{font-size:15px;font-weight:700;color:var(--red);}
+.vocab-es{font-size:15px;font-weight:700;color:var(--purple);}
 .vocab-en{font-size:12px;color:var(--muted);margin-top:1px;}
 .conj-table{width:100%;border-collapse:collapse;font-size:14px;}
 .conj-table th{text-align:left;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border);}
 .conj-table td{padding:7px 0;border-bottom:1px solid var(--border);}
 .conj-table td:first-child{color:var(--muted);width:40%;}
-.conj-table td:nth-child(2){font-weight:700;color:var(--red);width:30%;}
+.conj-table td:nth-child(2){font-weight:700;color:var(--purple);width:30%;}
 .conj-table td:last-child{font-size:12px;color:var(--muted);}
 .grammar-rule{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;line-height:1.5;}
-.grammar-rule strong{color:var(--red);}
-
-/* ── RESUME MODAL ── */
-.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center;}
-.modal-backdrop.show{display:flex;}
-.modal-sheet{background:var(--white);border-radius:22px 22px 0 0;padding:26px 22px 36px;width:100%;max-width:480px;}
-.modal-title{font-size:19px;font-weight:800;margin-bottom:6px;}
-.modal-sub{font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.5;}
+.grammar-rule strong{color:var(--purple);}
 </style>
 </head>
 <body>
 
-<!-- ════════════════ RESUME MODAL ════════════════ -->
+<!-- ══ RESUME MODAL ══ -->
 <div class="modal-backdrop" id="resume-modal">
   <div class="modal-sheet">
-    <div class="modal-title">Continue where you left off?</div>
+    <div class="modal-title">Continue where you left off? 🌿</div>
     <div class="modal-sub" id="resume-sub"></div>
     <button class="primary-btn" onclick="resumeSession()">▶ Continue</button>
     <button class="secondary-btn" onclick="startFresh()">↺ Start Fresh</button>
   </div>
 </div>
 
-<!-- ════════════════ HOME ════════════════ -->
+<!-- ══ HOME ══ -->
 <div id="s-home" class="scr on">
-  <div class="hdr"><div><div class="hdr-title">Mi Español 🇪🇸</div><div class="hdr-sub">Let's practice!</div></div></div>
+  <div class="hdr"><div><div class="hdr-title">Mi Español 💜</div><div class="hdr-sub">Let's practice!</div></div></div>
   <div style="padding:18px;">
+
     <div class="hero">
       <div class="hero-title">Lesson 1</div>
       <div class="hero-sub">April 3, 2026 · ser / tener / llamarse</div>
@@ -197,14 +217,30 @@ body{max-width:480px;margin:0 auto;}
         <div class="stat"><div class="stat-n">3</div><div class="stat-l">verbs</div></div>
         <div class="stat"><div class="stat-n" id="sr-streak">0</div><div class="stat-l">day streak</div></div>
       </div>
+      <!-- Jacaranda SVG decoration -->
+      <svg class="hero-flowers" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M160,80 Q130,60 100,50 Q70,40 40,45 Q20,48 0,55" stroke="white" stroke-width="1.5" fill="none" opacity=".5"/>
+        <path d="M120,50 Q115,30 105,20" stroke="white" stroke-width="1" fill="none" opacity=".4"/>
+        <path d="M80,48 Q75,28 68,18" stroke="white" stroke-width="1" fill="none" opacity=".4"/>
+        <circle cx="108" cy="17" r="5" fill="white" opacity=".5"/>
+        <circle cx="114" cy="12" r="4" fill="white" opacity=".4"/>
+        <circle cx="102" cy="11" r="4" fill="white" opacity=".35"/>
+        <circle cx="108" cy="7"  r="3" fill="white" opacity=".3"/>
+        <circle cx="70"  cy="15" r="5" fill="white" opacity=".5"/>
+        <circle cx="76"  cy="10" r="4" fill="white" opacity=".4"/>
+        <circle cx="64"  cy="10" r="4" fill="white" opacity=".35"/>
+        <circle cx="70"  cy="5"  r="3" fill="white" opacity=".3"/>
+        <circle cx="135" cy="42" r="4" fill="white" opacity=".4"/>
+        <circle cx="141" cy="37" r="3" fill="white" opacity=".35"/>
+        <circle cx="129" cy="37" r="3" fill="white" opacity=".3"/>
+      </svg>
     </div>
 
-    <!-- Due today -->
     <div class="due-card hidden" id="due-card">
       <div class="due-icon">📅</div>
       <div class="due-text">
         <div class="due-title">Due for review today</div>
-        <div class="due-sub" id="due-sub">X words due based on your memory curve</div>
+        <div class="due-sub" id="due-sub"></div>
       </div>
       <button class="due-btn" onclick="startMode('review')">Review</button>
     </div>
@@ -212,32 +248,35 @@ body{max-width:480px;margin:0 auto;}
     <div class="lesson-card">
       <div class="lc-head">
         <div><div class="lc-title">Lesson 1</div><div class="lc-date">April 3, 2026</div></div>
-        <div class="lc-badge">New</div>
+        <div class="lc-badge">New ✨</div>
       </div>
       <div class="mode-grid">
-        <div class="mbtn" onclick="startMode('es-en')">
-          <div class="mbtn-icon">🇪🇸→🇺🇸</div>
-          <div class="mbtn-label">Spanish → English</div>
-        </div>
-        <div class="mbtn" onclick="startMode('en-es')">
-          <div class="mbtn-icon">🇺🇸→🇪🇸</div>
-          <div class="mbtn-label">English → Spanish</div>
-        </div>
-        <div class="mbtn" onclick="startMode('fill')">
-          <div class="mbtn-icon">✏️</div>
-          <div class="mbtn-label">Fill in the Blank</div>
-        </div>
-        <div class="mbtn" onclick="startMode('conv')">
-          <div class="mbtn-icon">🎙️</div>
-          <div class="mbtn-label">Dialogue Practice</div>
-        </div>
+        <div class="mbtn" onclick="startMode('es-en')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+        <div class="mbtn" onclick="startMode('fill')"><div class="mbtn-icon">✏️</div><div class="mbtn-label">Fill in the Blank</div></div>
+        <div class="mbtn" onclick="startMode('conv')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
       </div>
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes')">📖 View Class Notes</button>
     </div>
+
+    <!-- Backup / export-import -->
+    <div class="backup-card">
+      <div class="backup-icon">💾</div>
+      <div class="backup-text">
+        <div class="backup-title">My Progress</div>
+        <div class="backup-sub">Save or restore your memory curve data</div>
+      </div>
+      <div class="backup-btns">
+        <button class="backup-btn" onclick="exportProgress()">⬇ Export</button>
+        <button class="backup-btn imp" onclick="document.getElementById('import-input').click()">⬆ Import</button>
+      </div>
+    </div>
+    <input type="file" id="import-input" accept=".json" style="display:none;" onchange="importProgress(this)">
+
   </div>
 </div>
 
-<!-- ════════════════ FLASHCARD ════════════════ -->
+<!-- ══ FLASHCARD ══ -->
 <div id="s-flash" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
@@ -250,21 +289,26 @@ body{max-width:480px;margin:0 auto;}
       <div class="fc-label" id="fc-label">What does this mean?</div>
       <div class="fc-word-row">
         <div class="fc-word" id="fc-word"></div>
-        <button class="speak-btn" id="fc-speak-btn" onclick="event.stopPropagation();speakCurrent()" title="Listen">🔊</button>
+        <button class="speak-btn" onclick="event.stopPropagation();speakCurrent()" title="Listen">🔊</button>
       </div>
       <div class="fc-article" id="fc-article"></div>
       <div class="fc-answer" id="fc-answer"></div>
       <div class="fc-hint" id="fc-hint">Tap to reveal →</div>
+      <div class="fc-review-tag" id="fc-review-tag">👀 Already answered — review only</div>
     </div>
     <div class="vbtn-row hidden" id="vbtn-row">
-      <button class="vbtn great" onclick="verdict(5)">✓ Got it<span class="vbtn-hint">next: ~6 days</span></button>
-      <button class="vbtn ok"    onclick="verdict(3)">🤔 Sort of<span class="vbtn-hint">next: tomorrow</span></button>
-      <button class="vbtn no"    onclick="verdict(1)">✗ Missed it<span class="vbtn-hint">review today</span></button>
+      <button class="vbtn great" onclick="verdict(5)">✓ Got it<span class="vbtn-hint">~6 days</span></button>
+      <button class="vbtn ok"    onclick="verdict(3)">🤔 Sort of<span class="vbtn-hint">tomorrow</span></button>
+      <button class="vbtn no"    onclick="verdict(1)">✗ Missed<span class="vbtn-hint">today</span></button>
+    </div>
+    <div class="nav-row" style="margin-top:10px;">
+      <button class="nav-btn" id="flash-prev" onclick="prevCard()" disabled>← Previous</button>
+      <button class="nav-btn fwd hidden" id="flash-skip" onclick="skipCard()">Next →</button>
     </div>
   </div>
 </div>
 
-<!-- ════════════════ FILL IN THE BLANK ════════════════ -->
+<!-- ══ FILL IN THE BLANK ══ -->
 <div id="s-fill" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
@@ -283,11 +327,14 @@ body{max-width:480px;margin:0 auto;}
       <div class="ex-reveal-es" id="ex-reveal-es"></div>
       <div class="ex-reveal-en" id="ex-reveal-en"></div>
     </div>
-    <button class="primary-btn orange-btn" id="fill-next-btn" onclick="nextFill()" style="display:none;">Next →</button>
+    <div class="nav-row">
+      <button class="nav-btn" id="fill-prev" onclick="prevFill()" disabled>← Previous</button>
+      <button class="nav-btn fwd hidden" id="fill-next" onclick="nextFill()">Next →</button>
+    </div>
   </div>
 </div>
 
-<!-- ════════════════ CONVERSATION ════════════════ -->
+<!-- ══ CONVERSATION ══ -->
 <div id="s-conv" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
@@ -299,45 +346,40 @@ body{max-width:480px;margin:0 auto;}
     <div class="conv-ctx" id="conv-ctx"></div>
     <div class="conv-top">
       <div class="conv-bubble" id="conv-question"></div>
-      <button class="speak-btn" style="margin-top:8px;font-size:22px;" onclick="speakQuestion()" title="Hear question">🔊</button>
+      <button class="speak-btn" style="margin-top:8px;font-size:22px;" onclick="speakQuestion()">🔊</button>
     </div>
     <div class="conv-en" id="conv-q-en"></div>
-
     <div class="conv-reveal" id="conv-reveal">
       <div class="conv-reveal-label">Model Answer</div>
       <div class="conv-ans-row">
-        <div>
-          <div class="conv-ans-es" id="conv-ans-es"></div>
-          <div class="conv-ans-en" id="conv-ans-en"></div>
-        </div>
-        <button class="speak-btn" style="font-size:22px;" onclick="speakAnswer()" title="Hear answer">🔊</button>
+        <div><div class="conv-ans-es" id="conv-ans-es"></div><div class="conv-ans-en" id="conv-ans-en"></div></div>
+        <button class="speak-btn" style="font-size:22px;" onclick="speakAnswer()">🔊</button>
       </div>
       <div class="conv-note" id="conv-note"></div>
     </div>
-
     <button class="primary-btn" id="conv-check-btn" onclick="checkConv()" style="margin-top:14px;">See Answer →</button>
-    <button class="primary-btn orange-btn" id="conv-next-btn" onclick="nextConv()" style="display:none;margin-top:10px;">Next →</button>
+    <div class="nav-row" style="margin-top:10px;">
+      <button class="nav-btn" id="conv-prev" onclick="prevConv()" disabled>← Previous</button>
+      <button class="nav-btn fwd hidden" id="conv-next" onclick="nextConv()">Next →</button>
+    </div>
   </div>
 </div>
 
-<!-- ════════════════ SCORE ════════════════ -->
+<!-- ══ SCORE ══ -->
 <div id="s-score" class="scr">
-  <div class="hdr">
-    <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Results</div></div>
-  </div>
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Results</div></div></div>
   <div style="padding:18px;">
     <div class="score-wrap">
       <div class="score-emoji" id="score-emoji"></div>
       <div class="score-title" id="score-title"></div>
-      <div class="score-sub"  id="score-sub"></div>
+      <div class="score-sub"   id="score-sub"></div>
       <div class="score-row">
         <div class="score-box c"><div class="score-n" id="score-c"></div><div class="score-l">Correct ✓</div></div>
         <div class="score-box w"><div class="score-n" id="score-w"></div><div class="score-l">To Review ✗</div></div>
       </div>
       <div class="sr-info" id="sr-info" style="display:none;">
-        📅 <strong>Memory curve updated!</strong><br>
-        Words you missed will come back tomorrow. Words you got right will return in ~<span id="sr-next-days">6</span> days.
+        💜 <strong>Memory curve updated!</strong><br>
+        Words you missed will come back tomorrow. Words you got right will return in ~6 days.
       </div>
       <button class="primary-btn" onclick="goHome()">🏠 Home</button>
       <button class="secondary-btn" onclick="retryMode()">↺ Try Again</button>
@@ -345,21 +387,12 @@ body{max-width:480px;margin:0 auto;}
   </div>
 </div>
 
-<!-- ════════════════ NOTES ════════════════ -->
+<!-- ══ NOTES ══ -->
 <div id="s-notes" class="scr">
-  <div class="hdr">
-    <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Class Notes · Lesson 1</div></div>
-  </div>
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 1</div></div></div>
   <div style="padding:18px;">
-    <div class="note-section">
-      <h3>📦 Vocabulary — Things</h3>
-      <div class="vocab-list" id="notes-things"></div>
-    </div>
-    <div class="note-section">
-      <h3>👨‍👩‍👧 Vocabulary — Family</h3>
-      <div class="vocab-list" id="notes-family"></div>
-    </div>
+    <div class="note-section"><h3>📦 Vocabulary — Things</h3><div class="vocab-list" id="notes-things"></div></div>
+    <div class="note-section"><h3>👨‍👩‍👧 Vocabulary — Family</h3><div class="vocab-list" id="notes-family"></div></div>
     <div class="note-section">
       <h3>🔤 Grammar — Articles & Gender</h3>
       <div class="grammar-rule"><strong>El / Los</strong> → masculine (usually ends in <strong>-O</strong>)<br>el carro · el plato · el cielo</div>
@@ -408,42 +441,30 @@ body{max-width:480px;margin:0 auto;}
 </div>
 
 <script>
-// ═══════════════════ DATA ═══════════════════
+// ══════════════ DATA ══════════════
 
 const THINGS = [
-  {es:"botella",en:"bottle",art:"la"},
-  {es:"carro",en:"car",art:"el"},
-  {es:"computadora",en:"computer",art:"la"},
-  {es:"tienda",en:"store / shop",art:"la"},
-  {es:"cafetería",en:"cafeteria",art:"la"},
-  {es:"plato",en:"plate / dish",art:"el"},
-  {es:"cama",en:"bed",art:"la"},
-  {es:"cielo",en:"sky",art:"el"},
-  {es:"invierno",en:"winter",art:"el"},
-  {es:"primavera",en:"spring",art:"la"},
+  {es:"botella",en:"bottle",art:"la"},{es:"carro",en:"car",art:"el"},
+  {es:"computadora",en:"computer",art:"la"},{es:"tienda",en:"store / shop",art:"la"},
+  {es:"cafetería",en:"cafeteria",art:"la"},{es:"plato",en:"plate / dish",art:"el"},
+  {es:"cama",en:"bed",art:"la"},{es:"cielo",en:"sky",art:"el"},
+  {es:"invierno",en:"winter",art:"el"},{es:"primavera",en:"spring",art:"la"},
   {es:"verano",en:"summer",art:"el"},
 ];
-
 const FAMILY = [
-  {es:"novio",en:"boyfriend",art:"el"},
-  {es:"tío",en:"uncle",art:"el"},
-  {es:"abuelo",en:"grandfather",art:"el"},
-  {es:"hermano",en:"brother",art:"el"},
-  {es:"hermana",en:"sister",art:"la"},
-  {es:"primo",en:"cousin",art:"el"},
-  {es:"sobrino",en:"nephew",art:"el"},
-  {es:"cuñado",en:"brother-in-law",art:"el"},
-  {es:"prometido",en:"fiancé",art:"el"},
-  {es:"papá",en:"dad / father",art:"el"},
+  {es:"novio",en:"boyfriend",art:"el"},{es:"tío",en:"uncle",art:"el"},
+  {es:"abuelo",en:"grandfather",art:"el"},{es:"hermano",en:"brother",art:"el"},
+  {es:"hermana",en:"sister",art:"la"},{es:"primo",en:"cousin",art:"el"},
+  {es:"sobrino",en:"nephew",art:"el"},{es:"cuñado",en:"brother-in-law",art:"el"},
+  {es:"prometido",en:"fiancé",art:"el"},{es:"papá",en:"dad / father",art:"el"},
   {es:"mamá",en:"mom / mother",art:"la"},
 ];
-
-const VOCAB = [...THINGS, ...FAMILY];
+const VOCAB = [...THINGS,...FAMILY];
 
 const VERB_CONJUGATIONS = {
-  'LLAMARSE': ['me llamo','te llamas','se llama','nos llamamos','se llaman'],
-  'TENER':    ['tengo','tienes','tiene','tenemos','tienen'],
-  'SER':      ['soy','eres','es','somos','son'],
+  'LLAMARSE':['me llamo','te llamas','se llama','nos llamamos','se llaman'],
+  'TENER':   ['tengo','tienes','tiene','tenemos','tienen'],
+  'SER':     ['soy','eres','es','somos','son'],
 };
 
 const FILL_EXERCISES = [
@@ -461,10 +482,10 @@ const FILL_EXERCISES = [
   {verb:"TENER",sentence:"Nosotros ___ calor.",                        answer:"tenemos",     en:"We are hot. (lit. We have heat)"},
   {verb:"TENER",sentence:"Ellos ___ un carro muy bonito.",             answer:"tienen",      en:"They have a very nice car."},
   {verb:"TENER",sentence:"Yo ___ un perro que se llama Max.",          answer:"tengo",       en:"I have a dog named Max."},
-  {verb:"TENER",sentence:"¿Ustedes ___ hambre?",                       answer:"tienen",      en:"Are you all hungry? (lit. Do you all have hunger?)"},
+  {verb:"TENER",sentence:"¿Ustedes ___ hambre?",                       answer:"tienen",      en:"Are you all hungry?"},
   {verb:"TENER",sentence:"Tú ___ que estudiar todos los días.",        answer:"tienes",      en:"You have to study every day."},
   {verb:"TENER",sentence:"Juan ___ un problema grande.",               answer:"tiene",       en:"Juan has a big problem."},
-  {verb:"TENER",sentence:"Nosotros ___ 20 años.",                      answer:"tenemos",     en:"We are 20 years old. (lit. We have 20 years)"},
+  {verb:"TENER",sentence:"Nosotros ___ 20 años.",                      answer:"tenemos",     en:"We are 20 years old."},
   {verb:"SER",sentence:"Yo ___ mexicano. De ciudad de México.",        answer:"soy",         en:"I am Mexican. From Mexico City."},
   {verb:"SER",sentence:"Nosotros ___ estudiantes de español.",         answer:"somos",       en:"We are Spanish students."},
   {verb:"SER",sentence:"Él ___ profesor... ¿verdad?",                  answer:"es",          en:"He is a professor... right?"},
@@ -478,506 +499,512 @@ const FILL_EXERCISES = [
 ];
 
 const CONVERSATIONS = [
-  {ctx:"Sujeto: tú",
-   q:"¿Cómo te llamas?",               q_en:"What's your name?",
-   ans:"Me llamo [tu nombre].",          ans_en:"My name is [your name].",
-   note:"<strong>Me llamo</strong> literally means 'I call myself'. It comes from the verb <strong>llamarse</strong>. Use it every time you introduce yourself."},
-  {ctx:"Sujeto: él",
-   q:"¿Cómo se llama él?",             q_en:"What is his name?",
-   ans:"Él se llama [nombre].",          ans_en:"His name is [name].",
-   note:"For he / she / usted, use <strong>se llama</strong>. It's the same form for all three — context tells you who you're talking about."},
-  {ctx:"Sujeto: ellas",
-   q:"¿Cómo se llaman ellas?",         q_en:"What are their names? (all female)",
-   ans:"Ellas se llaman [nombre] y [nombre].", ans_en:"Their names are [name] and [name].",
-   note:"Plural (they): <strong>se llaman</strong>. Same for ellos, ellas, and ustedes."},
-  {ctx:"Sujeto: nosotros",
-   q:"¿Cómo se llaman ustedes?",       q_en:"What are your names? (you all)",
-   ans:"Nos llamamos [nombre] y [nombre].", ans_en:"Our names are [name] and [name].",
-   note:"Note the switch: the question uses <strong>ustedes → se llaman</strong>, but your answer uses <strong>nosotros → nos llamamos</strong>."},
-  {ctx:"Sujeto: tú",
-   q:"¿Tienes hermanos?",              q_en:"Do you have any siblings?",
-   ans:"Sí, tengo [número] hermanos. / No, no tengo hermanos.", ans_en:"Yes, I have [number] siblings. / No, I don't have siblings.",
-   note:"<strong>Hermanos</strong> can mean 'brothers' or 'siblings'. Notice double negative: <strong>No, no tengo</strong> — both words are required in Spanish."},
-  {ctx:"Sujeto: tu papá",
-   q:"¿Cuántos años tiene tu papá?",   q_en:"How old is your dad?",
-   ans:"Mi papá tiene [número] años.", ans_en:"My dad is [number] years old.",
-   note:"In Spanish you <strong>have</strong> years, not <strong>be</strong> years old. Always: <strong>tener + número + años</strong>."},
-  {ctx:"Sujeto: tú",
-   q:"¿Tienes un carro?",              q_en:"Do you have a car?",
-   ans:"Sí, tengo un carro. / No, no tengo carro.", ans_en:"Yes, I have a car. / No, I don't have a car.",
-   note:"<strong>Un</strong> is the masculine article (a/an). Carro is masculine → <strong>un carro</strong>. Computadora is feminine → <strong>una computadora</strong>."},
-  {ctx:"Sujeto: tu mamá",
-   q:"¿De dónde es tu mamá?",          q_en:"Where is your mom from?",
-   ans:"Mi mamá es de [país/ciudad].", ans_en:"My mom is from [country/city].",
-   note:"Origin = <strong>ser + de</strong>. Never use 'estar' for origin — that would mean a temporary location, not where someone is from."},
-  {ctx:"Sujeto: tú",
-   q:"¿De dónde eres tú?",             q_en:"Where are you from?",
-   ans:"Yo soy de [país/ciudad].",      ans_en:"I am from [country/city].",
-   note:"<strong>Yo → soy</strong>. 'Ser de' tells us origin. Example: Yo soy de China. Mi mamá es de China. Mis papás son de China."},
-  {ctx:"Sujeto: nosotros",
-   q:"¿Son ustedes estudiantes de español?", q_en:"Are you all Spanish students?",
-   ans:"Sí, somos estudiantes de español.", ans_en:"Yes, we are Spanish students.",
-   note:"Question uses <strong>ustedes → son</strong>, answer uses <strong>nosotros → somos</strong>. Remember: ser conjugates differently for each pronoun."},
-  {ctx:"Sujeto: tu abuelo",
-   q:"¿Tienes abuelo? ¿Cómo se llama?", q_en:"Do you have a grandfather? What's his name?",
-   ans:"Sí, tengo un abuelo. Se llama [nombre].", ans_en:"Yes, I have a grandfather. His name is [name].",
-   note:"Two sentences, two verbs: <strong>tener</strong> (to have) + <strong>llamarse</strong> (to be called). 'Se llama' works for él without repeating 'él'."},
-  {ctx:"Sujeto: ella",
-   q:"¿Ella es tu hermana?",           q_en:"Is she your sister?",
-   ans:"Sí, ella es mi hermana. / No, ella es mi prima.", ans_en:"Yes, she is my sister. / No, she is my cousin.",
-   note:"<strong>Ella → es</strong>. Possessive: <strong>mi hermana</strong> (my sister). In Spanish, no article is needed when you use a possessive — just 'mi hermana', never 'la mi hermana'."},
+  {ctx:"Subject: you (tú)",q:"¿Cómo te llamas?",q_en:"What's your name?",ans:"Me llamo [tu nombre].",ans_en:"My name is [your name].",note:"<strong>Me llamo</strong> literally means 'I call myself'. Use it every time you introduce yourself."},
+  {ctx:"Subject: he (él)",q:"¿Cómo se llama él?",q_en:"What is his name?",ans:"Él se llama [nombre].",ans_en:"His name is [name].",note:"For he/she/usted, use <strong>se llama</strong>. Same form for all three."},
+  {ctx:"Subject: they (ellas)",q:"¿Cómo se llaman ellas?",q_en:"What are their names?",ans:"Ellas se llaman [nombre] y [nombre].",ans_en:"Their names are [name] and [name].",note:"Plural (they): <strong>se llaman</strong>. Same for ellos, ellas, and ustedes."},
+  {ctx:"Subject: we (nosotros)",q:"¿Cómo se llaman ustedes?",q_en:"What are your names? (you all)",ans:"Nos llamamos [nombre] y [nombre].",ans_en:"Our names are [name] and [name].",note:"Question uses <strong>ustedes → se llaman</strong>, but your answer switches to <strong>nosotros → nos llamamos</strong>."},
+  {ctx:"Subject: you (tú)",q:"¿Tienes hermanos?",q_en:"Do you have any siblings?",ans:"Sí, tengo [número] hermanos. / No, no tengo hermanos.",ans_en:"Yes, I have [number] siblings. / No, I don't have siblings.",note:"Notice double negative: <strong>No, no tengo</strong> — both words are required in Spanish."},
+  {ctx:"Subject: your dad",q:"¿Cuántos años tiene tu papá?",q_en:"How old is your dad?",ans:"Mi papá tiene [número] años.",ans_en:"My dad is [number] years old.",note:"In Spanish you <strong>have</strong> years, not <strong>be</strong> years old. Always: <strong>tener + número + años</strong>."},
+  {ctx:"Subject: you (tú)",q:"¿Tienes un carro?",q_en:"Do you have a car?",ans:"Sí, tengo un carro. / No, no tengo carro.",ans_en:"Yes, I have a car. / No, I don't have a car.",note:"<strong>Un</strong> = masculine article (a/an). Carro is masculine → <strong>un carro</strong>. Computadora is feminine → <strong>una computadora</strong>."},
+  {ctx:"Subject: your mom",q:"¿De dónde es tu mamá?",q_en:"Where is your mom from?",ans:"Mi mamá es de [país/ciudad].",ans_en:"My mom is from [country/city].",note:"Origin = <strong>ser + de</strong>. Never use 'estar' for origin."},
+  {ctx:"Subject: you (tú)",q:"¿De dónde eres tú?",q_en:"Where are you from?",ans:"Yo soy de [país/ciudad].",ans_en:"I am from [country/city].",note:"<strong>Yo → soy</strong>. 'Ser de' = to be from. Example: Yo soy de China."},
+  {ctx:"Subject: we (nosotros)",q:"¿Son ustedes estudiantes de español?",q_en:"Are you all Spanish students?",ans:"Sí, somos estudiantes de español.",ans_en:"Yes, we are Spanish students.",note:"Question uses <strong>ustedes → son</strong>, answer uses <strong>nosotros → somos</strong>."},
+  {ctx:"Subject: your grandfather",q:"¿Tienes abuelo? ¿Cómo se llama?",q_en:"Do you have a grandfather? What's his name?",ans:"Sí, tengo un abuelo. Se llama [nombre].",ans_en:"Yes, I have a grandfather. His name is [name].",note:"Two verbs: <strong>tener</strong> (to have) + <strong>llamarse</strong> (to be called)."},
+  {ctx:"Subject: she (ella)",q:"¿Ella es tu hermana?",q_en:"Is she your sister?",ans:"Sí, ella es mi hermana. / No, ella es mi prima.",ans_en:"Yes, she is my sister. / No, she is my cousin.",note:"<strong>Ella → es</strong>. Possessive: <strong>mi hermana</strong>. No article needed with possessives."},
 ];
 
-// ═══════════════════ TTS ═══════════════════
+// ══════════════ TTS ══════════════
 
 let voices = [];
-let ttsReady = false;
-
-function loadVoices() {
-  voices = window.speechSynthesis.getVoices();
-  if (voices.length > 0) ttsReady = true;
-}
-
 if (window.speechSynthesis) {
-  loadVoices();
-  window.speechSynthesis.onvoiceschanged = loadVoices;
+  const load = () => { voices = window.speechSynthesis.getVoices(); };
+  load(); window.speechSynthesis.onvoiceschanged = load;
 }
-
-function speak(text, lang = 'es-ES') {
+function speak(text, lang='es-ES') {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang;
-  u.rate = 0.82;
-  u.pitch = 1.0;
-  // Find best Spanish voice
-  const esVoice = voices.find(v => v.lang === 'es-MX') ||
-                  voices.find(v => v.lang === 'es-ES') ||
-                  voices.find(v => v.lang.startsWith('es'));
-  if (esVoice) u.voice = esVoice;
+  u.lang = lang; u.rate = 0.82;
+  const v = voices.find(v=>v.lang==='es-MX')||voices.find(v=>v.lang==='es-ES')||voices.find(v=>v.lang.startsWith('es'));
+  if (v) u.voice = v;
   window.speechSynthesis.speak(u);
 }
 
-function speakEN(text) { speak(text, 'en-US'); }
+// ══════════════ SPACED REPETITION (SM-2, split by direction) ══════════════
 
-// ═══════════════════ SPACED REPETITION (SM-2) ═══════════════════
+const SR_KEY    = 'sr_espanol_l1_v2';  // v2 = direction-aware
+const STREAK_KEY= 'sr_streak_l1';
+const LAST_KEY  = 'sr_last_l1';
 
-const SR_KEY = 'sr_espanol_l1';
-const STREAK_KEY = 'sr_streak_l1';
-const LAST_STUDY_KEY = 'sr_last_l1';
+function loadSR() { try{return JSON.parse(localStorage.getItem(SR_KEY))||{};}catch(e){return{};} }
+function saveSR(d) { localStorage.setItem(SR_KEY,JSON.stringify(d)); }
 
-function loadSR() {
-  try { return JSON.parse(localStorage.getItem(SR_KEY)) || {}; }
-  catch(e) { return {}; }
+// key = "botella_es_en" or "botella_en_es"
+function srKey(word, dir) { return `${word}_${dir}`; }
+
+function getSRCard(key, data) {
+  if (!data[key]) data[key]={interval:1,reps:0,ef:2.5,nextReview:0};
+  return data[key];
 }
 
-function saveSR(data) {
-  localStorage.setItem(SR_KEY, JSON.stringify(data));
-}
-
-function getSRCard(word, data) {
-  if (!data[word]) data[word] = {interval:1, reps:0, ef:2.5, nextReview:0};
-  return data[word];
-}
-
-function sm2Update(card, quality) {
-  // quality: 1 (fail), 3 (hesitant), 5 (perfect)
-  if (quality < 3) {
-    card.reps = 0;
-    card.interval = 1;
-  } else {
-    if (card.reps === 0) card.interval = 1;
-    else if (card.reps === 1) card.interval = 6;
-    else card.interval = Math.round(card.interval * card.ef);
+function sm2Update(card, q) {
+  if (q < 3) { card.reps=0; card.interval=1; }
+  else {
+    if (card.reps===0) card.interval=1;
+    else if (card.reps===1) card.interval=6;
+    else card.interval=Math.round(card.interval*card.ef);
     card.reps++;
   }
-  card.ef = Math.max(1.3, card.ef + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
-  card.nextReview = Date.now() + card.interval * 86400000;
+  card.ef=Math.max(1.3, card.ef+0.1-(5-q)*(0.08+(5-q)*0.02));
+  card.nextReview=Date.now()+card.interval*86400000;
   return card;
 }
 
 function getDueCards() {
-  const data = loadSR();
-  const now = Date.now();
-  return VOCAB.filter(v => {
-    const c = getSRCard(v.es, data);
-    return c.nextReview <= now;
+  const data=loadSR(), now=Date.now();
+  // Collect words due in either direction
+  const due=[];
+  VOCAB.forEach(v => {
+    const esen = getSRCard(srKey(v.es,'es_en'),data);
+    const enes = getSRCard(srKey(v.es,'en_es'),data);
+    if (esen.nextReview<=now || enes.nextReview<=now) due.push(v);
   });
+  return due;
 }
 
 function updateStreak() {
-  const today = new Date().toDateString();
-  const last = localStorage.getItem(LAST_STUDY_KEY);
-  let streak = parseInt(localStorage.getItem(STREAK_KEY) || '0');
-  const yesterday = new Date(Date.now() - 86400000).toDateString();
-  if (last === today) return streak;
-  if (last === yesterday) streak++;
-  else streak = 1;
-  localStorage.setItem(STREAK_KEY, streak);
-  localStorage.setItem(LAST_STUDY_KEY, today);
+  const today=new Date().toDateString(), last=localStorage.getItem(LAST_KEY);
+  let streak=parseInt(localStorage.getItem(STREAK_KEY)||'0');
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  if (last===today) return streak;
+  streak = last===yesterday ? streak+1 : 1;
+  localStorage.setItem(STREAK_KEY,streak);
+  localStorage.setItem(LAST_KEY,today);
   return streak;
 }
 
 function refreshHome() {
-  const due = getDueCards();
-  const dueCard = document.getElementById('due-card');
-  if (due.length > 0) {
-    document.getElementById('due-sub').textContent = `${due.length} word${due.length > 1 ? 's' : ''} due based on your memory curve`;
-    dueCard.classList.remove('hidden');
-  } else {
-    dueCard.classList.add('hidden');
-  }
-  const streak = parseInt(localStorage.getItem(STREAK_KEY) || '0');
-  document.getElementById('sr-streak').textContent = streak;
+  const due=getDueCards();
+  const dc=document.getElementById('due-card');
+  if (due.length>0) {
+    document.getElementById('due-sub').textContent=`${due.length} word${due.length>1?'s':''} due based on your memory curve`;
+    dc.classList.remove('hidden');
+  } else dc.classList.add('hidden');
+  document.getElementById('sr-streak').textContent=parseInt(localStorage.getItem(STREAK_KEY)||'0');
 }
 
-// ═══════════════════ STATE ═══════════════════
+// ══════════════ SESSION SAVE/RESTORE ══════════════
 
-const S = {mode:null, idx:0, cards:[], correct:0, wrong:0, revealed:false, submitted:false, srUpdates:{}};
+const SESSION_KEY='session_espanol_l1';
+function getId(c){return c.es||c.sentence||c.q;}
+function saveSession(){
+  if(!S.mode||!S.cards.length||S.idx>=S.cards.length)return;
+  localStorage.setItem(SESSION_KEY,JSON.stringify({
+    mode:S.mode, cardIds:S.cards.map(getId),
+    idx:S.idx, correct:S.correct, wrong:S.wrong,
+    answered:S.answered
+  }));
+}
+function clearSession(){localStorage.removeItem(SESSION_KEY);}
+function loadSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY));}catch(e){return null;}}
 
-function shuffle(arr) {
+// ══════════════ STATE ══════════════
+
+const S={
+  mode:null, idx:0, cards:[], correct:0, wrong:0,
+  revealed:false, submitted:false,
+  answered:{},   // {cardIdx: quality} — first-time answers only
+  srUpdates:{},
+  _pendingMode:null, _savedSession:null
+};
+
+function shuffle(arr){
   const a=[...arr];
   for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
   return a;
 }
 
-// ═══════════════════ NAVIGATION ═══════════════════
+// ══════════════ NAVIGATION ══════════════
 
-function show(id) {
+function show(id){
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   window.scrollTo(0,0);
 }
-
-function goHome() {
-  window.speechSynthesis && window.speechSynthesis.cancel();
-  refreshHome();
-  show('s-home');
+function goHome(){
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  refreshHome(); show('s-home');
 }
 
-// ═══════════════════ SESSION SAVE / RESTORE ═══════════════════
+// ══════════════ MODE LAUNCHERS ══════════════
 
-const SESSION_KEY = 'session_espanol_l1';
-
-function saveSession() {
-  if (!S.mode || !S.cards.length || S.idx >= S.cards.length) return;
-  const getId = c => c.es || c.sentence || c.q;
-  localStorage.setItem(SESSION_KEY, JSON.stringify({
-    mode: S.mode, cardIds: S.cards.map(getId),
-    idx: S.idx, correct: S.correct, wrong: S.wrong
-  }));
-}
-
-function clearSession() { localStorage.removeItem(SESSION_KEY); }
-
-function loadSession() {
-  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch(e) { return null; }
-}
-
-function navigateToMode(mode) {
-  if (mode === 'es-en' || mode === 'en-es' || mode === 'es-en-review') {
-    document.getElementById('flash-title').textContent =
-      mode === 'es-en' ? 'Spanish → English' :
-      mode === 'en-es' ? 'English → Spanish' : '📅 Today\'s Review';
+function navigateToMode(mode){
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'){
+    document.getElementById('flash-title').textContent=
+      mode==='es-en'?'Spanish → English':mode==='en-es'?'English → Spanish':'📅 Today\'s Review';
     show('s-flash'); renderFlash();
-  } else if (mode === 'fill') {
-    show('s-fill'); renderFill();
-  } else if (mode === 'conv') {
-    show('s-conv'); renderConv();
-  }
+  } else if(mode==='fill'){show('s-fill');renderFill();}
+  else if(mode==='conv'){show('s-conv');renderConv();}
 }
 
-// ═══════════════════ MODE LAUNCHERS ═══════════════════
-
-function startMode(mode) {
-  window.speechSynthesis && window.speechSynthesis.cancel();
-  const effectiveMode = mode === 'review' ? 'es-en-review' : mode;
-  const saved = loadSession();
-
-  if (saved && saved.mode === effectiveMode && saved.idx > 0 && saved.idx < saved.cardIds.length) {
-    S._pendingMode = mode;
-    S._savedSession = saved;
-    const total = saved.cardIds.length;
-    const left = total - saved.idx;
-    document.getElementById('resume-sub').textContent =
-      `You completed ${saved.idx} of ${total} cards. ${left} card${left>1?'s':''} remaining — pick up right there or start over?`;
+function startMode(mode){
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  const effective=mode==='review'?'es-en-review':mode;
+  const saved=loadSession();
+  if(saved&&saved.mode===effective&&saved.idx>0&&saved.idx<saved.cardIds.length){
+    S._pendingMode=mode; S._savedSession=saved;
+    const left=saved.cardIds.length-saved.idx;
+    document.getElementById('resume-sub').textContent=
+      `You were on card ${saved.idx} of ${saved.cardIds.length}. ${left} card${left>1?'s':''} remaining — pick up right there?`;
     document.getElementById('resume-modal').classList.add('show');
     return;
   }
   _startFresh(mode);
 }
 
-function resumeSession() {
+function resumeSession(){
   document.getElementById('resume-modal').classList.remove('show');
-  const saved = S._savedSession;
-  const mode = saved.mode;
-
-  // Reconstruct cards in saved order
+  const saved=S._savedSession, mode=saved.mode;
   let pool;
-  if (mode === 'es-en' || mode === 'en-es' || mode === 'es-en-review') pool = VOCAB;
-  else if (mode === 'fill') pool = FILL_EXERCISES;
-  else pool = CONVERSATIONS;
-
-  const getId = c => c.es || c.sentence || c.q;
-  S.cards = saved.cardIds.map(id => pool.find(c => getId(c) === id)).filter(Boolean);
-  S.mode = mode; S.idx = saved.idx;
-  S.correct = saved.correct; S.wrong = saved.wrong;
-  S.revealed = false; S.submitted = false; S.srUpdates = {};
-
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review') pool=VOCAB;
+  else if(mode==='fill') pool=FILL_EXERCISES;
+  else pool=CONVERSATIONS;
+  S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
+  S.mode=mode; S.idx=saved.idx; S.correct=saved.correct; S.wrong=saved.wrong;
+  S.answered=saved.answered||{}; S.revealed=false; S.submitted=false; S.srUpdates={};
   navigateToMode(mode);
 }
 
-function startFresh() {
+function startFresh(){
   document.getElementById('resume-modal').classList.remove('show');
-  clearSession();
-  _startFresh(S._pendingMode);
+  clearSession(); _startFresh(S._pendingMode);
 }
 
-function _startFresh(mode) {
-  S.idx = 0; S.correct = 0; S.wrong = 0; S.srUpdates = {};
-
-  if (mode === 'es-en' || mode === 'en-es') {
-    S.mode = mode; S.cards = shuffle(VOCAB); S.revealed = false;
-  } else if (mode === 'review') {
-    const due = getDueCards();
-    if (!due.length) { goHome(); return; }
-    S.mode = 'es-en-review'; S.cards = shuffle(due); S.revealed = false;
-  } else if (mode === 'fill') {
-    S.mode = 'fill'; S.cards = shuffle(FILL_EXERCISES); S.submitted = false;
-  } else if (mode === 'conv') {
-    S.mode = 'conv'; S.cards = shuffle(CONVERSATIONS);
+function _startFresh(mode){
+  S.idx=0; S.correct=0; S.wrong=0; S.answered={}; S.srUpdates={};
+  if(mode==='es-en'||mode==='en-es'){
+    S.mode=mode; S.cards=shuffle(VOCAB); S.revealed=false;
+  } else if(mode==='review'){
+    const due=getDueCards();
+    if(!due.length){goHome();return;}
+    S.mode='es-en-review'; S.cards=shuffle(due); S.revealed=false;
+  } else if(mode==='fill'){
+    S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
+  } else if(mode==='conv'){
+    S.mode='conv'; S.cards=shuffle(CONVERSATIONS);
   }
   navigateToMode(S.mode);
 }
 
-function retryMode() { clearSession(); startMode(S.mode === 'es-en-review' ? 'review' : S.mode); }
+function retryMode(){clearSession();startMode(S.mode==='es-en-review'?'review':S.mode);}
 
-// ═══════════════════ FLASHCARDS ═══════════════════
+// ══════════════ FLASHCARDS ══════════════
 
-function renderFlash() {
-  const item = S.cards[S.idx];
-  const total = S.cards.length;
-  const pct = (S.idx / total) * 100;
-  const isEsEn = S.mode === 'es-en' || S.mode === 'es-en-review';
+function renderFlash(){
+  const item=S.cards[S.idx], total=S.cards.length;
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+  const dir=isEsEn?'es_en':'en_es';
+  const alreadyAnswered=(S.idx in S.answered);
 
-  document.getElementById('flash-prog').style.width = pct + '%';
-  document.getElementById('flash-prog-label').textContent = `${S.idx + 1} / ${total}`;
-  document.getElementById('flash-sub').textContent = `${S.idx + 1} of ${total} words`;
-  document.getElementById('fc-label').textContent = isEsEn ? 'What does this mean in English?' : 'How do you say this in Spanish?';
-  document.getElementById('fc-word').textContent  = isEsEn ? item.es : item.en;
-  document.getElementById('fc-article').textContent = isEsEn ? `(${item.art} ${item.es})` : '';
-  document.getElementById('fc-answer').textContent  = isEsEn ? item.en : `${item.art} ${item.es}`;
-  document.getElementById('fc-answer').classList.remove('show');
-  document.getElementById('fc-hint').classList.remove('hide');
-  document.getElementById('vbtn-row').classList.add('hidden');
-  S.revealed = false;
+  document.getElementById('flash-prog').style.width=(S.idx/total*100)+'%';
+  document.getElementById('flash-prog-label').textContent=`${S.idx+1} / ${total}`;
+  document.getElementById('flash-sub').textContent=`${S.idx+1} of ${total} words`;
+  document.getElementById('fc-label').textContent=isEsEn?'What does this mean in English?':'How do you say this in Spanish?';
+  document.getElementById('fc-word').textContent=isEsEn?item.es:item.en;
+  document.getElementById('fc-article').textContent=isEsEn?`(${item.art} ${item.es})`:'';
+  document.getElementById('fc-answer').textContent=isEsEn?item.en:`${item.art} ${item.es}`;
 
-  // Auto-speak the Spanish word
-  if (isEsEn) speak(item.es);
+  const fc=document.getElementById('flashcard');
+  const ansEl=document.getElementById('fc-answer');
+  const hintEl=document.getElementById('fc-hint');
+  const vrow=document.getElementById('vbtn-row');
+  const revTag=document.getElementById('fc-review-tag');
+  const skipBtn=document.getElementById('flash-skip');
+
+  if(alreadyAnswered){
+    // Review mode: show revealed, no verdict
+    ansEl.classList.add('show');
+    hintEl.classList.add('hide');
+    vrow.classList.add('hidden');
+    revTag.classList.add('show');
+    fc.classList.add('review-mode');
+    skipBtn.classList.remove('hidden');
+  } else {
+    ansEl.classList.remove('show');
+    hintEl.classList.remove('hide');
+    vrow.classList.add('hidden');
+    revTag.classList.remove('show');
+    fc.classList.remove('review-mode');
+    skipBtn.classList.add('hidden');
+  }
+  S.revealed=alreadyAnswered;
+
+  // Prev button
+  document.getElementById('flash-prev').disabled=(S.idx===0);
+
+  if(isEsEn&&!alreadyAnswered) speak(item.es);
 }
 
-function speakCurrent() {
-  const item = S.cards[S.idx];
-  const isEsEn = S.mode === 'es-en' || S.mode === 'es-en-review';
-  speak(isEsEn ? item.es : item.en, isEsEn ? 'es-ES' : 'en-US');
+function speakCurrent(){
+  const item=S.cards[S.idx];
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+  speak(isEsEn?item.es:item.en,isEsEn?'es-ES':'en-US');
 }
 
-function revealCard() {
-  if (S.revealed) return;
-  S.revealed = true;
-  const item = S.cards[S.idx];
-  const isEsEn = S.mode === 'es-en' || S.mode === 'es-en-review';
+function revealCard(){
+  if(S.revealed||(S.idx in S.answered)) return;
+  S.revealed=true;
   document.getElementById('fc-answer').classList.add('show');
   document.getElementById('fc-hint').classList.add('hide');
   document.getElementById('vbtn-row').classList.remove('hidden');
-  // Speak answer
-  if (!isEsEn) speak(item.es);
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+  if(!isEsEn) speak(S.cards[S.idx].es);
 }
 
-function verdict(quality) {
-  const item = S.cards[S.idx];
-  if (quality >= 3) S.correct++; else S.wrong++;
-
-  // Update SM-2
-  const data = loadSR();
-  const card = getSRCard(item.es, data);
-  sm2Update(card, quality);
-  data[item.es] = card;
-  saveSR(data);
-  S.srUpdates[item.es] = card.interval;
-
+function verdict(quality){
+  const item=S.cards[S.idx];
+  if(!(S.idx in S.answered)){
+    S.answered[S.idx]=quality;
+    if(quality>=3) S.correct++; else S.wrong++;
+    // SM-2 update with direction
+    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+    const dir=isEsEn?'es_en':'en_es';
+    const data=loadSR();
+    const key=srKey(item.es,dir);
+    const card=getSRCard(key,data);
+    sm2Update(card,quality);
+    data[key]=card; saveSR(data);
+    S.srUpdates[item.es]=card.interval;
+  }
   S.idx++;
-  if (S.idx >= S.cards.length) { clearSession(); showScore(); }
-  else { S.revealed = false; saveSession(); renderFlash(); }
+  if(S.idx>=S.cards.length){clearSession();showScore();}
+  else{S.revealed=false;saveSession();renderFlash();}
 }
 
-// ═══════════════════ FILL IN THE BLANK (Multiple Choice) ═══════════════════
+function prevCard(){
+  if(S.idx===0) return;
+  S.idx--; S.revealed=false;
+  renderFlash();
+}
 
-function renderFill() {
-  const item = S.cards[S.idx];
-  const total = S.cards.length;
-  document.getElementById('fill-prog').style.width = (S.idx / total * 100) + '%';
-  document.getElementById('fill-prog-label').textContent = `${S.idx + 1} / ${total}`;
-  document.getElementById('ex-verb-tag').textContent = `${item.verb} — pick the correct form`;
+function skipCard(){
+  // For already-answered cards in review, just move forward
+  S.idx++;
+  if(S.idx>=S.cards.length){clearSession();showScore();}
+  else{S.revealed=false;renderFlash();}
+}
 
-  // Show sentence with styled blank placeholder
-  const parts = item.sentence.split('___');
-  document.getElementById('ex-sentence').innerHTML =
-    parts[0] + '<span class="blank-ph">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' + (parts[1] || '');
+// ══════════════ FILL IN THE BLANK ══════════════
 
-  // Build 4 choices: correct answer + 3 distractors from same verb
-  const pool = VERB_CONJUGATIONS[item.verb];
-  const distractors = shuffle(pool.filter(c => c !== item.answer)).slice(0, 3);
-  const choices = shuffle([item.answer, ...distractors]);
+function renderFill(){
+  const item=S.cards[S.idx], total=S.cards.length;
+  const alreadyDone=(S.idx in S.answered);
+  document.getElementById('fill-prog').style.width=(S.idx/total*100)+'%';
+  document.getElementById('fill-prog-label').textContent=`${S.idx+1} / ${total}`;
+  document.getElementById('ex-verb-tag').textContent=`${item.verb} — pick the correct form`;
+  const parts=item.sentence.split('___');
+  document.getElementById('ex-sentence').innerHTML=
+    parts[0]+'<span class="blank-ph">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'+(parts[1]||'');
 
-  const grid = document.getElementById('choices-grid');
-  grid.innerHTML = '';
-  choices.forEach(choice => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = choice;
-    btn.onclick = () => selectChoice(btn, choice);
+  const pool=VERB_CONJUGATIONS[item.verb];
+  const distractors=shuffle(pool.filter(c=>c!==item.answer)).slice(0,3);
+  const choices=shuffle([item.answer,...distractors]);
+  const grid=document.getElementById('choices-grid');
+  grid.innerHTML='';
+  choices.forEach(choice=>{
+    const btn=document.createElement('button');
+    btn.className='choice-btn';
+    btn.textContent=choice;
+    if(alreadyDone){
+      btn.disabled=true;
+      if(choice===item.answer) btn.classList.add('correct');
+      else if(S.answered[S.idx]===choice) btn.classList.add('wrong');
+    } else {
+      btn.onclick=()=>selectChoice(btn,choice);
+    }
     grid.appendChild(btn);
   });
 
-  document.getElementById('ex-reveal').classList.remove('show');
-  document.getElementById('fill-next-btn').style.display = 'none';
-  S.submitted = false;
-
-  // Speak sentence with pause at blank
-  speak(item.sentence.replace('___', '...'));
+  const revealEl=document.getElementById('ex-reveal');
+  const nextBtn=document.getElementById('fill-next');
+  const prevBtn=document.getElementById('fill-prev');
+  if(alreadyDone){
+    document.getElementById('ex-reveal-es').textContent=item.sentence.replace('___',item.answer);
+    document.getElementById('ex-reveal-en').textContent='🇺🇸 '+item.en;
+    revealEl.classList.add('show');
+    nextBtn.classList.remove('hidden');
+  } else {
+    revealEl.classList.remove('show');
+    nextBtn.classList.add('hidden');
+  }
+  prevBtn.disabled=(S.idx===0);
+  S.submitted=alreadyDone;
+  if(!alreadyDone) speak(item.sentence.replace('___','...'));
 }
 
-function selectChoice(btnEl, chosen) {
-  if (S.submitted) return;
-  S.submitted = true;
-  const item = S.cards[S.idx];
-  const isCorrect = chosen === item.answer;
-
-  // Highlight all buttons
-  document.querySelectorAll('.choice-btn').forEach(b => {
-    b.disabled = true;
-    if (b.textContent === item.answer) b.classList.add('correct');
-    else if (b === btnEl && !isCorrect) b.classList.add('wrong');
+function selectChoice(btnEl,chosen){
+  if(S.submitted) return;
+  S.submitted=true;
+  const item=S.cards[S.idx];
+  const isCorrect=chosen===item.answer;
+  document.querySelectorAll('.choice-btn').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===item.answer) b.classList.add('correct');
+    else if(b===btnEl&&!isCorrect) b.classList.add('wrong');
   });
-
-  if (isCorrect) S.correct++; else S.wrong++;
-
-  // Show full sentence + English translation
-  document.getElementById('ex-reveal-es').textContent = item.sentence.replace('___', item.answer);
-  document.getElementById('ex-reveal-en').textContent = '🇺🇸 ' + item.en;
+  S.answered[S.idx]=chosen;
+  if(isCorrect) S.correct++; else S.wrong++;
+  document.getElementById('ex-reveal-es').textContent=item.sentence.replace('___',item.answer);
+  document.getElementById('ex-reveal-en').textContent='🇺🇸 '+item.en;
   document.getElementById('ex-reveal').classList.add('show');
-
-  // Speak correct full sentence
-  speak(item.sentence.replace('___', item.answer));
-  document.getElementById('fill-next-btn').style.display = 'block';
+  speak(item.sentence.replace('___',item.answer));
+  document.getElementById('fill-next').classList.remove('hidden');
+  saveSession();
 }
 
-function nextFill() {
+function nextFill(){
   S.idx++;
-  if (S.idx >= S.cards.length) { clearSession(); showScore(); }
-  else { saveSession(); renderFill(); }
+  if(S.idx>=S.cards.length){clearSession();showScore();}
+  else renderFill();
 }
 
-// ═══════════════════ CONVERSATION ═══════════════════
+function prevFill(){
+  if(S.idx===0) return;
+  S.idx--; S.submitted=false;
+  renderFill();
+}
 
-function renderConv() {
-  const item = S.cards[S.idx];
-  const total = S.cards.length;
-  document.getElementById('conv-prog').style.width = (S.idx / total * 100) + '%';
-  document.getElementById('conv-prog-label').textContent = `${S.idx + 1} / ${total}`;
-  const ctxMap = {'Sujeto: tú':'Subject: you (tú)','Sujeto: él':'Subject: he (él)','Sujeto: ellas':'Subject: they (ellas)','Sujeto: nosotros':'Subject: we (nosotros)','Sujeto: tu papá':'Subject: your dad','Sujeto: tu mamá':'Subject: your mom','Sujeto: tu abuelo':'Subject: your grandfather','Sujeto: ella':'Subject: she (ella)'};
-  document.getElementById('conv-ctx').textContent = '🎯 ' + (ctxMap[item.ctx] || item.ctx);
-  document.getElementById('conv-question').textContent = item.q;
-  document.getElementById('conv-q-en').textContent = '🇺🇸 ' + item.q_en;
-  document.getElementById('conv-ans-es').textContent = item.ans;
-  document.getElementById('conv-ans-en').textContent = '🇺🇸 ' + item.ans_en;
-  document.getElementById('conv-note').innerHTML = '💡 ' + item.note;
-  document.getElementById('conv-reveal').classList.remove('show');
-  document.getElementById('conv-check-btn').style.display = 'block';
-  document.getElementById('conv-next-btn').style.display = 'none';
-  // Auto-speak question
+// ══════════════ CONVERSATION ══════════════
+
+function renderConv(){
+  const item=S.cards[S.idx], total=S.cards.length;
+  const alreadyDone=(S.idx in S.answered);
+  document.getElementById('conv-prog').style.width=(S.idx/total*100)+'%';
+  document.getElementById('conv-prog-label').textContent=`${S.idx+1} / ${total}`;
+  document.getElementById('conv-ctx').textContent='🎯 '+item.ctx;
+  document.getElementById('conv-question').textContent=item.q;
+  document.getElementById('conv-q-en').textContent='🇺🇸 '+item.q_en;
+  document.getElementById('conv-ans-es').textContent=item.ans;
+  document.getElementById('conv-ans-en').textContent='🇺🇸 '+item.ans_en;
+  document.getElementById('conv-note').innerHTML='💡 '+item.note;
+  const revealEl=document.getElementById('conv-reveal');
+  const checkBtn=document.getElementById('conv-check-btn');
+  const nextBtn=document.getElementById('conv-next');
+  const prevBtn=document.getElementById('conv-prev');
+  if(alreadyDone){
+    revealEl.classList.add('show');
+    checkBtn.style.display='none';
+    nextBtn.classList.remove('hidden');
+  } else {
+    revealEl.classList.remove('show');
+    checkBtn.style.display='block';
+    nextBtn.classList.add('hidden');
+  }
+  prevBtn.disabled=(S.idx===0);
   speak(item.q);
 }
 
-function speakQuestion() { speak(S.cards[S.idx].q); }
-function speakAnswer()   { speak(S.cards[S.idx].ans.replace('[tu nombre]','tu nombre').replace('[nombre]','nombre').replace('[número]','número').replace('[país/ciudad]','país')); }
+function speakQuestion(){speak(S.cards[S.idx].q);}
+function speakAnswer(){speak(S.cards[S.idx].ans.replace(/\[.*?\]/g,''));}
 
-function checkConv() {
+function checkConv(){
   document.getElementById('conv-reveal').classList.add('show');
-  document.getElementById('conv-check-btn').style.display = 'none';
-  document.getElementById('conv-next-btn').style.display = 'block';
-  speakAnswer();
+  document.getElementById('conv-check-btn').style.display='none';
+  document.getElementById('conv-next').classList.remove('hidden');
+  S.answered[S.idx]=true; S.correct++;
+  speakAnswer(); saveSession();
 }
 
-function nextConv() {
-  S.idx++; S.correct++;
-  if (S.idx >= S.cards.length) { clearSession(); showScore(); }
-  else { saveSession(); renderConv(); }
+function nextConv(){
+  S.idx++;
+  if(S.idx>=S.cards.length){clearSession();showScore();}
+  else renderConv();
 }
 
-// ═══════════════════ SCORE ═══════════════════
+function prevConv(){
+  if(S.idx===0) return;
+  S.idx--; renderConv();
+}
 
-function showScore() {
+// ══════════════ SCORE ══════════════
+
+function showScore(){
   updateStreak();
-  const total = S.correct + S.wrong;
-  const pct = total > 0 ? Math.round(S.correct / total * 100) : 100;
-  let emoji, title, sub;
-  if (S.mode === 'conv') {
-    emoji='🎉'; title='Dialogue complete!'; sub=`You finished ${S.cards.length} conversations. Keep it up!`;
-  } else if (pct===100) {
-    emoji='🏆'; title='Perfect!'; sub='You remembered every word!';
-  } else if (pct>=80) {
-    emoji='⭐'; title='Great job!'; sub=`You got ${pct}% correct. Almost perfect!`;
-  } else if (pct>=50) {
-    emoji='💪'; title='Good effort!'; sub=`You got ${pct}% correct. Keep practicing!`;
-  } else {
-    emoji='📚'; title='Keep studying!'; sub=`You got ${pct}% correct. The memory curve will help!`;
-  }
-  document.getElementById('score-emoji').textContent = emoji;
-  document.getElementById('score-title').textContent = title;
-  document.getElementById('score-sub').textContent   = sub;
-  document.getElementById('score-c').textContent = S.mode === 'conv' ? S.cards.length : S.correct;
-  document.getElementById('score-w').textContent = S.mode === 'conv' ? '—' : S.wrong;
-
-  const srInfo = document.getElementById('sr-info');
-  if (Object.keys(S.srUpdates).length > 0) {
-    srInfo.style.display = 'block';
-  } else {
-    srInfo.style.display = 'none';
-  }
+  const total=S.correct+S.wrong;
+  const pct=total>0?Math.round(S.correct/total*100):100;
+  let emoji,title,sub;
+  if(S.mode==='conv'){emoji='🎉';title='Dialogue complete!';sub=`You finished all ${S.cards.length} conversations!`;}
+  else if(pct===100){emoji='🏆';title='Perfect!';sub='You remembered every word!';}
+  else if(pct>=80){emoji='⭐';title='Great job!';sub=`You got ${pct}% correct!`;}
+  else if(pct>=50){emoji='💪';title='Good effort!';sub=`You got ${pct}%. Keep practicing!`;}
+  else{emoji='📚';title='Keep studying!';sub=`You got ${pct}%. The memory curve will help!`;}
+  document.getElementById('score-emoji').textContent=emoji;
+  document.getElementById('score-title').textContent=title;
+  document.getElementById('score-sub').textContent=sub;
+  document.getElementById('score-c').textContent=S.mode==='conv'?S.cards.length:S.correct;
+  document.getElementById('score-w').textContent=S.mode==='conv'?'—':S.wrong;
+  document.getElementById('sr-info').style.display=Object.keys(S.srUpdates).length>0?'block':'none';
   show('s-score');
 }
 
-// ═══════════════════ NOTES BUILDER ═══════════════════
+// ══════════════ EXPORT / IMPORT PROGRESS ══════════════
 
-function buildNotes() {
-  function makeItem(v) {
-    const div = document.createElement('div');
-    div.className = 'vocab-item';
-    div.innerHTML = `
-      <div class="vocab-text">
-        <div class="vocab-es">${v.art} ${v.es}</div>
-        <div class="vocab-en">${v.en}</div>
-      </div>
-      <button class="speak-btn" onclick="speak('${v.es}')">🔊</button>`;
-    return div;
-  }
-  const things = document.getElementById('notes-things');
-  const family = document.getElementById('notes-family');
-  THINGS.forEach(v => things.appendChild(makeItem(v)));
-  FAMILY.forEach(v => family.appendChild(makeItem(v)));
+function exportProgress() {
+  const payload = {
+    sr:     loadSR(),
+    streak: localStorage.getItem(STREAK_KEY) || '0',
+    last:   localStorage.getItem(LAST_KEY)   || '',
+    exported: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'mi-espanol-progress.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
-// ═══════════════════ INIT ═══════════════════
+function importProgress(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.sr)     saveSR(data.sr);
+      if (data.streak) localStorage.setItem(STREAK_KEY, data.streak);
+      if (data.last)   localStorage.setItem(LAST_KEY,   data.last);
+      refreshHome();
+      alert('🌸 Progress restored! Your memory curve is back.');
+    } catch(err) {
+      alert('Oops — couldn\'t read this file. Make sure it\'s a file exported from Mi Español.');
+    }
+    inputEl.value = ''; // reset so same file can be re-imported if needed
+  };
+  reader.readAsText(file);
+}
+
+// ══════════════ NOTES BUILDER ══════════════
+
+function buildNotes(){
+  function makeItem(v){
+    const div=document.createElement('div');
+    div.className='vocab-item';
+    div.innerHTML=`<div class="vocab-text"><div class="vocab-es">${v.art} ${v.es}</div><div class="vocab-en">${v.en}</div></div><button class="speak-btn" onclick="speak('${v.es}')">🔊</button>`;
+    return div;
+  }
+  THINGS.forEach(v=>document.getElementById('notes-things').appendChild(makeItem(v)));
+  FAMILY.forEach(v=>document.getElementById('notes-family').appendChild(makeItem(v)));
+}
 
 buildNotes();
 refreshHome();
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  });
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 }
 </script>
 </body>
