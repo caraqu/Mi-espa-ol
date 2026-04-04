@@ -1,9 +1,12 @@
-const CACHE_NAME = 'mi-espanol-v4';
+const CACHE_NAME = 'mi-espanol-v5';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './icon-180.png',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', e => {
