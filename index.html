@@ -101,13 +101,19 @@ body{max-width:480px;margin:0 auto;}
 /* ── FILL IN BLANK ── */
 .ex-card{background:var(--white);border-radius:16px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px;}
 .ex-verb-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:10px;}
-.ex-sentence{font-size:17px;line-height:1.8;margin-bottom:12px;}
-.blank{border:none;border-bottom:2px solid var(--red);background:transparent;font-size:17px;width:110px;text-align:center;padding:2px 4px;outline:none;color:var(--red);font-family:inherit;}
-.blank.ok{border-color:var(--green);color:var(--green);}
-.blank.bad{border-color:var(--err);color:var(--err);}
-.ex-feedback{font-size:14px;font-weight:600;margin-top:8px;min-height:20px;}
-.ex-feedback.ok{color:var(--green);}
-.ex-feedback.bad{color:var(--err);}
+.ex-sentence{font-size:17px;line-height:1.8;margin-bottom:16px;}
+.blank-ph{display:inline-block;min-width:80px;border-bottom:2.5px solid var(--red);margin:0 3px;border-radius:3px;background:rgba(214,40,40,.07);padding:0 6px;}
+.choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.choice-btn{padding:14px 8px;border:2px solid var(--border);border-radius:14px;font-size:15px;font-weight:700;background:var(--white);cursor:pointer;transition:all .15s;color:var(--text);-webkit-user-select:none;user-select:none;}
+.choice-btn:active{transform:scale(.95);}
+.choice-btn.correct{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.choice-btn.wrong{background:var(--err-bg);border-color:var(--err);color:var(--err);}
+.choice-btn:disabled{cursor:default;transform:none;}
+.ex-reveal{background:var(--blue-bg);border:1.5px solid var(--blue);border-radius:12px;padding:14px 16px;margin-bottom:4px;display:none;}
+.ex-reveal.show{display:block;}
+.ex-reveal-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:6px;}
+.ex-reveal-es{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:5px;line-height:1.5;}
+.ex-reveal-en{font-size:13px;color:var(--muted);font-style:italic;}
 
 /* ── BUTTONS ── */
 .primary-btn{width:100%;padding:15px;background:var(--red);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;}
@@ -158,9 +164,26 @@ body{max-width:480px;margin:0 auto;}
 .conj-table td:last-child{font-size:12px;color:var(--muted);}
 .grammar-rule{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;line-height:1.5;}
 .grammar-rule strong{color:var(--red);}
+
+/* ── RESUME MODAL ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center;}
+.modal-backdrop.show{display:flex;}
+.modal-sheet{background:var(--white);border-radius:22px 22px 0 0;padding:26px 22px 36px;width:100%;max-width:480px;}
+.modal-title{font-size:19px;font-weight:800;margin-bottom:6px;}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.5;}
 </style>
 </head>
 <body>
+
+<!-- ════════════════ RESUME MODAL ════════════════ -->
+<div class="modal-backdrop" id="resume-modal">
+  <div class="modal-sheet">
+    <div class="modal-title">Continue where you left off?</div>
+    <div class="modal-sub" id="resume-sub"></div>
+    <button class="primary-btn" onclick="resumeSession()">▶ Continue</button>
+    <button class="secondary-btn" onclick="startFresh()">↺ Start Fresh</button>
+  </div>
+</div>
 
 <!-- ════════════════ HOME ════════════════ -->
 <div id="s-home" class="scr on">
@@ -253,9 +276,13 @@ body{max-width:480px;margin:0 auto;}
     <div class="ex-card">
       <div class="ex-verb-tag" id="ex-verb-tag"></div>
       <div class="ex-sentence" id="ex-sentence"></div>
-      <div class="ex-feedback" id="ex-feedback"></div>
     </div>
-    <button class="primary-btn" id="fill-check-btn" onclick="checkFill()">Check</button>
+    <div class="choices-grid" id="choices-grid"></div>
+    <div class="ex-reveal" id="ex-reveal">
+      <div class="ex-reveal-label">Full sentence</div>
+      <div class="ex-reveal-es" id="ex-reveal-es"></div>
+      <div class="ex-reveal-en" id="ex-reveal-en"></div>
+    </div>
     <button class="primary-btn orange-btn" id="fill-next-btn" onclick="nextFill()" style="display:none;">Next →</button>
   </div>
 </div>
@@ -413,35 +440,41 @@ const FAMILY = [
 
 const VOCAB = [...THINGS, ...FAMILY];
 
+const VERB_CONJUGATIONS = {
+  'LLAMARSE': ['me llamo','te llamas','se llama','nos llamamos','se llaman'],
+  'TENER':    ['tengo','tienes','tiene','tenemos','tienen'],
+  'SER':      ['soy','eres','es','somos','son'],
+};
+
 const FILL_EXERCISES = [
-  {verb:"LLAMARSE",sentence:"¿Cómo ___ tú?",answer:"te llamas"},
-  {verb:"LLAMARSE",sentence:"Mis amigos ___ Pedro y Ana.",answer:"se llaman"},
-  {verb:"LLAMARSE",sentence:"Yo no ___ Juan.",answer:"me llamo"},
-  {verb:"LLAMARSE",sentence:"Mi jefe ___ Daniel.",answer:"se llama"},
-  {verb:"LLAMARSE",sentence:"Mucho gusto. Nosotros ___ Luis y Luisa.",answer:"nos llamamos"},
-  {verb:"LLAMARSE",sentence:"¿Cómo ___ tu mamá?",answer:"se llama"},
-  {verb:"LLAMARSE",sentence:"¿Cómo ___ tus papás?",answer:"se llaman"},
-  {verb:"LLAMARSE",sentence:"¿Cómo ___ usted?",answer:"se llama"},
-  {verb:"TENER",sentence:"¿Cuántos años ___ tú?",answer:"tienes"},
-  {verb:"TENER",sentence:"Yo ___ 32 años.",answer:"tengo"},
-  {verb:"TENER",sentence:"María ___ frío.",answer:"tiene"},
-  {verb:"TENER",sentence:"Nosotros ___ calor.",answer:"tenemos"},
-  {verb:"TENER",sentence:"Ellos ___ un carro muy bonito.",answer:"tienen"},
-  {verb:"TENER",sentence:"Yo ___ un perro que se llama Max.",answer:"tengo"},
-  {verb:"TENER",sentence:"¿Ustedes ___ hambre?",answer:"tienen"},
-  {verb:"TENER",sentence:"Tú ___ que estudiar todos los días.",answer:"tienes"},
-  {verb:"TENER",sentence:"Juan ___ un problema grande.",answer:"tiene"},
-  {verb:"TENER",sentence:"Nosotros ___ 20 años.",answer:"tenemos"},
-  {verb:"SER",sentence:"Yo ___ mexicano. De ciudad de México.",answer:"soy"},
-  {verb:"SER",sentence:"Nosotros ___ estudiantes de español.",answer:"somos"},
-  {verb:"SER",sentence:"Él ___ profesor... ¿verdad?",answer:"es"},
-  {verb:"SER",sentence:"Carlos y Daniel ___ colombianos.",answer:"son"},
-  {verb:"SER",sentence:"¿De dónde ___ ustedes?",answer:"son"},
-  {verb:"SER",sentence:"Ella ___ una arquitecta famosa.",answer:"es"},
-  {verb:"SER",sentence:"¿Quién ___ tú?",answer:"eres"},
-  {verb:"SER",sentence:"Mi nombre es Pedro y ___ coach profesional.",answer:"soy"},
-  {verb:"SER",sentence:"¿Tú ___ el hermano de Ana?",answer:"eres"},
-  {verb:"SER",sentence:"Mucho gusto. Nosotros ___ la familia López.",answer:"somos"},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ tú?",                          answer:"te llamas",   en:"What is your name? (informal)"},
+  {verb:"LLAMARSE",sentence:"Mis amigos ___ Pedro y Ana.",             answer:"se llaman",   en:"My friends are called Pedro and Ana."},
+  {verb:"LLAMARSE",sentence:"Yo no ___ Juan.",                         answer:"me llamo",    en:"My name is not Juan."},
+  {verb:"LLAMARSE",sentence:"Mi jefe ___ Daniel.",                     answer:"se llama",    en:"My boss is called Daniel."},
+  {verb:"LLAMARSE",sentence:"Mucho gusto. Nosotros ___ Luis y Luisa.", answer:"nos llamamos",en:"Nice to meet you. We are called Luis and Luisa."},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ tu mamá?",                      answer:"se llama",    en:"What is your mom's name?"},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ tus papás?",                    answer:"se llaman",   en:"What are your parents' names?"},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ usted?",                        answer:"se llama",    en:"What is your name? (formal)"},
+  {verb:"TENER",sentence:"¿Cuántos años ___ tú?",                      answer:"tienes",      en:"How old are you?"},
+  {verb:"TENER",sentence:"Yo ___ 32 años.",                            answer:"tengo",       en:"I am 32 years old."},
+  {verb:"TENER",sentence:"María ___ frío.",                            answer:"tiene",       en:"María is cold. (lit. María has cold)"},
+  {verb:"TENER",sentence:"Nosotros ___ calor.",                        answer:"tenemos",     en:"We are hot. (lit. We have heat)"},
+  {verb:"TENER",sentence:"Ellos ___ un carro muy bonito.",             answer:"tienen",      en:"They have a very nice car."},
+  {verb:"TENER",sentence:"Yo ___ un perro que se llama Max.",          answer:"tengo",       en:"I have a dog named Max."},
+  {verb:"TENER",sentence:"¿Ustedes ___ hambre?",                       answer:"tienen",      en:"Are you all hungry? (lit. Do you all have hunger?)"},
+  {verb:"TENER",sentence:"Tú ___ que estudiar todos los días.",        answer:"tienes",      en:"You have to study every day."},
+  {verb:"TENER",sentence:"Juan ___ un problema grande.",               answer:"tiene",       en:"Juan has a big problem."},
+  {verb:"TENER",sentence:"Nosotros ___ 20 años.",                      answer:"tenemos",     en:"We are 20 years old. (lit. We have 20 years)"},
+  {verb:"SER",sentence:"Yo ___ mexicano. De ciudad de México.",        answer:"soy",         en:"I am Mexican. From Mexico City."},
+  {verb:"SER",sentence:"Nosotros ___ estudiantes de español.",         answer:"somos",       en:"We are Spanish students."},
+  {verb:"SER",sentence:"Él ___ profesor... ¿verdad?",                  answer:"es",          en:"He is a professor... right?"},
+  {verb:"SER",sentence:"Carlos y Daniel ___ colombianos.",             answer:"son",         en:"Carlos and Daniel are Colombian."},
+  {verb:"SER",sentence:"¿De dónde ___ ustedes?",                       answer:"son",         en:"Where are you all from?"},
+  {verb:"SER",sentence:"Ella ___ una arquitecta famosa.",              answer:"es",          en:"She is a famous architect."},
+  {verb:"SER",sentence:"¿Quién ___ tú?",                              answer:"eres",        en:"Who are you?"},
+  {verb:"SER",sentence:"Mi nombre es Pedro y ___ coach profesional.",  answer:"soy",         en:"My name is Pedro and I am a professional coach."},
+  {verb:"SER",sentence:"¿Tú ___ el hermano de Ana?",                  answer:"eres",        en:"Are you Ana's brother?"},
+  {verb:"SER",sentence:"Mucho gusto. Nosotros ___ la familia López.",  answer:"somos",       en:"Nice to meet you. We are the López family."},
 ];
 
 const CONVERSATIONS = [
@@ -622,37 +655,102 @@ function goHome() {
   show('s-home');
 }
 
-// ═══════════════════ MODE LAUNCHERS ═══════════════════
+// ═══════════════════ SESSION SAVE / RESTORE ═══════════════════
 
-function startMode(mode) {
-  S.mode = mode; S.idx = 0; S.correct = 0; S.wrong = 0; S.srUpdates = {};
-  window.speechSynthesis && window.speechSynthesis.cancel();
+const SESSION_KEY = 'session_espanol_l1';
 
-  if (mode === 'es-en' || mode === 'en-es') {
-    S.cards = shuffle(VOCAB);
-    S.revealed = false;
-    document.getElementById('flash-title').textContent = mode === 'es-en' ? 'Spanish → English' : 'English → Spanish';
-    show('s-flash');
-    renderFlash();
-  } else if (mode === 'review') {
-    const due = getDueCards();
-    if (!due.length) { goHome(); return; }
-    S.cards = shuffle(due);
-    S.mode = 'es-en-review';
-    S.revealed = false;
-    document.getElementById('flash-title').textContent = '📅 Today\'s Review';
-    show('s-flash');
-    renderFlash();
+function saveSession() {
+  if (!S.mode || !S.cards.length || S.idx >= S.cards.length) return;
+  const getId = c => c.es || c.sentence || c.q;
+  localStorage.setItem(SESSION_KEY, JSON.stringify({
+    mode: S.mode, cardIds: S.cards.map(getId),
+    idx: S.idx, correct: S.correct, wrong: S.wrong
+  }));
+}
+
+function clearSession() { localStorage.removeItem(SESSION_KEY); }
+
+function loadSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch(e) { return null; }
+}
+
+function navigateToMode(mode) {
+  if (mode === 'es-en' || mode === 'en-es' || mode === 'es-en-review') {
+    document.getElementById('flash-title').textContent =
+      mode === 'es-en' ? 'Spanish → English' :
+      mode === 'en-es' ? 'English → Spanish' : '📅 Today\'s Review';
+    show('s-flash'); renderFlash();
   } else if (mode === 'fill') {
-    S.cards = shuffle(FILL_EXERCISES); S.submitted = false;
     show('s-fill'); renderFill();
   } else if (mode === 'conv') {
-    S.cards = shuffle(CONVERSATIONS);
     show('s-conv'); renderConv();
   }
 }
 
-function retryMode() { startMode(S.mode === 'es-en-review' ? 'review' : S.mode); }
+// ═══════════════════ MODE LAUNCHERS ═══════════════════
+
+function startMode(mode) {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  const effectiveMode = mode === 'review' ? 'es-en-review' : mode;
+  const saved = loadSession();
+
+  if (saved && saved.mode === effectiveMode && saved.idx > 0 && saved.idx < saved.cardIds.length) {
+    S._pendingMode = mode;
+    S._savedSession = saved;
+    const total = saved.cardIds.length;
+    const left = total - saved.idx;
+    document.getElementById('resume-sub').textContent =
+      `You completed ${saved.idx} of ${total} cards. ${left} card${left>1?'s':''} remaining — pick up right there or start over?`;
+    document.getElementById('resume-modal').classList.add('show');
+    return;
+  }
+  _startFresh(mode);
+}
+
+function resumeSession() {
+  document.getElementById('resume-modal').classList.remove('show');
+  const saved = S._savedSession;
+  const mode = saved.mode;
+
+  // Reconstruct cards in saved order
+  let pool;
+  if (mode === 'es-en' || mode === 'en-es' || mode === 'es-en-review') pool = VOCAB;
+  else if (mode === 'fill') pool = FILL_EXERCISES;
+  else pool = CONVERSATIONS;
+
+  const getId = c => c.es || c.sentence || c.q;
+  S.cards = saved.cardIds.map(id => pool.find(c => getId(c) === id)).filter(Boolean);
+  S.mode = mode; S.idx = saved.idx;
+  S.correct = saved.correct; S.wrong = saved.wrong;
+  S.revealed = false; S.submitted = false; S.srUpdates = {};
+
+  navigateToMode(mode);
+}
+
+function startFresh() {
+  document.getElementById('resume-modal').classList.remove('show');
+  clearSession();
+  _startFresh(S._pendingMode);
+}
+
+function _startFresh(mode) {
+  S.idx = 0; S.correct = 0; S.wrong = 0; S.srUpdates = {};
+
+  if (mode === 'es-en' || mode === 'en-es') {
+    S.mode = mode; S.cards = shuffle(VOCAB); S.revealed = false;
+  } else if (mode === 'review') {
+    const due = getDueCards();
+    if (!due.length) { goHome(); return; }
+    S.mode = 'es-en-review'; S.cards = shuffle(due); S.revealed = false;
+  } else if (mode === 'fill') {
+    S.mode = 'fill'; S.cards = shuffle(FILL_EXERCISES); S.submitted = false;
+  } else if (mode === 'conv') {
+    S.mode = 'conv'; S.cards = shuffle(CONVERSATIONS);
+  }
+  navigateToMode(S.mode);
+}
+
+function retryMode() { clearSession(); startMode(S.mode === 'es-en-review' ? 'review' : S.mode); }
 
 // ═══════════════════ FLASHCARDS ═══════════════════
 
@@ -709,68 +807,76 @@ function verdict(quality) {
   S.srUpdates[item.es] = card.interval;
 
   S.idx++;
-  if (S.idx >= S.cards.length) showScore();
-  else { S.revealed = false; renderFlash(); }
+  if (S.idx >= S.cards.length) { clearSession(); showScore(); }
+  else { S.revealed = false; saveSession(); renderFlash(); }
 }
 
-// ═══════════════════ FILL IN THE BLANK ═══════════════════
+// ═══════════════════ FILL IN THE BLANK (Multiple Choice) ═══════════════════
 
 function renderFill() {
   const item = S.cards[S.idx];
   const total = S.cards.length;
   document.getElementById('fill-prog').style.width = (S.idx / total * 100) + '%';
   document.getElementById('fill-prog-label').textContent = `${S.idx + 1} / ${total}`;
-  document.getElementById('ex-verb-tag').textContent = item.verb;
+  document.getElementById('ex-verb-tag').textContent = `${item.verb} — pick the correct form`;
 
+  // Show sentence with styled blank placeholder
   const parts = item.sentence.split('___');
-  const container = document.getElementById('ex-sentence');
-  container.innerHTML = '';
-  container.appendChild(document.createTextNode(parts[0]));
-  const inp = document.createElement('input');
-  inp.className = 'blank'; inp.id = 'fill-input'; inp.type = 'text';
-  inp.autocomplete = 'off'; inp.autocorrect = 'off'; inp.spellcheck = false;
-  inp.placeholder = '___';
-  inp.addEventListener('keydown', e => { if(e.key==='Enter') checkFill(); });
-  container.appendChild(inp);
-  if (parts[1]) container.appendChild(document.createTextNode(parts[1]));
+  document.getElementById('ex-sentence').innerHTML =
+    parts[0] + '<span class="blank-ph">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>' + (parts[1] || '');
 
-  // Speak the full sentence with a pause marker
-  const preview = item.sentence.replace('___', '...');
-  speak(preview);
+  // Build 4 choices: correct answer + 3 distractors from same verb
+  const pool = VERB_CONJUGATIONS[item.verb];
+  const distractors = shuffle(pool.filter(c => c !== item.answer)).slice(0, 3);
+  const choices = shuffle([item.answer, ...distractors]);
 
-  document.getElementById('ex-feedback').textContent = '';
-  document.getElementById('ex-feedback').className = 'ex-feedback';
-  document.getElementById('fill-check-btn').style.display = 'block';
+  const grid = document.getElementById('choices-grid');
+  grid.innerHTML = '';
+  choices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = choice;
+    btn.onclick = () => selectChoice(btn, choice);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('ex-reveal').classList.remove('show');
   document.getElementById('fill-next-btn').style.display = 'none';
   S.submitted = false;
-  setTimeout(() => { const el = document.getElementById('fill-input'); if(el) el.focus(); }, 120);
+
+  // Speak sentence with pause at blank
+  speak(item.sentence.replace('___', '...'));
 }
 
-function checkFill() {
+function selectChoice(btnEl, chosen) {
   if (S.submitted) return;
-  const inp = document.getElementById('fill-input');
-  if (!inp) return;
-  const userVal = inp.value.trim().toLowerCase();
-  const correct = S.cards[S.idx].answer.toLowerCase();
-  const fb = document.getElementById('ex-feedback');
-  if (userVal === correct) {
-    inp.classList.add('ok'); fb.className = 'ex-feedback ok';
-    fb.textContent = '✓ Correct!'; S.correct++;
-    speak(S.cards[S.idx].sentence.replace('___', correct));
-  } else {
-    inp.classList.add('bad'); fb.className = 'ex-feedback bad';
-    fb.textContent = `✗ Answer: ${S.cards[S.idx].answer}`; S.wrong++;
-    speak(S.cards[S.idx].sentence.replace('___', S.cards[S.idx].answer));
-  }
-  inp.disabled = true; S.submitted = true;
-  document.getElementById('fill-check-btn').style.display = 'none';
+  S.submitted = true;
+  const item = S.cards[S.idx];
+  const isCorrect = chosen === item.answer;
+
+  // Highlight all buttons
+  document.querySelectorAll('.choice-btn').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === item.answer) b.classList.add('correct');
+    else if (b === btnEl && !isCorrect) b.classList.add('wrong');
+  });
+
+  if (isCorrect) S.correct++; else S.wrong++;
+
+  // Show full sentence + English translation
+  document.getElementById('ex-reveal-es').textContent = item.sentence.replace('___', item.answer);
+  document.getElementById('ex-reveal-en').textContent = '🇺🇸 ' + item.en;
+  document.getElementById('ex-reveal').classList.add('show');
+
+  // Speak correct full sentence
+  speak(item.sentence.replace('___', item.answer));
   document.getElementById('fill-next-btn').style.display = 'block';
 }
 
 function nextFill() {
   S.idx++;
-  if (S.idx >= S.cards.length) showScore();
-  else renderFill();
+  if (S.idx >= S.cards.length) { clearSession(); showScore(); }
+  else { saveSession(); renderFill(); }
 }
 
 // ═══════════════════ CONVERSATION ═══════════════════
@@ -806,8 +912,8 @@ function checkConv() {
 
 function nextConv() {
   S.idx++; S.correct++;
-  if (S.idx >= S.cards.length) showScore();
-  else renderConv();
+  if (S.idx >= S.cards.length) { clearSession(); showScore(); }
+  else { saveSession(); renderConv(); }
 }
 
 // ═══════════════════ SCORE ═══════════════════
