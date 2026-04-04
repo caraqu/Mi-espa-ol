@@ -164,15 +164,15 @@ body{max-width:480px;margin:0 auto;}
 
 <!-- ════════════════ HOME ════════════════ -->
 <div id="s-home" class="scr on">
-  <div class="hdr"><div><div class="hdr-title">Mi Español 🇪🇸</div><div class="hdr-sub">¡Vamos a practicar!</div></div></div>
+  <div class="hdr"><div><div class="hdr-title">Mi Español 🇪🇸</div><div class="hdr-sub">Let's practice!</div></div></div>
   <div style="padding:18px;">
     <div class="hero">
-      <div class="hero-title">Lección 1</div>
-      <div class="hero-sub">Abril 3, 2026 · ser / tener / llamarse</div>
+      <div class="hero-title">Lesson 1</div>
+      <div class="hero-sub">April 3, 2026 · ser / tener / llamarse</div>
       <div class="hero-stats">
-        <div class="stat"><div class="stat-n">22</div><div class="stat-l">palabras</div></div>
-        <div class="stat"><div class="stat-n">3</div><div class="stat-l">verbos</div></div>
-        <div class="stat"><div class="stat-n" id="sr-streak">0</div><div class="stat-l">racha días</div></div>
+        <div class="stat"><div class="stat-n">22</div><div class="stat-l">words</div></div>
+        <div class="stat"><div class="stat-n">3</div><div class="stat-l">verbs</div></div>
+        <div class="stat"><div class="stat-n" id="sr-streak">0</div><div class="stat-l">day streak</div></div>
       </div>
     </div>
 
@@ -180,36 +180,36 @@ body{max-width:480px;margin:0 auto;}
     <div class="due-card hidden" id="due-card">
       <div class="due-icon">📅</div>
       <div class="due-text">
-        <div class="due-title">Toca repasar hoy</div>
-        <div class="due-sub" id="due-sub">X palabras pendientes según tu curva de memoria</div>
+        <div class="due-title">Due for review today</div>
+        <div class="due-sub" id="due-sub">X words due based on your memory curve</div>
       </div>
-      <button class="due-btn" onclick="startMode('review')">Repasar</button>
+      <button class="due-btn" onclick="startMode('review')">Review</button>
     </div>
 
     <div class="lesson-card">
       <div class="lc-head">
-        <div><div class="lc-title">Lección 1</div><div class="lc-date">Abril 3, 2026</div></div>
-        <div class="lc-badge">Nueva</div>
+        <div><div class="lc-title">Lesson 1</div><div class="lc-date">April 3, 2026</div></div>
+        <div class="lc-badge">New</div>
       </div>
       <div class="mode-grid">
         <div class="mbtn" onclick="startMode('es-en')">
           <div class="mbtn-icon">🇪🇸→🇺🇸</div>
-          <div class="mbtn-label">Español → Inglés</div>
+          <div class="mbtn-label">Spanish → English</div>
         </div>
         <div class="mbtn" onclick="startMode('en-es')">
           <div class="mbtn-icon">🇺🇸→🇪🇸</div>
-          <div class="mbtn-label">Inglés → Español</div>
+          <div class="mbtn-label">English → Spanish</div>
         </div>
         <div class="mbtn" onclick="startMode('fill')">
           <div class="mbtn-icon">✏️</div>
-          <div class="mbtn-label">Rellena los huecos</div>
+          <div class="mbtn-label">Fill in the Blank</div>
         </div>
         <div class="mbtn" onclick="startMode('conv')">
           <div class="mbtn-icon">🎙️</div>
-          <div class="mbtn-label">Práctica de diálogo</div>
+          <div class="mbtn-label">Dialogue Practice</div>
         </div>
       </div>
-      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes')">📖 Ver apuntes de clase</button>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes')">📖 View Class Notes</button>
     </div>
   </div>
 </div>
@@ -218,25 +218,25 @@ body{max-width:480px;margin:0 auto;}
 <div id="s-flash" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title" id="flash-title">Tarjetas</div><div class="hdr-sub" id="flash-sub"></div></div>
+    <div><div class="hdr-title" id="flash-title">Flashcards</div><div class="hdr-sub" id="flash-sub"></div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="flash-prog"></div></div>
     <div class="prog-label" id="flash-prog-label"></div>
     <div class="fc" id="flashcard" onclick="revealCard()">
-      <div class="fc-label" id="fc-label">¿Qué significa?</div>
+      <div class="fc-label" id="fc-label">What does this mean?</div>
       <div class="fc-word-row">
         <div class="fc-word" id="fc-word"></div>
-        <button class="speak-btn" id="fc-speak-btn" onclick="event.stopPropagation();speakCurrent()" title="Escuchar">🔊</button>
+        <button class="speak-btn" id="fc-speak-btn" onclick="event.stopPropagation();speakCurrent()" title="Listen">🔊</button>
       </div>
       <div class="fc-article" id="fc-article"></div>
       <div class="fc-answer" id="fc-answer"></div>
-      <div class="fc-hint" id="fc-hint">Toca para revelar →</div>
+      <div class="fc-hint" id="fc-hint">Tap to reveal →</div>
     </div>
     <div class="vbtn-row hidden" id="vbtn-row">
-      <button class="vbtn great" onclick="verdict(5)">✓ Lo sé<span class="vbtn-hint">próx. ~6 días</span></button>
-      <button class="vbtn ok"    onclick="verdict(3)">🤔 Más o menos<span class="vbtn-hint">próx. mañana</span></button>
-      <button class="vbtn no"    onclick="verdict(1)">✗ No lo sé<span class="vbtn-hint">repasar hoy</span></button>
+      <button class="vbtn great" onclick="verdict(5)">✓ Got it<span class="vbtn-hint">next: ~6 days</span></button>
+      <button class="vbtn ok"    onclick="verdict(3)">🤔 Sort of<span class="vbtn-hint">next: tomorrow</span></button>
+      <button class="vbtn no"    onclick="verdict(1)">✗ Missed it<span class="vbtn-hint">review today</span></button>
     </div>
   </div>
 </div>
@@ -245,7 +245,7 @@ body{max-width:480px;margin:0 auto;}
 <div id="s-fill" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Rellena los huecos</div><div class="hdr-sub">Conjugación de verbos</div></div>
+    <div><div class="hdr-title">Fill in the Blank</div><div class="hdr-sub">Verb Conjugation</div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="fill-prog"></div></div>
@@ -255,8 +255,8 @@ body{max-width:480px;margin:0 auto;}
       <div class="ex-sentence" id="ex-sentence"></div>
       <div class="ex-feedback" id="ex-feedback"></div>
     </div>
-    <button class="primary-btn" id="fill-check-btn" onclick="checkFill()">Comprobar</button>
-    <button class="primary-btn orange-btn" id="fill-next-btn" onclick="nextFill()" style="display:none;">Siguiente →</button>
+    <button class="primary-btn" id="fill-check-btn" onclick="checkFill()">Check</button>
+    <button class="primary-btn orange-btn" id="fill-next-btn" onclick="nextFill()" style="display:none;">Next →</button>
   </div>
 </div>
 
@@ -264,7 +264,7 @@ body{max-width:480px;margin:0 auto;}
 <div id="s-conv" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Práctica de diálogo</div><div class="hdr-sub">Escucha · habla · compara</div></div>
+    <div><div class="hdr-title">Dialogue Practice</div><div class="hdr-sub">Listen · speak · compare</div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="conv-prog"></div></div>
@@ -272,24 +272,24 @@ body{max-width:480px;margin:0 auto;}
     <div class="conv-ctx" id="conv-ctx"></div>
     <div class="conv-top">
       <div class="conv-bubble" id="conv-question"></div>
-      <button class="speak-btn" style="margin-top:8px;font-size:22px;" onclick="speakQuestion()" title="Escuchar pregunta">🔊</button>
+      <button class="speak-btn" style="margin-top:8px;font-size:22px;" onclick="speakQuestion()" title="Hear question">🔊</button>
     </div>
     <div class="conv-en" id="conv-q-en"></div>
 
     <div class="conv-reveal" id="conv-reveal">
-      <div class="conv-reveal-label">Respuesta modelo</div>
+      <div class="conv-reveal-label">Model Answer</div>
       <div class="conv-ans-row">
         <div>
           <div class="conv-ans-es" id="conv-ans-es"></div>
           <div class="conv-ans-en" id="conv-ans-en"></div>
         </div>
-        <button class="speak-btn" style="font-size:22px;" onclick="speakAnswer()" title="Escuchar respuesta">🔊</button>
+        <button class="speak-btn" style="font-size:22px;" onclick="speakAnswer()" title="Hear answer">🔊</button>
       </div>
       <div class="conv-note" id="conv-note"></div>
     </div>
 
-    <button class="primary-btn" id="conv-check-btn" onclick="checkConv()" style="margin-top:14px;">Ver respuesta →</button>
-    <button class="primary-btn orange-btn" id="conv-next-btn" onclick="nextConv()" style="display:none;margin-top:10px;">Siguiente →</button>
+    <button class="primary-btn" id="conv-check-btn" onclick="checkConv()" style="margin-top:14px;">See Answer →</button>
+    <button class="primary-btn orange-btn" id="conv-next-btn" onclick="nextConv()" style="display:none;margin-top:10px;">Next →</button>
   </div>
 </div>
 
@@ -297,7 +297,7 @@ body{max-width:480px;margin:0 auto;}
 <div id="s-score" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Resultado</div></div>
+    <div><div class="hdr-title">Results</div></div>
   </div>
   <div style="padding:18px;">
     <div class="score-wrap">
@@ -305,15 +305,15 @@ body{max-width:480px;margin:0 auto;}
       <div class="score-title" id="score-title"></div>
       <div class="score-sub"  id="score-sub"></div>
       <div class="score-row">
-        <div class="score-box c"><div class="score-n" id="score-c"></div><div class="score-l">Bien ✓</div></div>
-        <div class="score-box w"><div class="score-n" id="score-w"></div><div class="score-l">A repasar ✗</div></div>
+        <div class="score-box c"><div class="score-n" id="score-c"></div><div class="score-l">Correct ✓</div></div>
+        <div class="score-box w"><div class="score-n" id="score-w"></div><div class="score-l">To Review ✗</div></div>
       </div>
       <div class="sr-info" id="sr-info" style="display:none;">
-        📅 <strong>Curva de memoria actualizada.</strong><br>
-        Volverás a ver las palabras que fallaste mañana, y las que recordaste bien en <span id="sr-next-days">6</span> días.
+        📅 <strong>Memory curve updated!</strong><br>
+        Words you missed will come back tomorrow. Words you got right will return in ~<span id="sr-next-days">6</span> days.
       </div>
-      <button class="primary-btn" onclick="goHome()">🏠 Inicio</button>
-      <button class="secondary-btn" onclick="retryMode()">↺ Repetir</button>
+      <button class="primary-btn" onclick="goHome()">🏠 Home</button>
+      <button class="secondary-btn" onclick="retryMode()">↺ Try Again</button>
     </div>
   </div>
 </div>
@@ -322,26 +322,26 @@ body{max-width:480px;margin:0 auto;}
 <div id="s-notes" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Apuntes · Lección 1</div></div>
+    <div><div class="hdr-title">Class Notes · Lesson 1</div></div>
   </div>
   <div style="padding:18px;">
     <div class="note-section">
-      <h3>📦 Vocabulario — Cosas</h3>
+      <h3>📦 Vocabulary — Things</h3>
       <div class="vocab-list" id="notes-things"></div>
     </div>
     <div class="note-section">
-      <h3>👨‍👩‍👧 Vocabulario — Familia</h3>
+      <h3>👨‍👩‍👧 Vocabulary — Family</h3>
       <div class="vocab-list" id="notes-family"></div>
     </div>
     <div class="note-section">
-      <h3>🔤 Gramática — Artículos y género</h3>
-      <div class="grammar-rule"><strong>El / Los</strong> → masculino (suele terminar en <strong>-O</strong>)<br>el carro · el plato · el cielo</div>
-      <div class="grammar-rule"><strong>La / Las</strong> → femenino (suele terminar en <strong>-A</strong>)<br>la botella · la tienda · la cama</div>
-      <div class="grammar-rule"><strong>Posesivos:</strong> mi / tu / su / nuestro (singular)<br>mis / tus / sus / nuestros (plural)</div>
-      <div class="grammar-rule"><strong>DE</strong> para posesión:<br>El novio <strong>de</strong> mi hermana → Su novio</div>
+      <h3>🔤 Grammar — Articles & Gender</h3>
+      <div class="grammar-rule"><strong>El / Los</strong> → masculine (usually ends in <strong>-O</strong>)<br>el carro · el plato · el cielo</div>
+      <div class="grammar-rule"><strong>La / Las</strong> → feminine (usually ends in <strong>-A</strong>)<br>la botella · la tienda · la cama</div>
+      <div class="grammar-rule"><strong>Possessives:</strong> mi / tu / su / nuestro (singular)<br>mis / tus / sus / nuestros (plural)</div>
+      <div class="grammar-rule"><strong>DE</strong> for possession:<br>El novio <strong>de</strong> mi hermana → Su novio</div>
     </div>
     <div class="note-section">
-      <h3>📊 Verbos — Conjugación</h3>
+      <h3>📊 Verbs — Conjugation</h3>
       <table class="conj-table" style="margin-bottom:16px;">
         <tr><th colspan="3">SER — to be</th></tr>
         <tr><td>yo</td><td>soy</td><td>I am</td></tr>
@@ -368,7 +368,7 @@ body{max-width:480px;margin:0 auto;}
       </table>
     </div>
     <div class="note-section">
-      <h3>🔢 Números</h3>
+      <h3>🔢 Numbers</h3>
       <div class="vocab-list">
         <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">1 uno · 2 dos · 3 tres</span></div><button class="speak-btn" onclick="speak('uno, dos, tres')">🔊</button></div>
         <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">16 dieciséis · 20 veinte · 21 veintiuno</span></div><button class="speak-btn" onclick="speak('dieciséis, veinte, veintiuno')">🔊</button></div>
@@ -589,7 +589,7 @@ function refreshHome() {
   const due = getDueCards();
   const dueCard = document.getElementById('due-card');
   if (due.length > 0) {
-    document.getElementById('due-sub').textContent = `${due.length} palabra${due.length > 1 ? 's' : ''} pendiente${due.length > 1 ? 's' : ''} según tu curva de memoria`;
+    document.getElementById('due-sub').textContent = `${due.length} word${due.length > 1 ? 's' : ''} due based on your memory curve`;
     dueCard.classList.remove('hidden');
   } else {
     dueCard.classList.add('hidden');
@@ -631,7 +631,7 @@ function startMode(mode) {
   if (mode === 'es-en' || mode === 'en-es') {
     S.cards = shuffle(VOCAB);
     S.revealed = false;
-    document.getElementById('flash-title').textContent = mode === 'es-en' ? 'Español → Inglés' : 'Inglés → Español';
+    document.getElementById('flash-title').textContent = mode === 'es-en' ? 'Spanish → English' : 'English → Spanish';
     show('s-flash');
     renderFlash();
   } else if (mode === 'review') {
@@ -640,7 +640,7 @@ function startMode(mode) {
     S.cards = shuffle(due);
     S.mode = 'es-en-review';
     S.revealed = false;
-    document.getElementById('flash-title').textContent = '📅 Repaso de hoy';
+    document.getElementById('flash-title').textContent = '📅 Today\'s Review';
     show('s-flash');
     renderFlash();
   } else if (mode === 'fill') {
@@ -664,8 +664,8 @@ function renderFlash() {
 
   document.getElementById('flash-prog').style.width = pct + '%';
   document.getElementById('flash-prog-label').textContent = `${S.idx + 1} / ${total}`;
-  document.getElementById('flash-sub').textContent = `${S.idx + 1} de ${total} palabras`;
-  document.getElementById('fc-label').textContent = isEsEn ? '¿Qué significa en inglés?' : '¿Cómo se dice en español?';
+  document.getElementById('flash-sub').textContent = `${S.idx + 1} of ${total} words`;
+  document.getElementById('fc-label').textContent = isEsEn ? 'What does this mean in English?' : 'How do you say this in Spanish?';
   document.getElementById('fc-word').textContent  = isEsEn ? item.es : item.en;
   document.getElementById('fc-article').textContent = isEsEn ? `(${item.art} ${item.es})` : '';
   document.getElementById('fc-answer').textContent  = isEsEn ? item.en : `${item.art} ${item.es}`;
@@ -755,11 +755,11 @@ function checkFill() {
   const fb = document.getElementById('ex-feedback');
   if (userVal === correct) {
     inp.classList.add('ok'); fb.className = 'ex-feedback ok';
-    fb.textContent = '✓ ¡Correcto!'; S.correct++;
+    fb.textContent = '✓ Correct!'; S.correct++;
     speak(S.cards[S.idx].sentence.replace('___', correct));
   } else {
     inp.classList.add('bad'); fb.className = 'ex-feedback bad';
-    fb.textContent = `✗ Respuesta: ${S.cards[S.idx].answer}`; S.wrong++;
+    fb.textContent = `✗ Answer: ${S.cards[S.idx].answer}`; S.wrong++;
     speak(S.cards[S.idx].sentence.replace('___', S.cards[S.idx].answer));
   }
   inp.disabled = true; S.submitted = true;
@@ -780,7 +780,8 @@ function renderConv() {
   const total = S.cards.length;
   document.getElementById('conv-prog').style.width = (S.idx / total * 100) + '%';
   document.getElementById('conv-prog-label').textContent = `${S.idx + 1} / ${total}`;
-  document.getElementById('conv-ctx').textContent = '🎯 ' + item.ctx;
+  const ctxMap = {'Sujeto: tú':'Subject: you (tú)','Sujeto: él':'Subject: he (él)','Sujeto: ellas':'Subject: they (ellas)','Sujeto: nosotros':'Subject: we (nosotros)','Sujeto: tu papá':'Subject: your dad','Sujeto: tu mamá':'Subject: your mom','Sujeto: tu abuelo':'Subject: your grandfather','Sujeto: ella':'Subject: she (ella)'};
+  document.getElementById('conv-ctx').textContent = '🎯 ' + (ctxMap[item.ctx] || item.ctx);
   document.getElementById('conv-question').textContent = item.q;
   document.getElementById('conv-q-en').textContent = '🇺🇸 ' + item.q_en;
   document.getElementById('conv-ans-es').textContent = item.ans;
@@ -817,15 +818,15 @@ function showScore() {
   const pct = total > 0 ? Math.round(S.correct / total * 100) : 100;
   let emoji, title, sub;
   if (S.mode === 'conv') {
-    emoji='🎉'; title='¡Diálogo completado!'; sub=`Completaste ${S.cards.length} conversaciones. ¡Sigue así!`;
+    emoji='🎉'; title='Dialogue complete!'; sub=`You finished ${S.cards.length} conversations. Keep it up!`;
   } else if (pct===100) {
-    emoji='🏆'; title='¡Perfecto!'; sub='¡Recordaste todas las palabras!';
+    emoji='🏆'; title='Perfect!'; sub='You remembered every word!';
   } else if (pct>=80) {
-    emoji='⭐'; title='¡Muy bien!'; sub=`Acertaste el ${pct}%. ¡Casi perfecto!`;
+    emoji='⭐'; title='Great job!'; sub=`You got ${pct}% correct. Almost perfect!`;
   } else if (pct>=50) {
-    emoji='💪'; title='¡Buen intento!'; sub=`Acertaste el ${pct}%. ¡Sigue practicando!`;
+    emoji='💪'; title='Good effort!'; sub=`You got ${pct}% correct. Keep practicing!`;
   } else {
-    emoji='📚'; title='¡A repasar!'; sub=`Acertaste el ${pct}%. La curva de memoria te ayudará.`;
+    emoji='📚'; title='Keep studying!'; sub=`You got ${pct}% correct. The memory curve will help!`;
   }
   document.getElementById('score-emoji').textContent = emoji;
   document.getElementById('score-title').textContent = title;
