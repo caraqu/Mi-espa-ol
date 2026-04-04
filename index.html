@@ -15,13 +15,14 @@
   --red:#D62828;--red-dark:#B71C1C;--orange:#F77F00;--yellow:#FCBF49;
   --bg:#FFF8F0;--white:#FFFFFF;--text:#2D2D2D;--muted:#777;
   --green:#2E7D32;--green-bg:#E8F5E9;--err:#C62828;--err-bg:#FFEBEE;
+  --blue:#1565C0;--blue-bg:#E3F2FD;
   --border:#E0D5C8;--shadow:0 2px 10px rgba(0,0,0,0.09);
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
-body{max-width:480px;margin:0 auto;position:relative;}
+body{max-width:480px;margin:0 auto;}
 
 /* ── HEADER ── */
-.hdr{background:var(--red);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;}
+.hdr{background:var(--red);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.2);}
 .hdr-title{font-size:18px;font-weight:700;flex:1;}
 .hdr-sub{font-size:12px;opacity:.8;margin-top:1px;}
 .back{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px;line-height:1;flex-shrink:0;}
@@ -31,75 +32,102 @@ body{max-width:480px;margin:0 auto;position:relative;}
 .scr.on{display:block;}
 
 /* ── HOME ── */
-.hero{background:linear-gradient(135deg,var(--red),var(--orange));border-radius:18px;padding:22px;color:#fff;margin-bottom:20px;}
+.hero{background:linear-gradient(135deg,var(--red),var(--orange));border-radius:18px;padding:22px;color:#fff;margin-bottom:16px;}
 .hero-title{font-size:22px;font-weight:800;margin-bottom:4px;}
 .hero-sub{font-size:13px;opacity:.85;}
-.hero-stats{display:flex;gap:16px;margin-top:14px;}
-.stat{background:rgba(255,255,255,.2);border-radius:10px;padding:8px 14px;text-align:center;}
+.hero-stats{display:flex;gap:10px;margin-top:14px;}
+.stat{background:rgba(255,255,255,.2);border-radius:10px;padding:8px 12px;text-align:center;flex:1;}
 .stat-n{font-size:20px;font-weight:800;}
-.stat-l{font-size:11px;opacity:.85;}
+.stat-l{font-size:10px;opacity:.85;}
+
+/* ── DUE CARD ── */
+.due-card{background:var(--blue-bg);border:2px solid var(--blue);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.due-card.hidden{display:none;}
+.due-icon{font-size:28px;flex-shrink:0;}
+.due-text{flex:1;}
+.due-title{font-size:14px;font-weight:700;color:var(--blue);}
+.due-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.due-btn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}
 
 .lesson-card{background:var(--white);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow);}
 .lc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
 .lc-title{font-size:16px;font-weight:700;color:var(--red);}
 .lc-date{font-size:12px;color:var(--muted);}
 .lc-badge{background:var(--yellow);color:#5a3e00;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;}
-
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .mbtn{background:var(--bg);border:2px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none;}
-.mbtn:active{transform:scale(.95);background:#f0e8de;}
-.mbtn-icon{font-size:26px;margin-bottom:6px;}
-.mbtn-label{font-size:12px;font-weight:700;color:var(--text);line-height:1.3;}
-.mbtn-done{border-color:var(--green);background:var(--green-bg);}
+.mbtn:active{transform:scale(.95);}
+.mbtn-icon{font-size:24px;margin-bottom:6px;}
+.mbtn-label{font-size:11px;font-weight:700;color:var(--text);line-height:1.3;}
 
-/* ── PROGRESS BAR ── */
-.prog-wrap{height:5px;background:var(--border);border-radius:3px;margin-bottom:18px;overflow:hidden;}
+/* ── PROGRESS ── */
+.prog-wrap{height:5px;background:var(--border);border-radius:3px;margin-bottom:14px;overflow:hidden;}
 .prog-bar{height:100%;background:var(--red);border-radius:3px;transition:width .3s;}
 .prog-label{text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px;}
 
+/* ── SPEAK BUTTON ── */
+.speak-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:4px 6px;border-radius:8px;transition:background .15s;color:var(--red);flex-shrink:0;}
+.speak-btn:active{background:rgba(214,40,40,.1);}
+.speak-btn.speaking{animation:pulse 0.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
 /* ── FLASHCARD ── */
-.fc{background:var(--white);border-radius:22px;min-height:210px;padding:36px 28px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.11);margin-bottom:18px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .15s;}
+.fc-wrap{position:relative;}
+.fc{background:var(--white);border-radius:22px;min-height:200px;padding:32px 24px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.11);margin-bottom:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .15s;}
 .fc:active{transform:scale(.98);}
-.fc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px;}
-.fc-word{font-size:38px;font-weight:800;color:var(--red);margin-bottom:6px;}
-.fc-article{font-size:15px;color:var(--muted);margin-bottom:10px;}
-.fc-answer{font-size:26px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;margin-top:10px;}
+.fc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;}
+.fc-word-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.fc-word{font-size:36px;font-weight:800;color:var(--red);}
+.fc-article{font-size:14px;color:var(--muted);margin-bottom:12px;}
+.fc-answer{font-size:24px;font-weight:700;color:var(--green);opacity:0;transition:opacity .3s;margin-top:10px;}
 .fc-answer.show{opacity:1;}
-.fc-hint{font-size:13px;color:var(--muted);margin-top:18px;}
+.fc-hint{font-size:13px;color:var(--muted);margin-top:16px;}
 .fc-hint.hide{display:none;}
 
-.vbtn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;}
+/* ── SR VERDICT BUTTONS ── */
+.vbtn-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;}
+.vbtn-row.two{grid-template-columns:1fr 1fr;}
 .vbtn-row.hidden{display:none;}
-.vbtn{padding:15px;border:2px solid;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;transition:transform .15s;}
+.vbtn{padding:12px 4px;border:2px solid;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;transition:transform .15s;text-align:center;}
 .vbtn:active{transform:scale(.95);}
-.vbtn.yes{background:var(--green-bg);color:var(--green);border-color:var(--green);}
+.vbtn.great{background:var(--green-bg);color:var(--green);border-color:var(--green);}
+.vbtn.ok{background:#FFF8E1;color:#F57F17;border-color:#F9A825;}
 .vbtn.no{background:var(--err-bg);color:var(--err);border-color:var(--err);}
+.vbtn-hint{font-size:10px;display:block;margin-top:2px;opacity:.7;font-weight:400;}
+
+/* ── SR BADGE ── */
+.sr-badge{display:inline-block;background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:10px;margin-left:6px;vertical-align:middle;}
 
 /* ── FILL IN BLANK ── */
-.ex-card{background:var(--white);border-radius:16px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px;}
+.ex-card{background:var(--white);border-radius:16px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px;}
 .ex-verb-tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--orange);margin-bottom:10px;}
-.ex-sentence{font-size:18px;line-height:1.7;margin-bottom:14px;flex-wrap:wrap;}
-.blank{border:none;border-bottom:2px solid var(--red);background:transparent;font-size:18px;width:110px;text-align:center;padding:2px 4px;outline:none;color:var(--red);font-family:inherit;}
+.ex-sentence{font-size:17px;line-height:1.8;margin-bottom:12px;}
+.blank{border:none;border-bottom:2px solid var(--red);background:transparent;font-size:17px;width:110px;text-align:center;padding:2px 4px;outline:none;color:var(--red);font-family:inherit;}
 .blank.ok{border-color:var(--green);color:var(--green);}
 .blank.bad{border-color:var(--err);color:var(--err);}
-.ex-feedback{font-size:14px;font-weight:600;margin-top:8px;min-height:20px;transition:opacity .3s;}
+.ex-feedback{font-size:14px;font-weight:600;margin-top:8px;min-height:20px;}
 .ex-feedback.ok{color:var(--green);}
 .ex-feedback.bad{color:var(--err);}
 
+/* ── BUTTONS ── */
 .primary-btn{width:100%;padding:15px;background:var(--red);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;}
 .primary-btn:active{background:var(--red-dark);transform:scale(.98);}
-.primary-btn:disabled{opacity:.5;cursor:default;}
-.secondary-btn{width:100%;padding:15px;background:transparent;color:var(--red);border:2px solid var(--red);border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;margin-top:10px;}
+.secondary-btn{width:100%;padding:13px;background:transparent;color:var(--red);border:2px solid var(--red);border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.orange-btn{background:var(--orange);}
 
 /* ── CONVERSATION ── */
-.conv-ctx{font-size:13px;color:var(--muted);margin-bottom:10px;background:var(--bg);border-radius:10px;padding:8px 12px;}
-.conv-bubble{background:var(--red);color:#fff;padding:15px 18px;border-radius:18px 18px 4px 18px;font-size:17px;line-height:1.5;margin-bottom:14px;}
-.conv-input{width:100%;padding:13px 15px;border:2px solid var(--border);border-radius:12px;font-size:16px;font-family:inherit;outline:none;transition:border .2s;background:var(--white);}
-.conv-input:focus{border-color:var(--red);}
-.conv-reveal{background:var(--green-bg);border:2px solid var(--green);border-radius:4px 18px 18px 18px;padding:15px 18px;font-size:16px;color:var(--green);margin-top:12px;display:none;line-height:1.5;}
+.conv-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.conv-ctx{font-size:12px;color:var(--muted);background:var(--bg);border-radius:8px;padding:6px 10px;margin-bottom:10px;}
+.conv-bubble{background:var(--red);color:#fff;padding:16px 18px;border-radius:18px 18px 4px 18px;font-size:18px;line-height:1.5;flex:1;}
+.conv-en{font-size:13px;color:var(--muted);margin-bottom:14px;padding-left:4px;font-style:italic;}
+.conv-reveal{background:var(--green-bg);border:2px solid var(--green);border-radius:4px 18px 18px 18px;padding:15px 18px;margin-top:12px;display:none;}
 .conv-reveal.show{display:block;}
-.conv-reveal-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;opacity:.7;}
-.conv-note{font-size:13px;color:var(--muted);margin-top:8px;}
+.conv-reveal-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:8px;}
+.conv-ans-row{display:flex;align-items:flex-start;gap:8px;}
+.conv-ans-es{font-size:17px;font-weight:700;color:var(--green);line-height:1.5;flex:1;}
+.conv-ans-en{font-size:13px;color:var(--muted);margin-top:6px;font-style:italic;}
+.conv-note{background:var(--blue-bg);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13px;color:var(--blue);line-height:1.5;}
+.conv-note strong{color:var(--blue);}
 
 /* ── SCORE ── */
 .score-wrap{text-align:center;padding:20px 0;}
@@ -112,51 +140,56 @@ body{max-width:480px;margin:0 auto;position:relative;}
 .score-box.w{background:var(--err-bg);color:var(--err);}
 .score-n{font-size:30px;font-weight:800;}
 .score-l{font-size:12px;font-weight:600;margin-top:2px;}
+.sr-info{background:var(--blue-bg);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--blue);text-align:left;}
 
-/* ── NOTES VIEW ── */
+/* ── NOTES ── */
 .note-section{background:var(--white);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px;}
-.note-section h3{font-size:14px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
-.vocab-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.vocab-item{background:var(--bg);border-radius:8px;padding:8px 10px;}
-.vocab-es{font-size:14px;font-weight:700;color:var(--red);}
-.vocab-en{font-size:12px;color:var(--muted);}
+.note-section h3{font-size:13px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+.vocab-list{display:flex;flex-direction:column;gap:6px;}
+.vocab-item{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;}
+.vocab-text{flex:1;}
+.vocab-es{font-size:15px;font-weight:700;color:var(--red);}
+.vocab-en{font-size:12px;color:var(--muted);margin-top:1px;}
 .conj-table{width:100%;border-collapse:collapse;font-size:14px;}
-.conj-table th{text-align:left;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border);}
+.conj-table th{text-align:left;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;padding:4px 0;border-bottom:1px solid var(--border);}
 .conj-table td{padding:7px 0;border-bottom:1px solid var(--border);}
-.conj-table td:first-child{color:var(--muted);width:45%;}
-.conj-table td:last-child{font-weight:700;color:var(--red);}
+.conj-table td:first-child{color:var(--muted);width:40%;}
+.conj-table td:nth-child(2){font-weight:700;color:var(--red);width:30%;}
+.conj-table td:last-child{font-size:12px;color:var(--muted);}
 .grammar-rule{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;line-height:1.5;}
 .grammar-rule strong{color:var(--red);}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════ HOME ═══════════════════════════════ -->
+<!-- ════════════════ HOME ════════════════ -->
 <div id="s-home" class="scr on">
-  <div class="hdr" style="border-radius:0;">
-    <div>
-      <div class="hdr-title">Mi Español 🇪🇸</div>
-      <div class="hdr-sub">¡Vamos a practicar!</div>
-    </div>
-  </div>
+  <div class="hdr"><div><div class="hdr-title">Mi Español 🇪🇸</div><div class="hdr-sub">¡Vamos a practicar!</div></div></div>
   <div style="padding:18px;">
     <div class="hero">
       <div class="hero-title">Lección 1</div>
-      <div class="hero-sub">Abril 3, 2026 · Verbos ser / tener / llamarse</div>
+      <div class="hero-sub">Abril 3, 2026 · ser / tener / llamarse</div>
       <div class="hero-stats">
-        <div class="stat"><div class="stat-n" id="vocab-count">22</div><div class="stat-l">palabras</div></div>
+        <div class="stat"><div class="stat-n">22</div><div class="stat-l">palabras</div></div>
         <div class="stat"><div class="stat-n">3</div><div class="stat-l">verbos</div></div>
-        <div class="stat"><div class="stat-n">28</div><div class="stat-l">ejercicios</div></div>
+        <div class="stat"><div class="stat-n" id="sr-streak">0</div><div class="stat-l">racha días</div></div>
       </div>
+    </div>
+
+    <!-- Due today -->
+    <div class="due-card hidden" id="due-card">
+      <div class="due-icon">📅</div>
+      <div class="due-text">
+        <div class="due-title">Toca repasar hoy</div>
+        <div class="due-sub" id="due-sub">X palabras pendientes según tu curva de memoria</div>
+      </div>
+      <button class="due-btn" onclick="startMode('review')">Repasar</button>
     </div>
 
     <div class="lesson-card">
       <div class="lc-head">
-        <div>
-          <div class="lc-title">Lección 1</div>
-          <div class="lc-date">Abril 3, 2026</div>
-        </div>
-        <div class="lc-badge">Nuevo</div>
+        <div><div class="lc-title">Lección 1</div><div class="lc-date">Abril 3, 2026</div></div>
+        <div class="lc-badge">Nueva</div>
       </div>
       <div class="mode-grid">
         <div class="mbtn" onclick="startMode('es-en')">
@@ -172,49 +205,47 @@ body{max-width:480px;margin:0 auto;position:relative;}
           <div class="mbtn-label">Rellena los huecos</div>
         </div>
         <div class="mbtn" onclick="startMode('conv')">
-          <div class="mbtn-icon">💬</div>
+          <div class="mbtn-icon">🎙️</div>
           <div class="mbtn-label">Práctica de diálogo</div>
         </div>
       </div>
-      <button class="secondary-btn" style="margin-top:12px;" onclick="showNotes()">📖 Ver apuntes de clase</button>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes')">📖 Ver apuntes de clase</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════ FLASHCARD (ES→EN & EN→ES) ═══════════════════════════════ -->
+<!-- ════════════════ FLASHCARD ════════════════ -->
 <div id="s-flash" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div>
-      <div class="hdr-title" id="flash-title">Español → Inglés</div>
-      <div class="hdr-sub" id="flash-sub">Tarjetas</div>
-    </div>
+    <div><div class="hdr-title" id="flash-title">Tarjetas</div><div class="hdr-sub" id="flash-sub"></div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="flash-prog"></div></div>
     <div class="prog-label" id="flash-prog-label"></div>
     <div class="fc" id="flashcard" onclick="revealCard()">
       <div class="fc-label" id="fc-label">¿Qué significa?</div>
-      <div class="fc-word" id="fc-word"></div>
+      <div class="fc-word-row">
+        <div class="fc-word" id="fc-word"></div>
+        <button class="speak-btn" id="fc-speak-btn" onclick="event.stopPropagation();speakCurrent()" title="Escuchar">🔊</button>
+      </div>
       <div class="fc-article" id="fc-article"></div>
       <div class="fc-answer" id="fc-answer"></div>
       <div class="fc-hint" id="fc-hint">Toca para revelar →</div>
     </div>
     <div class="vbtn-row hidden" id="vbtn-row">
-      <button class="vbtn yes" onclick="verdict(true)">✓ Lo sé</button>
-      <button class="vbtn no" onclick="verdict(false)">✗ Repasar</button>
+      <button class="vbtn great" onclick="verdict(5)">✓ Lo sé<span class="vbtn-hint">próx. ~6 días</span></button>
+      <button class="vbtn ok"    onclick="verdict(3)">🤔 Más o menos<span class="vbtn-hint">próx. mañana</span></button>
+      <button class="vbtn no"    onclick="verdict(1)">✗ No lo sé<span class="vbtn-hint">repasar hoy</span></button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════ FILL IN THE BLANK ═══════════════════════════════ -->
+<!-- ════════════════ FILL IN THE BLANK ════════════════ -->
 <div id="s-fill" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div>
-      <div class="hdr-title">Rellena los huecos</div>
-      <div class="hdr-sub">Conjugación de verbos</div>
-    </div>
+    <div><div class="hdr-title">Rellena los huecos</div><div class="hdr-sub">Conjugación de verbos</div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="fill-prog"></div></div>
@@ -225,36 +256,44 @@ body{max-width:480px;margin:0 auto;position:relative;}
       <div class="ex-feedback" id="ex-feedback"></div>
     </div>
     <button class="primary-btn" id="fill-check-btn" onclick="checkFill()">Comprobar</button>
-    <button class="primary-btn" id="fill-next-btn" onclick="nextFill()" style="display:none;background:var(--orange);">Siguiente →</button>
+    <button class="primary-btn orange-btn" id="fill-next-btn" onclick="nextFill()" style="display:none;">Siguiente →</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════ CONVERSATION ═══════════════════════════════ -->
+<!-- ════════════════ CONVERSATION ════════════════ -->
 <div id="s-conv" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div>
-      <div class="hdr-title">Práctica de diálogo</div>
-      <div class="hdr-sub">Tú respondes</div>
-    </div>
+    <div><div class="hdr-title">Práctica de diálogo</div><div class="hdr-sub">Escucha · habla · compara</div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="conv-prog"></div></div>
     <div class="prog-label" id="conv-prog-label"></div>
     <div class="conv-ctx" id="conv-ctx"></div>
-    <div class="conv-bubble" id="conv-question"></div>
-    <input class="conv-input" id="conv-input" type="text" placeholder="Escribe tu respuesta..." autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="conv-top">
+      <div class="conv-bubble" id="conv-question"></div>
+      <button class="speak-btn" style="margin-top:8px;font-size:22px;" onclick="speakQuestion()" title="Escuchar pregunta">🔊</button>
+    </div>
+    <div class="conv-en" id="conv-q-en"></div>
+
     <div class="conv-reveal" id="conv-reveal">
       <div class="conv-reveal-label">Respuesta modelo</div>
-      <div id="conv-answer-text"></div>
+      <div class="conv-ans-row">
+        <div>
+          <div class="conv-ans-es" id="conv-ans-es"></div>
+          <div class="conv-ans-en" id="conv-ans-en"></div>
+        </div>
+        <button class="speak-btn" style="font-size:22px;" onclick="speakAnswer()" title="Escuchar respuesta">🔊</button>
+      </div>
+      <div class="conv-note" id="conv-note"></div>
     </div>
-    <div class="conv-note" id="conv-note"></div>
-    <button class="primary-btn" id="conv-check-btn" onclick="checkConv()" style="margin-top:14px;">Ver respuesta</button>
-    <button class="primary-btn" id="conv-next-btn" onclick="nextConv()" style="display:none;background:var(--orange);margin-top:10px;">Siguiente →</button>
+
+    <button class="primary-btn" id="conv-check-btn" onclick="checkConv()" style="margin-top:14px;">Ver respuesta →</button>
+    <button class="primary-btn orange-btn" id="conv-next-btn" onclick="nextConv()" style="display:none;margin-top:10px;">Siguiente →</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════ SCORE ═══════════════════════════════ -->
+<!-- ════════════════ SCORE ════════════════ -->
 <div id="s-score" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
@@ -264,446 +303,573 @@ body{max-width:480px;margin:0 auto;position:relative;}
     <div class="score-wrap">
       <div class="score-emoji" id="score-emoji"></div>
       <div class="score-title" id="score-title"></div>
-      <div class="score-sub" id="score-sub"></div>
+      <div class="score-sub"  id="score-sub"></div>
       <div class="score-row">
-        <div class="score-box c"><div class="score-n" id="score-c"></div><div class="score-l">Correctas ✓</div></div>
+        <div class="score-box c"><div class="score-n" id="score-c"></div><div class="score-l">Bien ✓</div></div>
         <div class="score-box w"><div class="score-n" id="score-w"></div><div class="score-l">A repasar ✗</div></div>
       </div>
+      <div class="sr-info" id="sr-info" style="display:none;">
+        📅 <strong>Curva de memoria actualizada.</strong><br>
+        Volverás a ver las palabras que fallaste mañana, y las que recordaste bien en <span id="sr-next-days">6</span> días.
+      </div>
       <button class="primary-btn" onclick="goHome()">🏠 Inicio</button>
-      <button class="secondary-btn" id="retry-btn" onclick="retryMode()">↺ Repetir</button>
+      <button class="secondary-btn" onclick="retryMode()">↺ Repetir</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════ NOTES ═══════════════════════════════ -->
+<!-- ════════════════ NOTES ════════════════ -->
 <div id="s-notes" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
     <div><div class="hdr-title">Apuntes · Lección 1</div></div>
   </div>
   <div style="padding:18px;">
-
     <div class="note-section">
       <h3>📦 Vocabulario — Cosas</h3>
-      <div class="vocab-list">
-        <div class="vocab-item"><div class="vocab-es">la botella</div><div class="vocab-en">bottle</div></div>
-        <div class="vocab-item"><div class="vocab-es">el carro</div><div class="vocab-en">car</div></div>
-        <div class="vocab-item"><div class="vocab-es">la computadora</div><div class="vocab-en">computer</div></div>
-        <div class="vocab-item"><div class="vocab-es">la tienda</div><div class="vocab-en">store / shop</div></div>
-        <div class="vocab-item"><div class="vocab-es">la cafetería</div><div class="vocab-en">cafeteria</div></div>
-        <div class="vocab-item"><div class="vocab-es">el plato</div><div class="vocab-en">plate / dish</div></div>
-        <div class="vocab-item"><div class="vocab-es">la cama</div><div class="vocab-en">bed</div></div>
-        <div class="vocab-item"><div class="vocab-es">el cielo</div><div class="vocab-en">sky</div></div>
-        <div class="vocab-item"><div class="vocab-es">el invierno</div><div class="vocab-en">winter</div></div>
-        <div class="vocab-item"><div class="vocab-es">la primavera</div><div class="vocab-en">spring</div></div>
-        <div class="vocab-item"><div class="vocab-es">el verano</div><div class="vocab-en">summer</div></div>
-      </div>
+      <div class="vocab-list" id="notes-things"></div>
     </div>
-
     <div class="note-section">
       <h3>👨‍👩‍👧 Vocabulario — Familia</h3>
-      <div class="vocab-list">
-        <div class="vocab-item"><div class="vocab-es">el novio</div><div class="vocab-en">boyfriend</div></div>
-        <div class="vocab-item"><div class="vocab-es">el tío</div><div class="vocab-en">uncle</div></div>
-        <div class="vocab-item"><div class="vocab-es">el abuelo</div><div class="vocab-en">grandfather</div></div>
-        <div class="vocab-item"><div class="vocab-es">el hermano</div><div class="vocab-en">brother</div></div>
-        <div class="vocab-item"><div class="vocab-es">la hermana</div><div class="vocab-en">sister</div></div>
-        <div class="vocab-item"><div class="vocab-es">el primo</div><div class="vocab-en">cousin</div></div>
-        <div class="vocab-item"><div class="vocab-es">el sobrino</div><div class="vocab-en">nephew</div></div>
-        <div class="vocab-item"><div class="vocab-es">el cuñado</div><div class="vocab-en">brother-in-law</div></div>
-        <div class="vocab-item"><div class="vocab-es">el prometido</div><div class="vocab-en">fiancé</div></div>
-        <div class="vocab-item"><div class="vocab-es">el papá</div><div class="vocab-en">dad</div></div>
-        <div class="vocab-item"><div class="vocab-es">la mamá</div><div class="vocab-en">mom</div></div>
-      </div>
+      <div class="vocab-list" id="notes-family"></div>
     </div>
-
     <div class="note-section">
       <h3>🔤 Gramática — Artículos y género</h3>
-      <div class="grammar-rule"><strong>El / Los</strong> → masculino (suele terminar en <strong>-O</strong>)<br>el carro, el plato, el cielo</div>
-      <div class="grammar-rule"><strong>La / Las</strong> → femenino (suele terminar en <strong>-A</strong>)<br>la botella, la tienda, la cama</div>
+      <div class="grammar-rule"><strong>El / Los</strong> → masculino (suele terminar en <strong>-O</strong>)<br>el carro · el plato · el cielo</div>
+      <div class="grammar-rule"><strong>La / Las</strong> → femenino (suele terminar en <strong>-A</strong>)<br>la botella · la tienda · la cama</div>
       <div class="grammar-rule"><strong>Posesivos:</strong> mi / tu / su / nuestro (singular)<br>mis / tus / sus / nuestros (plural)</div>
-      <div class="grammar-rule"><strong>DE</strong> para indicar posesión:<br>El novio <strong>de</strong> mi hermana se llama Jesús.<br>→ Su novio se llama Jesús.</div>
+      <div class="grammar-rule"><strong>DE</strong> para posesión:<br>El novio <strong>de</strong> mi hermana → Su novio</div>
     </div>
-
     <div class="note-section">
       <h3>📊 Verbos — Conjugación</h3>
       <table class="conj-table" style="margin-bottom:16px;">
-        <tr><th colspan="3">SER (to be)</th></tr>
-        <tr><td>yo</td><td>soy</td><td></td></tr>
-        <tr><td>tú</td><td>eres</td><td></td></tr>
-        <tr><td>él / ella</td><td>es</td><td></td></tr>
-        <tr><td>nosotros</td><td>somos</td><td></td></tr>
-        <tr><td>ellos / ellas</td><td>son</td><td></td></tr>
+        <tr><th colspan="3">SER — to be</th></tr>
+        <tr><td>yo</td><td>soy</td><td>I am</td></tr>
+        <tr><td>tú</td><td>eres</td><td>you are</td></tr>
+        <tr><td>él/ella</td><td>es</td><td>he/she is</td></tr>
+        <tr><td>nosotros</td><td>somos</td><td>we are</td></tr>
+        <tr><td>ellos/ellas</td><td>son</td><td>they are</td></tr>
       </table>
       <table class="conj-table" style="margin-bottom:16px;">
-        <tr><th colspan="3">TENER (to have)</th></tr>
-        <tr><td>yo</td><td>tengo</td><td></td></tr>
-        <tr><td>tú</td><td>tienes</td><td></td></tr>
-        <tr><td>él / ella</td><td>tiene</td><td></td></tr>
-        <tr><td>nosotros</td><td>tenemos</td><td></td></tr>
-        <tr><td>ellos / ellas</td><td>tienen</td><td></td></tr>
+        <tr><th colspan="3">TENER — to have</th></tr>
+        <tr><td>yo</td><td>tengo</td><td>I have</td></tr>
+        <tr><td>tú</td><td>tienes</td><td>you have</td></tr>
+        <tr><td>él/ella</td><td>tiene</td><td>he/she has</td></tr>
+        <tr><td>nosotros</td><td>tenemos</td><td>we have</td></tr>
+        <tr><td>ellos/ellas</td><td>tienen</td><td>they have</td></tr>
       </table>
       <table class="conj-table">
-        <tr><th colspan="3">LLAMARSE (to be called)</th></tr>
-        <tr><td>yo</td><td>me llamo</td><td></td></tr>
-        <tr><td>tú</td><td>te llamas</td><td></td></tr>
-        <tr><td>él / ella</td><td>se llama</td><td></td></tr>
-        <tr><td>nosotros</td><td>nos llamamos</td><td></td></tr>
-        <tr><td>ellos / ellas</td><td>se llaman</td><td></td></tr>
+        <tr><th colspan="3">LLAMARSE — to be called</th></tr>
+        <tr><td>yo</td><td>me llamo</td><td>my name is</td></tr>
+        <tr><td>tú</td><td>te llamas</td><td>your name is</td></tr>
+        <tr><td>él/ella</td><td>se llama</td><td>his/her name is</td></tr>
+        <tr><td>nosotros</td><td>nos llamamos</td><td>our names are</td></tr>
+        <tr><td>ellos/ellas</td><td>se llaman</td><td>their names are</td></tr>
       </table>
     </div>
-
     <div class="note-section">
       <h3>🔢 Números</h3>
       <div class="vocab-list">
-        <div class="vocab-item"><div class="vocab-es">1 uno</div><div class="vocab-en">2 dos</div></div>
-        <div class="vocab-item"><div class="vocab-es">3 tres</div><div class="vocab-en">16 dieciséis</div></div>
-        <div class="vocab-item"><div class="vocab-es">20 veinte</div><div class="vocab-en">21 veintiuno</div></div>
-        <div class="vocab-item"><div class="vocab-es">30 treinta</div><div class="vocab-en">40 cuarenta</div></div>
-        <div class="vocab-item"><div class="vocab-es">50 cincuenta</div><div class="vocab-en">60 sesenta</div></div>
-        <div class="vocab-item"><div class="vocab-es">70 setenta</div><div class="vocab-en">80 ochenta</div></div>
-        <div class="vocab-item"><div class="vocab-es">90 noventa</div><div class="vocab-en">100 cien</div></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">1 uno · 2 dos · 3 tres</span></div><button class="speak-btn" onclick="speak('uno, dos, tres')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">16 dieciséis · 20 veinte · 21 veintiuno</span></div><button class="speak-btn" onclick="speak('dieciséis, veinte, veintiuno')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">30 treinta · 40 cuarenta · 50 cincuenta</span></div><button class="speak-btn" onclick="speak('treinta, cuarenta, cincuenta')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">60 sesenta · 70 setenta · 80 ochenta</span></div><button class="speak-btn" onclick="speak('sesenta, setenta, ochenta')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">90 noventa · 100 cien</span></div><button class="speak-btn" onclick="speak('noventa, cien')">🔊</button></div>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-// ═══════════════════════════ DATA ═══════════════════════════
+// ═══════════════════ DATA ═══════════════════
 
-const VOCAB = [
-  {es:"botella",   en:"bottle",           art:"la",  g:"f"},
-  {es:"carro",     en:"car",              art:"el",  g:"m"},
-  {es:"computadora",en:"computer",        art:"la",  g:"f"},
-  {es:"tienda",    en:"store / shop",     art:"la",  g:"f"},
-  {es:"cafetería", en:"cafeteria",        art:"la",  g:"f"},
-  {es:"plato",     en:"plate / dish",     art:"el",  g:"m"},
-  {es:"cama",      en:"bed",              art:"la",  g:"f"},
-  {es:"cielo",     en:"sky",              art:"el",  g:"m"},
-  {es:"invierno",  en:"winter",           art:"el",  g:"m"},
-  {es:"primavera", en:"spring (season)",  art:"la",  g:"f"},
-  {es:"verano",    en:"summer",           art:"el",  g:"m"},
-  {es:"novio",     en:"boyfriend",        art:"el",  g:"m"},
-  {es:"tío",       en:"uncle",            art:"el",  g:"m"},
-  {es:"abuelo",    en:"grandfather",      art:"el",  g:"m"},
-  {es:"hermano",   en:"brother",          art:"el",  g:"m"},
-  {es:"hermana",   en:"sister",           art:"la",  g:"f"},
-  {es:"primo",     en:"cousin",           art:"el",  g:"m"},
-  {es:"sobrino",   en:"nephew",           art:"el",  g:"m"},
-  {es:"cuñado",    en:"brother-in-law",   art:"el",  g:"m"},
-  {es:"prometido", en:"fiancé",           art:"el",  g:"m"},
-  {es:"papá",      en:"dad / father",     art:"el",  g:"m"},
-  {es:"mamá",      en:"mom / mother",     art:"la",  g:"f"},
+const THINGS = [
+  {es:"botella",en:"bottle",art:"la"},
+  {es:"carro",en:"car",art:"el"},
+  {es:"computadora",en:"computer",art:"la"},
+  {es:"tienda",en:"store / shop",art:"la"},
+  {es:"cafetería",en:"cafeteria",art:"la"},
+  {es:"plato",en:"plate / dish",art:"el"},
+  {es:"cama",en:"bed",art:"la"},
+  {es:"cielo",en:"sky",art:"el"},
+  {es:"invierno",en:"winter",art:"el"},
+  {es:"primavera",en:"spring",art:"la"},
+  {es:"verano",en:"summer",art:"el"},
 ];
 
+const FAMILY = [
+  {es:"novio",en:"boyfriend",art:"el"},
+  {es:"tío",en:"uncle",art:"el"},
+  {es:"abuelo",en:"grandfather",art:"el"},
+  {es:"hermano",en:"brother",art:"el"},
+  {es:"hermana",en:"sister",art:"la"},
+  {es:"primo",en:"cousin",art:"el"},
+  {es:"sobrino",en:"nephew",art:"el"},
+  {es:"cuñado",en:"brother-in-law",art:"el"},
+  {es:"prometido",en:"fiancé",art:"el"},
+  {es:"papá",en:"dad / father",art:"el"},
+  {es:"mamá",en:"mom / mother",art:"la"},
+];
+
+const VOCAB = [...THINGS, ...FAMILY];
+
 const FILL_EXERCISES = [
-  // LLAMARSE
-  {verb:"LLAMARSE", sentence:"¿Cómo ___ tú?",                           answer:"te llamas"},
-  {verb:"LLAMARSE", sentence:"Mis amigos ___ Pedro y Ana.",              answer:"se llaman"},
-  {verb:"LLAMARSE", sentence:"Yo no ___ Juan.",                          answer:"me llamo"},
-  {verb:"LLAMARSE", sentence:"Mi jefe ___ Daniel.",                      answer:"se llama"},
-  {verb:"LLAMARSE", sentence:"Mucho gusto. Nosotros ___ Luis y Luisa.",  answer:"nos llamamos"},
-  {verb:"LLAMARSE", sentence:"¿Cómo ___ tu mamá?",                       answer:"se llama"},
-  {verb:"LLAMARSE", sentence:"¿Cómo ___ tus papás?",                     answer:"se llaman"},
-  {verb:"LLAMARSE", sentence:"¿Cómo ___ usted?",                         answer:"se llama"},
-  // TENER
-  {verb:"TENER", sentence:"¿Cuántos años ___ tú?",                      answer:"tienes"},
-  {verb:"TENER", sentence:"Yo ___ 32 años.",                             answer:"tengo"},
-  {verb:"TENER", sentence:"María ___ frío.",                             answer:"tiene"},
-  {verb:"TENER", sentence:"Nosotros ___ calor.",                         answer:"tenemos"},
-  {verb:"TENER", sentence:"Ellos ___ un carro muy bonito.",              answer:"tienen"},
-  {verb:"TENER", sentence:"Yo ___ un perro que se llama Max.",           answer:"tengo"},
-  {verb:"TENER", sentence:"¿Ustedes ___ hambre?",                        answer:"tienen"},
-  {verb:"TENER", sentence:"Tú ___ que estudiar todos los días.",         answer:"tienes"},
-  {verb:"TENER", sentence:"Juan ___ un problema grande.",                answer:"tiene"},
-  {verb:"TENER", sentence:"Nosotros ___ 20 años.",                       answer:"tenemos"},
-  // SER
-  {verb:"SER", sentence:"Yo ___ mexicano. De ciudad de México.",         answer:"soy"},
-  {verb:"SER", sentence:"Nosotros ___ estudiantes de español.",          answer:"somos"},
-  {verb:"SER", sentence:"Él ___ profesor... ¿verdad?",                  answer:"es"},
-  {verb:"SER", sentence:"Carlos y Daniel ___ colombianos.",              answer:"son"},
-  {verb:"SER", sentence:"¿De dónde ___ ustedes?",                        answer:"son"},
-  {verb:"SER", sentence:"Ella ___ una arquitecta famosa.",               answer:"es"},
-  {verb:"SER", sentence:"¿Quién ___ tú?",                               answer:"eres"},
-  {verb:"SER", sentence:"Mi nombre es Pedro y ___ coach profesional.",   answer:"soy"},
-  {verb:"SER", sentence:"¿Tú ___ el hermano de Ana?",                   answer:"eres"},
-  {verb:"SER", sentence:"Mucho gusto. Nosotros ___ la familia López.",   answer:"somos"},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ tú?",answer:"te llamas"},
+  {verb:"LLAMARSE",sentence:"Mis amigos ___ Pedro y Ana.",answer:"se llaman"},
+  {verb:"LLAMARSE",sentence:"Yo no ___ Juan.",answer:"me llamo"},
+  {verb:"LLAMARSE",sentence:"Mi jefe ___ Daniel.",answer:"se llama"},
+  {verb:"LLAMARSE",sentence:"Mucho gusto. Nosotros ___ Luis y Luisa.",answer:"nos llamamos"},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ tu mamá?",answer:"se llama"},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ tus papás?",answer:"se llaman"},
+  {verb:"LLAMARSE",sentence:"¿Cómo ___ usted?",answer:"se llama"},
+  {verb:"TENER",sentence:"¿Cuántos años ___ tú?",answer:"tienes"},
+  {verb:"TENER",sentence:"Yo ___ 32 años.",answer:"tengo"},
+  {verb:"TENER",sentence:"María ___ frío.",answer:"tiene"},
+  {verb:"TENER",sentence:"Nosotros ___ calor.",answer:"tenemos"},
+  {verb:"TENER",sentence:"Ellos ___ un carro muy bonito.",answer:"tienen"},
+  {verb:"TENER",sentence:"Yo ___ un perro que se llama Max.",answer:"tengo"},
+  {verb:"TENER",sentence:"¿Ustedes ___ hambre?",answer:"tienen"},
+  {verb:"TENER",sentence:"Tú ___ que estudiar todos los días.",answer:"tienes"},
+  {verb:"TENER",sentence:"Juan ___ un problema grande.",answer:"tiene"},
+  {verb:"TENER",sentence:"Nosotros ___ 20 años.",answer:"tenemos"},
+  {verb:"SER",sentence:"Yo ___ mexicano. De ciudad de México.",answer:"soy"},
+  {verb:"SER",sentence:"Nosotros ___ estudiantes de español.",answer:"somos"},
+  {verb:"SER",sentence:"Él ___ profesor... ¿verdad?",answer:"es"},
+  {verb:"SER",sentence:"Carlos y Daniel ___ colombianos.",answer:"son"},
+  {verb:"SER",sentence:"¿De dónde ___ ustedes?",answer:"son"},
+  {verb:"SER",sentence:"Ella ___ una arquitecta famosa.",answer:"es"},
+  {verb:"SER",sentence:"¿Quién ___ tú?",answer:"eres"},
+  {verb:"SER",sentence:"Mi nombre es Pedro y ___ coach profesional.",answer:"soy"},
+  {verb:"SER",sentence:"¿Tú ___ el hermano de Ana?",answer:"eres"},
+  {verb:"SER",sentence:"Mucho gusto. Nosotros ___ la familia López.",answer:"somos"},
 ];
 
 const CONVERSATIONS = [
-  {ctx:"Sujeto: tú", q:"¿Cómo te llamas?",                ans:"Me llamo [tu nombre].",              note:"Usa 'me llamo' para hablar de ti mismo/a."},
-  {ctx:"Sujeto: él",  q:"¿Cómo se llama él?",              ans:"Él se llama [nombre].",              note:"Para hablar de una tercera persona, usa 'se llama'."},
-  {ctx:"Sujeto: ellas",q:"¿Cómo se llaman ellas?",         ans:"Ellas se llaman [nombre] y [nombre].",note:"Plural: se llaman (igual para ellos y ellas)."},
-  {ctx:"Sujeto: nosotros",q:"¿Cómo se llaman ustedes?",    ans:"Nos llamamos [nombre] y [nombre].",  note:"Nosotros → nos llamamos."},
-  {ctx:"Sujeto: tú", q:"¿Tienes hermanos?",                ans:"Sí, tengo [número] hermanos. / No, no tengo hermanos.", note:"Tú → tienes. Responde con tu realidad."},
-  {ctx:"Sujeto: tu papá",q:"¿Cuántos años tiene tu papá?", ans:"Mi papá tiene [número] años.",       note:"Él/ella/tu papá → tiene."},
-  {ctx:"Sujeto: tú",  q:"¿Tienes un carro?",               ans:"Sí, tengo un carro. / No, no tengo carro.", note:"Artículo masculino: un carro."},
-  {ctx:"Sujeto: tu mamá",q:"¿De dónde es tu mamá?",        ans:"Mi mamá es de [país/ciudad].",       note:"Ser + de → origen. Mi mamá es de China."},
-  {ctx:"Sujeto: tú", q:"¿De dónde eres tú?",               ans:"Yo soy de [país/ciudad].",            note:"Yo → soy. Para origen usamos 'ser de'."},
-  {ctx:"Sujeto: nosotros",q:"¿Son ustedes estudiantes de español?", ans:"Sí, somos estudiantes de español.", note:"Ustedes/ellos → son. Nosotros → somos."},
-  {ctx:"Sujeto: tu abuelo",q:"¿Tienes abuelo? ¿Cómo se llama?", ans:"Sí, tengo un abuelo. Se llama [nombre].", note:"Combina tener + llamarse."},
-  {ctx:"Sujeto: ella",q:"¿Ella es tu hermana?",             ans:"Sí, ella es mi hermana. / No, ella es mi prima.", note:"Ella → es. Posesivo: mi hermana."},
+  {ctx:"Sujeto: tú",
+   q:"¿Cómo te llamas?",               q_en:"What's your name?",
+   ans:"Me llamo [tu nombre].",          ans_en:"My name is [your name].",
+   note:"<strong>Me llamo</strong> literally means 'I call myself'. It comes from the verb <strong>llamarse</strong>. Use it every time you introduce yourself."},
+  {ctx:"Sujeto: él",
+   q:"¿Cómo se llama él?",             q_en:"What is his name?",
+   ans:"Él se llama [nombre].",          ans_en:"His name is [name].",
+   note:"For he / she / usted, use <strong>se llama</strong>. It's the same form for all three — context tells you who you're talking about."},
+  {ctx:"Sujeto: ellas",
+   q:"¿Cómo se llaman ellas?",         q_en:"What are their names? (all female)",
+   ans:"Ellas se llaman [nombre] y [nombre].", ans_en:"Their names are [name] and [name].",
+   note:"Plural (they): <strong>se llaman</strong>. Same for ellos, ellas, and ustedes."},
+  {ctx:"Sujeto: nosotros",
+   q:"¿Cómo se llaman ustedes?",       q_en:"What are your names? (you all)",
+   ans:"Nos llamamos [nombre] y [nombre].", ans_en:"Our names are [name] and [name].",
+   note:"Note the switch: the question uses <strong>ustedes → se llaman</strong>, but your answer uses <strong>nosotros → nos llamamos</strong>."},
+  {ctx:"Sujeto: tú",
+   q:"¿Tienes hermanos?",              q_en:"Do you have any siblings?",
+   ans:"Sí, tengo [número] hermanos. / No, no tengo hermanos.", ans_en:"Yes, I have [number] siblings. / No, I don't have siblings.",
+   note:"<strong>Hermanos</strong> can mean 'brothers' or 'siblings'. Notice double negative: <strong>No, no tengo</strong> — both words are required in Spanish."},
+  {ctx:"Sujeto: tu papá",
+   q:"¿Cuántos años tiene tu papá?",   q_en:"How old is your dad?",
+   ans:"Mi papá tiene [número] años.", ans_en:"My dad is [number] years old.",
+   note:"In Spanish you <strong>have</strong> years, not <strong>be</strong> years old. Always: <strong>tener + número + años</strong>."},
+  {ctx:"Sujeto: tú",
+   q:"¿Tienes un carro?",              q_en:"Do you have a car?",
+   ans:"Sí, tengo un carro. / No, no tengo carro.", ans_en:"Yes, I have a car. / No, I don't have a car.",
+   note:"<strong>Un</strong> is the masculine article (a/an). Carro is masculine → <strong>un carro</strong>. Computadora is feminine → <strong>una computadora</strong>."},
+  {ctx:"Sujeto: tu mamá",
+   q:"¿De dónde es tu mamá?",          q_en:"Where is your mom from?",
+   ans:"Mi mamá es de [país/ciudad].", ans_en:"My mom is from [country/city].",
+   note:"Origin = <strong>ser + de</strong>. Never use 'estar' for origin — that would mean a temporary location, not where someone is from."},
+  {ctx:"Sujeto: tú",
+   q:"¿De dónde eres tú?",             q_en:"Where are you from?",
+   ans:"Yo soy de [país/ciudad].",      ans_en:"I am from [country/city].",
+   note:"<strong>Yo → soy</strong>. 'Ser de' tells us origin. Example: Yo soy de China. Mi mamá es de China. Mis papás son de China."},
+  {ctx:"Sujeto: nosotros",
+   q:"¿Son ustedes estudiantes de español?", q_en:"Are you all Spanish students?",
+   ans:"Sí, somos estudiantes de español.", ans_en:"Yes, we are Spanish students.",
+   note:"Question uses <strong>ustedes → son</strong>, answer uses <strong>nosotros → somos</strong>. Remember: ser conjugates differently for each pronoun."},
+  {ctx:"Sujeto: tu abuelo",
+   q:"¿Tienes abuelo? ¿Cómo se llama?", q_en:"Do you have a grandfather? What's his name?",
+   ans:"Sí, tengo un abuelo. Se llama [nombre].", ans_en:"Yes, I have a grandfather. His name is [name].",
+   note:"Two sentences, two verbs: <strong>tener</strong> (to have) + <strong>llamarse</strong> (to be called). 'Se llama' works for él without repeating 'él'."},
+  {ctx:"Sujeto: ella",
+   q:"¿Ella es tu hermana?",           q_en:"Is she your sister?",
+   ans:"Sí, ella es mi hermana. / No, ella es mi prima.", ans_en:"Yes, she is my sister. / No, she is my cousin.",
+   note:"<strong>Ella → es</strong>. Possessive: <strong>mi hermana</strong> (my sister). In Spanish, no article is needed when you use a possessive — just 'mi hermana', never 'la mi hermana'."},
 ];
 
-// ═══════════════════════════ STATE ═══════════════════════════
+// ═══════════════════ TTS ═══════════════════
 
-const S = {
-  mode: null,
-  idx: 0,
-  cards: [],
-  correct: 0,
-  wrong: 0,
-  revealed: false,
-  submitted: false,
-};
+let voices = [];
+let ttsReady = false;
+
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) ttsReady = true;
+}
+
+if (window.speechSynthesis) {
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function speak(text, lang = 'es-ES') {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
+  u.rate = 0.82;
+  u.pitch = 1.0;
+  // Find best Spanish voice
+  const esVoice = voices.find(v => v.lang === 'es-MX') ||
+                  voices.find(v => v.lang === 'es-ES') ||
+                  voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) u.voice = esVoice;
+  window.speechSynthesis.speak(u);
+}
+
+function speakEN(text) { speak(text, 'en-US'); }
+
+// ═══════════════════ SPACED REPETITION (SM-2) ═══════════════════
+
+const SR_KEY = 'sr_espanol_l1';
+const STREAK_KEY = 'sr_streak_l1';
+const LAST_STUDY_KEY = 'sr_last_l1';
+
+function loadSR() {
+  try { return JSON.parse(localStorage.getItem(SR_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+
+function saveSR(data) {
+  localStorage.setItem(SR_KEY, JSON.stringify(data));
+}
+
+function getSRCard(word, data) {
+  if (!data[word]) data[word] = {interval:1, reps:0, ef:2.5, nextReview:0};
+  return data[word];
+}
+
+function sm2Update(card, quality) {
+  // quality: 1 (fail), 3 (hesitant), 5 (perfect)
+  if (quality < 3) {
+    card.reps = 0;
+    card.interval = 1;
+  } else {
+    if (card.reps === 0) card.interval = 1;
+    else if (card.reps === 1) card.interval = 6;
+    else card.interval = Math.round(card.interval * card.ef);
+    card.reps++;
+  }
+  card.ef = Math.max(1.3, card.ef + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+  card.nextReview = Date.now() + card.interval * 86400000;
+  return card;
+}
+
+function getDueCards() {
+  const data = loadSR();
+  const now = Date.now();
+  return VOCAB.filter(v => {
+    const c = getSRCard(v.es, data);
+    return c.nextReview <= now;
+  });
+}
+
+function updateStreak() {
+  const today = new Date().toDateString();
+  const last = localStorage.getItem(LAST_STUDY_KEY);
+  let streak = parseInt(localStorage.getItem(STREAK_KEY) || '0');
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (last === today) return streak;
+  if (last === yesterday) streak++;
+  else streak = 1;
+  localStorage.setItem(STREAK_KEY, streak);
+  localStorage.setItem(LAST_STUDY_KEY, today);
+  return streak;
+}
+
+function refreshHome() {
+  const due = getDueCards();
+  const dueCard = document.getElementById('due-card');
+  if (due.length > 0) {
+    document.getElementById('due-sub').textContent = `${due.length} palabra${due.length > 1 ? 's' : ''} pendiente${due.length > 1 ? 's' : ''} según tu curva de memoria`;
+    dueCard.classList.remove('hidden');
+  } else {
+    dueCard.classList.add('hidden');
+  }
+  const streak = parseInt(localStorage.getItem(STREAK_KEY) || '0');
+  document.getElementById('sr-streak').textContent = streak;
+}
+
+// ═══════════════════ STATE ═══════════════════
+
+const S = {mode:null, idx:0, cards:[], correct:0, wrong:0, revealed:false, submitted:false, srUpdates:{}};
 
 function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
   return a;
 }
 
-// ═══════════════════════════ NAVIGATION ═══════════════════════════
+// ═══════════════════ NAVIGATION ═══════════════════
 
 function show(id) {
-  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-function goHome() { show('s-home'); }
-function showNotes() { show('s-notes'); }
+function goHome() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  refreshHome();
+  show('s-home');
+}
 
-// ═══════════════════════════ MODE LAUNCHERS ═══════════════════════════
+// ═══════════════════ MODE LAUNCHERS ═══════════════════
 
 function startMode(mode) {
-  S.mode = mode;
-  S.idx = 0;
-  S.correct = 0;
-  S.wrong = 0;
+  S.mode = mode; S.idx = 0; S.correct = 0; S.wrong = 0; S.srUpdates = {};
+  window.speechSynthesis && window.speechSynthesis.cancel();
 
   if (mode === 'es-en' || mode === 'en-es') {
     S.cards = shuffle(VOCAB);
     S.revealed = false;
-    show('s-flash');
     document.getElementById('flash-title').textContent = mode === 'es-en' ? 'Español → Inglés' : 'Inglés → Español';
+    show('s-flash');
+    renderFlash();
+  } else if (mode === 'review') {
+    const due = getDueCards();
+    if (!due.length) { goHome(); return; }
+    S.cards = shuffle(due);
+    S.mode = 'es-en-review';
+    S.revealed = false;
+    document.getElementById('flash-title').textContent = '📅 Repaso de hoy';
+    show('s-flash');
     renderFlash();
   } else if (mode === 'fill') {
-    S.cards = shuffle(FILL_EXERCISES);
-    S.submitted = false;
-    show('s-fill');
-    renderFill();
+    S.cards = shuffle(FILL_EXERCISES); S.submitted = false;
+    show('s-fill'); renderFill();
   } else if (mode === 'conv') {
     S.cards = shuffle(CONVERSATIONS);
-    show('s-conv');
-    renderConv();
+    show('s-conv'); renderConv();
   }
 }
 
-function retryMode() { startMode(S.mode); }
+function retryMode() { startMode(S.mode === 'es-en-review' ? 'review' : S.mode); }
 
-// ═══════════════════════════ FLASHCARDS ═══════════════════════════
+// ═══════════════════ FLASHCARDS ═══════════════════
 
 function renderFlash() {
-  const total = S.cards.length;
   const item = S.cards[S.idx];
+  const total = S.cards.length;
   const pct = (S.idx / total) * 100;
+  const isEsEn = S.mode === 'es-en' || S.mode === 'es-en-review';
 
   document.getElementById('flash-prog').style.width = pct + '%';
   document.getElementById('flash-prog-label').textContent = `${S.idx + 1} / ${total}`;
   document.getElementById('flash-sub').textContent = `${S.idx + 1} de ${total} palabras`;
-
-  const isEsEn = S.mode === 'es-en';
-  document.getElementById('fc-label').textContent = isEsEn ? '¿Qué significa en inglés?' : 'How do you say this in Spanish?';
-  document.getElementById('fc-word').textContent = isEsEn ? item.es : item.en;
+  document.getElementById('fc-label').textContent = isEsEn ? '¿Qué significa en inglés?' : '¿Cómo se dice en español?';
+  document.getElementById('fc-word').textContent  = isEsEn ? item.es : item.en;
   document.getElementById('fc-article').textContent = isEsEn ? `(${item.art} ${item.es})` : '';
-  document.getElementById('fc-answer').textContent = isEsEn ? item.en : `${item.art} ${item.es}`;
+  document.getElementById('fc-answer').textContent  = isEsEn ? item.en : `${item.art} ${item.es}`;
   document.getElementById('fc-answer').classList.remove('show');
   document.getElementById('fc-hint').classList.remove('hide');
   document.getElementById('vbtn-row').classList.add('hidden');
   S.revealed = false;
+
+  // Auto-speak the Spanish word
+  if (isEsEn) speak(item.es);
+}
+
+function speakCurrent() {
+  const item = S.cards[S.idx];
+  const isEsEn = S.mode === 'es-en' || S.mode === 'es-en-review';
+  speak(isEsEn ? item.es : item.en, isEsEn ? 'es-ES' : 'en-US');
 }
 
 function revealCard() {
   if (S.revealed) return;
   S.revealed = true;
+  const item = S.cards[S.idx];
+  const isEsEn = S.mode === 'es-en' || S.mode === 'es-en-review';
   document.getElementById('fc-answer').classList.add('show');
   document.getElementById('fc-hint').classList.add('hide');
   document.getElementById('vbtn-row').classList.remove('hidden');
+  // Speak answer
+  if (!isEsEn) speak(item.es);
 }
 
-function verdict(correct) {
-  if (correct) S.correct++; else S.wrong++;
+function verdict(quality) {
+  const item = S.cards[S.idx];
+  if (quality >= 3) S.correct++; else S.wrong++;
+
+  // Update SM-2
+  const data = loadSR();
+  const card = getSRCard(item.es, data);
+  sm2Update(card, quality);
+  data[item.es] = card;
+  saveSR(data);
+  S.srUpdates[item.es] = card.interval;
+
   S.idx++;
-  if (S.idx >= S.cards.length) {
-    showScore();
-  } else {
-    renderFlash();
-  }
+  if (S.idx >= S.cards.length) showScore();
+  else { S.revealed = false; renderFlash(); }
 }
 
-// ═══════════════════════════ FILL IN THE BLANK ═══════════════════════════
+// ═══════════════════ FILL IN THE BLANK ═══════════════════
 
 function renderFill() {
-  const total = S.cards.length;
   const item = S.cards[S.idx];
-  const pct = (S.idx / total) * 100;
-
-  document.getElementById('fill-prog').style.width = pct + '%';
+  const total = S.cards.length;
+  document.getElementById('fill-prog').style.width = (S.idx / total * 100) + '%';
   document.getElementById('fill-prog-label').textContent = `${S.idx + 1} / ${total}`;
   document.getElementById('ex-verb-tag').textContent = item.verb;
 
-  // Build sentence with input
   const parts = item.sentence.split('___');
-  const sentence = document.getElementById('ex-sentence');
-  sentence.innerHTML = '';
+  const container = document.getElementById('ex-sentence');
+  container.innerHTML = '';
+  container.appendChild(document.createTextNode(parts[0]));
+  const inp = document.createElement('input');
+  inp.className = 'blank'; inp.id = 'fill-input'; inp.type = 'text';
+  inp.autocomplete = 'off'; inp.autocorrect = 'off'; inp.spellcheck = false;
+  inp.placeholder = '___';
+  inp.addEventListener('keydown', e => { if(e.key==='Enter') checkFill(); });
+  container.appendChild(inp);
+  if (parts[1]) container.appendChild(document.createTextNode(parts[1]));
 
-  const before = document.createTextNode(parts[0]);
-  sentence.appendChild(before);
-
-  const input = document.createElement('input');
-  input.className = 'blank';
-  input.id = 'fill-input';
-  input.type = 'text';
-  input.autocomplete = 'off';
-  input.autocorrect = 'off';
-  input.spellcheck = false;
-  input.placeholder = '___';
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') checkFill(); });
-  sentence.appendChild(input);
-
-  if (parts[1]) {
-    const after = document.createTextNode(parts[1]);
-    sentence.appendChild(after);
-  }
+  // Speak the full sentence with a pause marker
+  const preview = item.sentence.replace('___', '...');
+  speak(preview);
 
   document.getElementById('ex-feedback').textContent = '';
   document.getElementById('ex-feedback').className = 'ex-feedback';
   document.getElementById('fill-check-btn').style.display = 'block';
   document.getElementById('fill-next-btn').style.display = 'none';
   S.submitted = false;
-
-  setTimeout(() => { const inp = document.getElementById('fill-input'); if(inp) inp.focus(); }, 100);
+  setTimeout(() => { const el = document.getElementById('fill-input'); if(el) el.focus(); }, 120);
 }
 
 function checkFill() {
   if (S.submitted) return;
-  const input = document.getElementById('fill-input');
-  if (!input) return;
-  const userVal = input.value.trim().toLowerCase();
+  const inp = document.getElementById('fill-input');
+  if (!inp) return;
+  const userVal = inp.value.trim().toLowerCase();
   const correct = S.cards[S.idx].answer.toLowerCase();
   const fb = document.getElementById('ex-feedback');
-
   if (userVal === correct) {
-    input.classList.add('ok');
-    fb.className = 'ex-feedback ok';
-    fb.textContent = '✓ ¡Correcto!';
-    S.correct++;
+    inp.classList.add('ok'); fb.className = 'ex-feedback ok';
+    fb.textContent = '✓ ¡Correcto!'; S.correct++;
+    speak(S.cards[S.idx].sentence.replace('___', correct));
   } else {
-    input.classList.add('bad');
-    fb.className = 'ex-feedback bad';
-    fb.textContent = `✗ Respuesta: ${S.cards[S.idx].answer}`;
-    S.wrong++;
+    inp.classList.add('bad'); fb.className = 'ex-feedback bad';
+    fb.textContent = `✗ Respuesta: ${S.cards[S.idx].answer}`; S.wrong++;
+    speak(S.cards[S.idx].sentence.replace('___', S.cards[S.idx].answer));
   }
-
-  input.disabled = true;
-  S.submitted = true;
+  inp.disabled = true; S.submitted = true;
   document.getElementById('fill-check-btn').style.display = 'none';
   document.getElementById('fill-next-btn').style.display = 'block';
 }
 
 function nextFill() {
   S.idx++;
-  if (S.idx >= S.cards.length) {
-    showScore();
-  } else {
-    renderFill();
-  }
+  if (S.idx >= S.cards.length) showScore();
+  else renderFill();
 }
 
-// ═══════════════════════════ CONVERSATION ═══════════════════════════
+// ═══════════════════ CONVERSATION ═══════════════════
 
 function renderConv() {
-  const total = S.cards.length;
   const item = S.cards[S.idx];
-  const pct = (S.idx / total) * 100;
-
-  document.getElementById('conv-prog').style.width = pct + '%';
+  const total = S.cards.length;
+  document.getElementById('conv-prog').style.width = (S.idx / total * 100) + '%';
   document.getElementById('conv-prog-label').textContent = `${S.idx + 1} / ${total}`;
   document.getElementById('conv-ctx').textContent = '🎯 ' + item.ctx;
   document.getElementById('conv-question').textContent = item.q;
-  document.getElementById('conv-answer-text').textContent = item.ans;
-  document.getElementById('conv-note').textContent = '';
-
-  const reveal = document.getElementById('conv-reveal');
-  reveal.classList.remove('show');
-
-  const input = document.getElementById('conv-input');
-  input.value = '';
-  input.disabled = false;
-
+  document.getElementById('conv-q-en').textContent = '🇺🇸 ' + item.q_en;
+  document.getElementById('conv-ans-es').textContent = item.ans;
+  document.getElementById('conv-ans-en').textContent = '🇺🇸 ' + item.ans_en;
+  document.getElementById('conv-note').innerHTML = '💡 ' + item.note;
+  document.getElementById('conv-reveal').classList.remove('show');
   document.getElementById('conv-check-btn').style.display = 'block';
   document.getElementById('conv-next-btn').style.display = 'none';
-
-  setTimeout(() => input.focus(), 150);
+  // Auto-speak question
+  speak(item.q);
 }
 
+function speakQuestion() { speak(S.cards[S.idx].q); }
+function speakAnswer()   { speak(S.cards[S.idx].ans.replace('[tu nombre]','tu nombre').replace('[nombre]','nombre').replace('[número]','número').replace('[país/ciudad]','país')); }
+
 function checkConv() {
-  const item = S.cards[S.idx];
   document.getElementById('conv-reveal').classList.add('show');
-  document.getElementById('conv-note').textContent = '💡 ' + item.note;
-  document.getElementById('conv-input').disabled = true;
   document.getElementById('conv-check-btn').style.display = 'none';
   document.getElementById('conv-next-btn').style.display = 'block';
-  S.correct++; // conversation is self-assessed; count as completed
+  speakAnswer();
 }
 
 function nextConv() {
-  S.idx++;
-  if (S.idx >= S.cards.length) {
-    showScore();
-  } else {
-    renderConv();
-  }
+  S.idx++; S.correct++;
+  if (S.idx >= S.cards.length) showScore();
+  else renderConv();
 }
 
-// ═══════════════════════════ SCORE ═══════════════════════════
+// ═══════════════════ SCORE ═══════════════════
 
 function showScore() {
+  updateStreak();
   const total = S.correct + S.wrong;
-  const pct = total > 0 ? Math.round((S.correct / total) * 100) : 100;
-
+  const pct = total > 0 ? Math.round(S.correct / total * 100) : 100;
   let emoji, title, sub;
   if (S.mode === 'conv') {
-    emoji = '🎉'; title = '¡Diálogo completado!'; sub = `Completaste ${S.cards.length} preguntas. ¡Buen trabajo!`;
-  } else if (pct === 100) {
-    emoji = '🏆'; title = '¡Perfecto!'; sub = '¡Sabías todas las respuestas!';
-  } else if (pct >= 75) {
-    emoji = '⭐'; title = '¡Muy bien!'; sub = `Acertaste el ${pct}%. ¡Casi perfecto!`;
-  } else if (pct >= 50) {
-    emoji = '💪'; title = '¡Buen intento!'; sub = `Acertaste el ${pct}%. ¡Sigue practicando!`;
+    emoji='🎉'; title='¡Diálogo completado!'; sub=`Completaste ${S.cards.length} conversaciones. ¡Sigue así!`;
+  } else if (pct===100) {
+    emoji='🏆'; title='¡Perfecto!'; sub='¡Recordaste todas las palabras!';
+  } else if (pct>=80) {
+    emoji='⭐'; title='¡Muy bien!'; sub=`Acertaste el ${pct}%. ¡Casi perfecto!`;
+  } else if (pct>=50) {
+    emoji='💪'; title='¡Buen intento!'; sub=`Acertaste el ${pct}%. ¡Sigue practicando!`;
   } else {
-    emoji = '📚'; title = '¡A repasar!'; sub = `Acertaste el ${pct}%. ¡No te rindas!`;
+    emoji='📚'; title='¡A repasar!'; sub=`Acertaste el ${pct}%. La curva de memoria te ayudará.`;
   }
-
   document.getElementById('score-emoji').textContent = emoji;
   document.getElementById('score-title').textContent = title;
-  document.getElementById('score-sub').textContent = sub;
+  document.getElementById('score-sub').textContent   = sub;
   document.getElementById('score-c').textContent = S.mode === 'conv' ? S.cards.length : S.correct;
-  document.getElementById('score-w').textContent = S.mode === 'conv' ? 0 : S.wrong;
+  document.getElementById('score-w').textContent = S.mode === 'conv' ? '—' : S.wrong;
 
+  const srInfo = document.getElementById('sr-info');
+  if (Object.keys(S.srUpdates).length > 0) {
+    srInfo.style.display = 'block';
+  } else {
+    srInfo.style.display = 'none';
+  }
   show('s-score');
 }
 
-// ═══════════════════════════ SERVICE WORKER ═══════════════════════════
+// ═══════════════════ NOTES BUILDER ═══════════════════
+
+function buildNotes() {
+  function makeItem(v) {
+    const div = document.createElement('div');
+    div.className = 'vocab-item';
+    div.innerHTML = `
+      <div class="vocab-text">
+        <div class="vocab-es">${v.art} ${v.es}</div>
+        <div class="vocab-en">${v.en}</div>
+      </div>
+      <button class="speak-btn" onclick="speak('${v.es}')">🔊</button>`;
+    return div;
+  }
+  const things = document.getElementById('notes-things');
+  const family = document.getElementById('notes-family');
+  THINGS.forEach(v => things.appendChild(makeItem(v)));
+  FAMILY.forEach(v => family.appendChild(makeItem(v)));
+}
+
+// ═══════════════════ INIT ═══════════════════
+
+buildNotes();
+refreshHome();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
   });
 }
 </script>
