@@ -156,6 +156,23 @@ body{max-width:480px;margin:0 auto;}
 .score-l{font-size:12px;font-weight:600;margin-top:2px;}
 .sr-info{background:var(--purple-light);border-radius:12px;padding:14px;margin-bottom:18px;font-size:13px;color:var(--purple-dark);text-align:left;line-height:1.6;}
 
+/* ── MY WORDS ── */
+.myw-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.myw-btns{display:flex;gap:6px;}
+.myw-add-btn{background:var(--purple);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;}
+.myw-add-btn:active{background:var(--purple-dark);}
+.myw-bulk-btn{background:var(--purple-light);color:var(--purple-dark);border:none;border-radius:10px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer;}
+.myw-bulk-btn:active{background:var(--border);}
+.myw-empty{font-size:13px;color:var(--muted);text-align:center;padding:8px 0 4px;}
+.addword-row{display:flex;gap:8px;margin-bottom:12px;}
+.addword-input{flex:1;padding:12px 14px;border:2px solid var(--border);border-radius:12px;font-size:15px;background:var(--bg);color:var(--text);outline:none;}
+.addword-input:focus{border-color:var(--purple);}
+.addword-art{width:72px;flex-shrink:0;}
+.bulk-textarea{width:100%;min-height:160px;padding:12px 14px;border:2px solid var(--border);border-radius:12px;font-size:14px;background:var(--bg);color:var(--text);outline:none;resize:vertical;font-family:inherit;line-height:1.6;}
+.bulk-textarea:focus{border-color:var(--purple);}
+.bulk-hint{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
+.bulk-result{font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px;display:none;}
+
 /* ── BACKUP CARD ── */
 .backup-card{background:var(--white);border-radius:18px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;}
 .backup-icon{font-size:28px;flex-shrink:0;}
@@ -194,6 +211,37 @@ body{max-width:480px;margin:0 auto;}
 </style>
 </head>
 <body>
+
+<!-- ══ BULK IMPORT MODAL ══ -->
+<div class="modal-backdrop" id="bulk-modal">
+  <div class="modal-sheet">
+    <div class="modal-title">Bulk Import 📋</div>
+    <div class="bulk-hint">One phrase per line, Spanish = meaning:<br>
+      <span style="color:var(--purple-dark);font-weight:600;">perdón = sorry<br>¿cuánto cuesta? = how much?<br>pollo = chicken / 鸡肉</span>
+    </div>
+    <div class="bulk-result" id="bulk-result"></div>
+    <textarea class="bulk-textarea" id="bulk-textarea" placeholder="Paste your words here..."></textarea>
+    <button class="primary-btn" style="margin-top:12px;" onclick="doBulkImport()">Import All</button>
+    <button class="secondary-btn" onclick="document.getElementById('bulk-modal').classList.remove('show')">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ ADD WORD MODAL ══ -->
+<div class="modal-backdrop" id="addword-modal">
+  <div class="modal-sheet">
+    <div class="modal-title">Add a Word ✏️</div>
+    <div class="modal-sub">Add vocab you pick up outside class — it'll join your memory curve!</div>
+    <div class="addword-row">
+      <input class="addword-input" id="addword-es" placeholder="Spanish (e.g. gato)" autocomplete="off" autocorrect="off" spellcheck="false">
+      <input class="addword-input addword-art" id="addword-art" placeholder="el/la" autocomplete="off" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="addword-row">
+      <input class="addword-input" id="addword-en" placeholder="English (e.g. cat)" autocomplete="off">
+    </div>
+    <button class="primary-btn" onclick="saveNewWord()">Save Word</button>
+    <button class="secondary-btn" onclick="closeAddWordModal()">Cancel</button>
+  </div>
+</div>
 
 <!-- ══ RESUME MODAL ══ -->
 <div class="modal-backdrop" id="resume-modal">
@@ -258,6 +306,25 @@ body{max-width:480px;margin:0 auto;}
         <div class="mbtn" onclick="startMode('conv')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
       </div>
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes')">📖 View Class Notes</button>
+    </div>
+
+    <!-- My Words -->
+    <div class="lesson-card">
+      <div class="myw-header">
+        <div>
+          <div class="lc-title">My Words 📝</div>
+          <div class="lc-date" id="myw-count">0 words added</div>
+        </div>
+        <div class="myw-btns">
+          <button class="myw-bulk-btn" onclick="document.getElementById('bulk-modal').classList.add('show')">📋 Bulk</button>
+          <button class="myw-add-btn" onclick="showAddWordModal()">+ Add</button>
+        </div>
+      </div>
+      <div class="mode-grid" id="myw-grid" style="display:none;">
+        <div class="mbtn" onclick="startMode('myw-es-en')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('myw-en-es')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+      </div>
+      <div class="myw-empty" id="myw-empty">No words yet — tap + Add to start! ✨</div>
     </div>
 
     <!-- Backup / export-import -->
@@ -514,6 +581,67 @@ const CONVERSATIONS = [
   {ctx:"Subject: she (ella)",q:"¿Ella es tu hermana?",q_en:"Is she your sister?",ans:"Sí, ella es mi hermana. / No, ella es mi prima.",ans_en:"Yes, she is my sister. / No, she is my cousin.",note:"<strong>Ella → es</strong>. Possessive: <strong>mi hermana</strong>. No article needed with possessives."},
 ];
 
+// ══════════════ MY WORDS ══════════════
+
+const MYWORDS_KEY = 'mywords_espanol';
+function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
+function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
+
+function showAddWordModal() {
+  document.getElementById('addword-es').value='';
+  document.getElementById('addword-en').value='';
+  document.getElementById('addword-art').value='';
+  document.getElementById('addword-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('addword-es').focus(),120);
+}
+function closeAddWordModal() {
+  document.getElementById('addword-modal').classList.remove('show');
+}
+function doBulkImport() {
+  const text = document.getElementById('bulk-textarea').value;
+  const lines = text.split('\n').map(l=>l.trim()).filter(l=>l&&l.includes('='));
+  const words = loadMyWords();
+  let added = 0;
+  lines.forEach(line => {
+    // Support both "es = en" and lines starting with * or -
+    const clean = line.replace(/^[\*\-•]\s*/,'');
+    const eqIdx = clean.indexOf('=');
+    if(eqIdx<1) return;
+    let left = clean.slice(0,eqIdx).trim().toLowerCase();
+    let right = clean.slice(eqIdx+1).trim();
+    if(!left||!right) return;
+    // Strip trailing punctuation from Spanish for key, keep full form as display
+    const es = left;
+    const en = right;
+    if(!words.find(w=>w.es===es)){
+      words.push({es, en, art:'', custom:true, added:Date.now()});
+      added++;
+    }
+  });
+  saveMyWords(words);
+  const res = document.getElementById('bulk-result');
+  res.textContent = `✓ Added ${added} word${added!==1?'s':''}!`;
+  res.style.display = 'block';
+  document.getElementById('bulk-textarea').value = '';
+  refreshHome();
+  setTimeout(()=>{
+    document.getElementById('bulk-modal').classList.remove('show');
+    res.style.display='none';
+  }, 1500);
+}
+
+function saveNewWord() {
+  const es=document.getElementById('addword-es').value.trim().toLowerCase();
+  const en=document.getElementById('addword-en').value.trim();
+  const art=document.getElementById('addword-art').value.trim().toLowerCase();
+  if(!es||!en){alert('Please fill in both Spanish and English.');return;}
+  const words=loadMyWords();
+  if(!words.find(w=>w.es===es)) words.push({es,en,art,custom:true,added:Date.now()});
+  saveMyWords(words);
+  closeAddWordModal();
+  refreshHome();
+}
+
 // ══════════════ TTS ══════════════
 
 let voices = [];
@@ -563,12 +691,18 @@ function sm2Update(card, q) {
 
 function getDueCards() {
   const data=loadSR(), now=Date.now();
-  // Collect words due in either direction
   const due=[];
-  VOCAB.forEach(v => {
-    const esen = getSRCard(srKey(v.es,'es_en'),data);
-    const enes = getSRCard(srKey(v.es,'en_es'),data);
-    if (esen.nextReview<=now || enes.nextReview<=now) due.push(v);
+  // Only count words that have been explicitly reviewed before (exist in SR data)
+  // This prevents never-reviewed words (nextReview=0) from always showing as due
+  const checkDue = v => {
+    const esenKey=srKey(v.es,'es_en'), enesKey=srKey(v.es,'en_es');
+    return (data[esenKey]&&data[esenKey].nextReview<=now) ||
+           (data[enesKey]&&data[enesKey].nextReview<=now);
+  };
+  VOCAB.forEach(v => { if(checkDue(v)) due.push(v); });
+  // Also include custom My Words that are due
+  loadMyWords().forEach(v => {
+    if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v);
   });
   return due;
 }
@@ -592,6 +726,11 @@ function refreshHome() {
     dc.classList.remove('hidden');
   } else dc.classList.add('hidden');
   document.getElementById('sr-streak').textContent=parseInt(localStorage.getItem(STREAK_KEY)||'0');
+  // Update My Words section
+  const myw=loadMyWords();
+  document.getElementById('myw-count').textContent=`${myw.length} word${myw.length!==1?'s':''} added`;
+  document.getElementById('myw-grid').style.display=myw.length>0?'grid':'none';
+  document.getElementById('myw-empty').style.display=myw.length>0?'none':'block';
 }
 
 // ══════════════ SESSION SAVE/RESTORE ══════════════
@@ -640,9 +779,9 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'){
-    document.getElementById('flash-title').textContent=
-      mode==='es-en'?'Spanish → English':mode==='en-es'?'English → Spanish':'📅 Today\'s Review';
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='myw-es-en'||mode==='myw-en-es'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 Today\'s Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸'};
+    document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='fill'){show('s-fill');renderFill();}
   else if(mode==='conv'){show('s-conv');renderConv();}
@@ -667,7 +806,8 @@ function resumeSession(){
   document.getElementById('resume-modal').classList.remove('show');
   const saved=S._savedSession, mode=saved.mode;
   let pool;
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review') pool=VOCAB;
+  if(mode==='myw-es-en'||mode==='myw-en-es') pool=loadMyWords();
+  else if(mode==='es-en'||mode==='en-es'||mode==='es-en-review') pool=VOCAB;
   else if(mode==='fill') pool=FILL_EXERCISES;
   else pool=CONVERSATIONS;
   S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
@@ -689,6 +829,10 @@ function _startFresh(mode){
     const due=getDueCards();
     if(!due.length){goHome();return;}
     S.mode='es-en-review'; S.cards=shuffle(due); S.revealed=false;
+  } else if(mode==='myw-es-en'||mode==='myw-en-es'){
+    const myw=loadMyWords();
+    if(!myw.length){goHome();return;}
+    S.mode=mode; S.cards=shuffle(myw); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='conv'){
@@ -703,7 +847,7 @@ function retryMode(){clearSession();startMode(S.mode==='es-en-review'?'review':S
 
 function renderFlash(){
   const item=S.cards[S.idx], total=S.cards.length;
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
   const dir=isEsEn?'es_en':'en_es';
   const alreadyAnswered=(S.idx in S.answered);
 
@@ -748,7 +892,7 @@ function renderFlash(){
 
 function speakCurrent(){
   const item=S.cards[S.idx];
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
   speak(isEsEn?item.es:item.en,isEsEn?'es-ES':'en-US');
 }
 
@@ -758,7 +902,7 @@ function revealCard(){
   document.getElementById('fc-answer').classList.add('show');
   document.getElementById('fc-hint').classList.add('hide');
   document.getElementById('vbtn-row').classList.remove('hidden');
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
   if(!isEsEn) speak(S.cards[S.idx].es);
 }
 
@@ -768,7 +912,7 @@ function verdict(quality){
     S.answered[S.idx]=quality;
     if(quality>=3) S.correct++; else S.wrong++;
     // SM-2 update with direction
-    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review';
+    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
     const dir=isEsEn?'es_en':'en_es';
     const data=loadSR();
     const key=srKey(item.es,dir);
@@ -952,9 +1096,10 @@ function showScore(){
 
 function exportProgress() {
   const payload = {
-    sr:     loadSR(),
-    streak: localStorage.getItem(STREAK_KEY) || '0',
-    last:   localStorage.getItem(LAST_KEY)   || '',
+    sr:      loadSR(),
+    streak:  localStorage.getItem(STREAK_KEY) || '0',
+    last:    localStorage.getItem(LAST_KEY)   || '',
+    myWords: loadMyWords(),
     exported: new Date().toISOString()
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
@@ -975,9 +1120,10 @@ function importProgress(inputEl) {
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      if (data.sr)     saveSR(data.sr);
-      if (data.streak) localStorage.setItem(STREAK_KEY, data.streak);
-      if (data.last)   localStorage.setItem(LAST_KEY,   data.last);
+      if (data.sr)      saveSR(data.sr);
+      if (data.streak)  localStorage.setItem(STREAK_KEY, data.streak);
+      if (data.last)    localStorage.setItem(LAST_KEY,   data.last);
+      if (data.myWords) saveMyWords(data.myWords);
       refreshHome();
       alert('🌸 Progress restored! Your memory curve is back.');
     } catch(err) {
@@ -1001,7 +1147,61 @@ function buildNotes(){
   FAMILY.forEach(v=>document.getElementById('notes-family').appendChild(makeItem(v)));
 }
 
+// ══════════════ SEED MY WORDS (first launch only) ══════════════
+function seedMyWords(){
+  if(localStorage.getItem('myw_seeded_v1')) return; // only once
+  const seed=[
+    // 日常用语
+    {es:'perdón',          en:'sorry / 对不起'},
+    {es:'de nada',         en:"you're welcome / 不客气"},
+    {es:'¿dónde está el baño?', en:'where is the bathroom? / 厕所在哪'},
+    {es:'¿cuánto cuesta?', en:'how much does it cost? / 多少钱'},
+    {es:'¿cómo estás?',    en:'how are you? / 你好吗'},
+    {es:'buenos días',     en:'good morning / 早上好'},
+    {es:'buenas tardes',   en:'good afternoon / 中午/下午好'},
+    {es:'buenas noches',   en:'good evening / 晚上好'},
+    {es:'más barato',      en:'cheaper / 便宜点'},
+    {es:'por favor',       en:'please / 请'},
+    {es:'poquito',         en:'a little bit / 一点点'},
+    // 餐厅用语
+    {es:'quiero esto',     en:'I want this / 我要这个'},
+    {es:'¿qué es esto?',   en:'what is this? / 这是什么'},
+    {es:'¿qué me recomienda?', en:'what do you recommend? / 有推荐吗'},
+    {es:'sin picante',     en:'no spice / 不要辣'},
+    {es:'sin lactosa',     en:'no dairy / 无乳糖'},
+    {es:'¿tarjeta o efectivo?', en:'card or cash? / 刷卡还是现金'},
+    {es:'¿para llevar o aquí?', en:'to go or here? / 带走还是在这'},
+    // Taco 肉类
+    {es:'asada',           en:'grilled beef / 烤牛肉'},
+    {es:'pastor',          en:'pork + pineapple / 猪肉+菠萝（必点）'},
+    {es:'birria',          en:'braised beef / 炖牛肉（很香）'},
+    {es:'lengua',          en:'beef tongue / 牛舌（嫩）'},
+    {es:'tripa',           en:'tripe / 肠（重口）'},
+    {es:'cabeza',          en:'head meat / 牛头肉'},
+    {es:'campechano',      en:'mixed meat / 混合肉'},
+    {es:'chorizo',         en:'sausage / 香肠'},
+    {es:'guisado',         en:'stew / 炖菜'},
+    {es:'tinga de pollo',  en:'chicken tinga / 鸡肉（quesadilla推荐）'},
+    {es:'huitlacoche',     en:'corn mushroom / 玉米菌（特色）'},
+    {es:'flor de calabaza',en:'squash flower / 南瓜花（特色）'},
+    // 饮料
+    {es:'agua fresca',     en:'fruit water / 水果饮料（最推荐）'},
+    {es:'licuado',         en:'smoothie with milk / 奶昔'},
+    {es:'jugo',            en:'juice / 果汁'},
+    {es:'sandía',          en:'watermelon / 西瓜'},
+    {es:'jamaica',         en:'hibiscus drink / 洛神花（酸甜）'},
+    {es:'horchata',        en:'rice milk drink / 米奶（甜）'},
+  ].map(w=>({...w, art:'', custom:true, added:Date.now()}));
+
+  const existing=loadMyWords();
+  const merged=[...existing];
+  seed.forEach(w=>{ if(!merged.find(m=>m.es===w.es)) merged.push(w); });
+  saveMyWords(merged);
+  localStorage.setItem('myw_seeded_v1','1');
+}
+
 buildNotes();
+seedMyWords();
 refreshHome();
 
 if('serviceWorker' in navigator){
