@@ -308,6 +308,20 @@ body{max-width:480px;margin:0 auto;}
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes')">📖 View Class Notes</button>
     </div>
 
+    <div class="lesson-card">
+      <div class="lc-head">
+        <div><div class="lc-title">Lesson 2</div><div class="lc-date">April 6, 2026</div></div>
+        <div class="lc-badge">New ✨</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mbtn" onclick="startMode('es-en-l2')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es-l2')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+        <div class="mbtn" onclick="startMode('fill-l2')"><div class="mbtn-icon">✏️</div><div class="mbtn-label">Fill in the Blank</div></div>
+        <div class="mbtn" onclick="startMode('conv-l2')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+      </div>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l2')">📖 View Class Notes</button>
+    </div>
+
     <!-- My Words -->
     <div class="lesson-card">
       <div class="myw-header">
@@ -380,7 +394,7 @@ body{max-width:480px;margin:0 auto;}
 <div id="s-fill" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Fill in the Blank</div><div class="hdr-sub">Verb Conjugation</div></div>
+    <div><div class="hdr-title">Fill in the Blank</div><div class="hdr-sub" id="fill-hdr-sub">Verb Conjugation</div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="fill-prog"></div></div>
@@ -406,7 +420,7 @@ body{max-width:480px;margin:0 auto;}
 <div id="s-conv" class="scr">
   <div class="hdr">
     <button class="back" onclick="goHome()">←</button>
-    <div><div class="hdr-title">Dialogue Practice</div><div class="hdr-sub">Listen · speak · compare</div></div>
+    <div><div class="hdr-title">Dialogue Practice</div><div class="hdr-sub" id="conv-hdr-sub">Listen · speak · compare</div></div>
   </div>
   <div style="padding:18px;">
     <div class="prog-wrap"><div class="prog-bar" id="conv-prog"></div></div>
@@ -508,6 +522,79 @@ body{max-width:480px;margin:0 auto;}
   </div>
 </div>
 
+<!-- ══ NOTES L2 ══ -->
+<div id="s-notes-l2" class="scr">
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 2</div></div></div>
+  <div style="padding:18px;">
+    <div class="note-section">
+      <h3>📅 Days of the Week</h3>
+      <div class="vocab-list">
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">lunes · martes · miércoles</span><div class="vocab-en">Monday · Tuesday · Wednesday</div></div><button class="speak-btn" onclick="speak('lunes, martes, miércoles')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">jueves · viernes</span><div class="vocab-en">Thursday · Friday</div></div><button class="speak-btn" onclick="speak('jueves, viernes')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">sábado · domingo</span><div class="vocab-en">Saturday · Sunday</div></div><button class="speak-btn" onclick="speak('sábado, domingo')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">de lunes a viernes</span><div class="vocab-en">Monday to Friday (weekdays)</div></div><button class="speak-btn" onclick="speak('de lunes a viernes')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">el fin de semana</span><div class="vocab-en">the weekend</div></div><button class="speak-btn" onclick="speak('el fin de semana')">🔊</button></div>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🌅 Time of Day</h3>
+      <div class="vocab-list">
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">la mañana</span><div class="vocab-en">the morning</div></div><button class="speak-btn" onclick="speak('la mañana')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">la tarde</span><div class="vocab-en">the afternoon / evening</div></div><button class="speak-btn" onclick="speak('la tarde')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">la noche</span><div class="vocab-en">the night</div></div><button class="speak-btn" onclick="speak('la noche')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">a la una · a las dos · a las ocho</span><div class="vocab-en">at one · at two · at eight o'clock</div></div><button class="speak-btn" onclick="speak('a la una, a las dos, a las ocho')">🔊</button></div>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🔤 Grammar — AR / ER / IR Verbs</h3>
+      <div class="grammar-rule"><strong>AR verbs</strong> (hablar, trabajar, estudiar, caminar, comprar…)<br>-o · -as · -a · -amos · -an</div>
+      <div class="grammar-rule"><strong>ER verbs</strong> (comer, leer, aprender, entender…)<br>-o · -es · -e · -emos · -en</div>
+      <div class="grammar-rule"><strong>IR verbs</strong> (vivir, escribir, subir…)<br>-o · -es · -e · -imos · -en<br><span style="color:var(--muted);font-size:13px;">Note: nosotros IR = -imos (not -emos)</span></div>
+    </div>
+    <div class="note-section">
+      <h3>📊 Verbs — AR Conjugation</h3>
+      <table class="conj-table" style="margin-bottom:16px;">
+        <tr><th colspan="3">HABLAR — to speak</th></tr>
+        <tr><td>yo</td><td>hablo</td><td>I speak</td></tr>
+        <tr><td>tú</td><td>hablas</td><td>you speak</td></tr>
+        <tr><td>él/ella</td><td>habla</td><td>he/she speaks</td></tr>
+        <tr><td>nosotros</td><td>hablamos</td><td>we speak</td></tr>
+        <tr><td>ellos/ellas</td><td>hablan</td><td>they speak</td></tr>
+      </table>
+      <div class="grammar-rule" style="margin-bottom:12px;"><strong>Same pattern:</strong> trabajar → trabajo/trabajas/trabaja/trabajamos/trabajan<br>estudiar → estudio/estudias/estudia/estudiamos/estudian</div>
+      <h3 style="margin-top:4px;">📊 Verbs — ER Conjugation</h3>
+      <table class="conj-table" style="margin-bottom:16px;margin-top:12px;">
+        <tr><th colspan="3">COMER — to eat</th></tr>
+        <tr><td>yo</td><td>como</td><td>I eat</td></tr>
+        <tr><td>tú</td><td>comes</td><td>you eat</td></tr>
+        <tr><td>él/ella</td><td>come</td><td>he/she eats</td></tr>
+        <tr><td>nosotros</td><td>comemos</td><td>we eat</td></tr>
+        <tr><td>ellos/ellas</td><td>comen</td><td>they eat</td></tr>
+      </table>
+      <div class="grammar-rule" style="margin-bottom:12px;"><strong>Same pattern:</strong> aprender → aprendo/aprendes/aprende/aprendemos/aprenden<br>entender → entiendo/entiendes/entiende/entendemos/entienden</div>
+      <h3 style="margin-top:4px;">📊 Verbs — IR Conjugation</h3>
+      <table class="conj-table" style="margin-bottom:16px;margin-top:12px;">
+        <tr><th colspan="3">VIVIR — to live</th></tr>
+        <tr><td>yo</td><td>vivo</td><td>I live</td></tr>
+        <tr><td>tú</td><td>vives</td><td>you live</td></tr>
+        <tr><td>él/ella</td><td>vive</td><td>he/she lives</td></tr>
+        <tr><td>nosotros</td><td>vivimos</td><td>we live</td></tr>
+        <tr><td>ellos/ellas</td><td>viven</td><td>they live</td></tr>
+      </table>
+      <div class="grammar-rule"><strong>Same pattern:</strong> escribir → escribo/escribes/escribe/escribimos/escriben</div>
+    </div>
+    <div class="note-section">
+      <h3>👆 Demonstratives — This / That / These / Those</h3>
+      <div class="grammar-rule">
+        <strong>este / esta</strong> = this (m/f) — <em>este libro, esta mesa</em><br>
+        <strong>ese / esa</strong> = that (m/f) — <em>ese carro, esa tienda</em><br>
+        <strong>estos / estas</strong> = these — <em>estos días, estas noches</em><br>
+        <strong>esos / esas</strong> = those — <em>esos años, esas tardes</em>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════ DATA ══════════════
 
@@ -530,9 +617,17 @@ const FAMILY = [
 const VOCAB = [...THINGS,...FAMILY];
 
 const VERB_CONJUGATIONS = {
-  'LLAMARSE':['me llamo','te llamas','se llama','nos llamamos','se llaman'],
-  'TENER':   ['tengo','tienes','tiene','tenemos','tienen'],
-  'SER':     ['soy','eres','es','somos','son'],
+  'LLAMARSE': ['me llamo','te llamas','se llama','nos llamamos','se llaman'],
+  'TENER':    ['tengo','tienes','tiene','tenemos','tienen'],
+  'SER':      ['soy','eres','es','somos','son'],
+  // Lesson 2 — AR
+  'HABLAR':   ['hablo','hablas','habla','hablamos','hablan'],
+  'TRABAJAR': ['trabajo','trabajas','trabaja','trabajamos','trabajan'],
+  'ESTUDIAR': ['estudio','estudias','estudia','estudiamos','estudian'],
+  'COMER':    ['como','comes','come','comemos','comen'],
+  'APRENDER': ['aprendo','aprendes','aprende','aprendemos','aprenden'],
+  'VIVIR':    ['vivo','vives','vive','vivimos','viven'],
+  'ESCRIBIR': ['escribo','escribes','escribe','escribimos','escriben'],
 };
 
 const FILL_EXERCISES = [
@@ -579,6 +674,100 @@ const CONVERSATIONS = [
   {ctx:"Subject: we (nosotros)",q:"¿Son ustedes estudiantes de español?",q_en:"Are you all Spanish students?",ans:"Sí, somos estudiantes de español.",ans_en:"Yes, we are Spanish students.",note:"Question uses <strong>ustedes → son</strong>, answer uses <strong>nosotros → somos</strong>."},
   {ctx:"Subject: your grandfather",q:"¿Tienes abuelo? ¿Cómo se llama?",q_en:"Do you have a grandfather? What's his name?",ans:"Sí, tengo un abuelo. Se llama [nombre].",ans_en:"Yes, I have a grandfather. His name is [name].",note:"Two verbs: <strong>tener</strong> (to have) + <strong>llamarse</strong> (to be called)."},
   {ctx:"Subject: she (ella)",q:"¿Ella es tu hermana?",q_en:"Is she your sister?",ans:"Sí, ella es mi hermana. / No, ella es mi prima.",ans_en:"Yes, she is my sister. / No, she is my cousin.",note:"<strong>Ella → es</strong>. Possessive: <strong>mi hermana</strong>. No article needed with possessives."},
+];
+
+// ══════════════ LESSON 2 DATA ══════════════
+
+const VOCAB_L2 = [
+  // Days of the week
+  {es:'lunes',            en:'Monday',                 art:'el'},
+  {es:'martes',           en:'Tuesday',                art:'el'},
+  {es:'miércoles',        en:'Wednesday',              art:'el'},
+  {es:'jueves',           en:'Thursday',               art:'el'},
+  {es:'viernes',          en:'Friday',                 art:'el'},
+  {es:'sábado',           en:'Saturday',               art:'el'},
+  {es:'domingo',          en:'Sunday',                 art:'el'},
+  // Time of day
+  {es:'la mañana',        en:'the morning',            art:''},
+  {es:'la tarde',         en:'the afternoon/evening',  art:''},
+  {es:'la noche',         en:'the night',              art:''},
+  // AR verbs (infinitive)
+  {es:'hablar',           en:'to speak',               art:''},
+  {es:'caminar',          en:'to walk',                art:''},
+  {es:'comprar',          en:'to buy',                 art:''},
+  {es:'trabajar',         en:'to work',                art:''},
+  {es:'estudiar',         en:'to study',               art:''},
+  {es:'levantarse',       en:'to get up',              art:''},
+  {es:'desayunar',        en:'to have breakfast',      art:''},
+  // ER verbs (infinitive)
+  {es:'comer',            en:'to eat',                 art:''},
+  {es:'leer',             en:'to read',                art:''},
+  {es:'aprender',         en:'to learn',               art:''},
+  {es:'entender',         en:'to understand',          art:''},
+  // IR verbs (infinitive)
+  {es:'escribir',         en:'to write',               art:''},
+  {es:'vivir',            en:'to live',                art:''},
+  {es:'subir',            en:'to go up / upload',      art:''},
+  // Demonstratives
+  {es:'este / esta',      en:'this (m / f)',            art:''},
+  {es:'ese / esa',        en:'that (m / f)',            art:''},
+  {es:'estos / estas',    en:'these (m / f)',           art:''},
+  {es:'esos / esas',      en:'those (m / f)',           art:''},
+  // Time expressions
+  {es:'de lunes a viernes', en:'Monday to Friday',     art:''},
+  {es:'el fin de semana',   en:'the weekend',           art:''},
+  {es:'a la / a las',       en:'at (o\'clock)',          art:''},
+];
+
+const FILL_L2 = [
+  // HABLAR
+  {verb:"HABLAR",   sentence:"Yo ___ español muy poco.",              answer:"hablo",    en:"I speak Spanish very little."},
+  {verb:"HABLAR",   sentence:"¿Tú ___ inglés?",                       answer:"hablas",   en:"Do you speak English?"},
+  {verb:"HABLAR",   sentence:"Mi mamá ___ muy rápido.",               answer:"habla",    en:"My mom speaks very fast."},
+  {verb:"HABLAR",   sentence:"Nosotros ___ español en clase.",         answer:"hablamos", en:"We speak Spanish in class."},
+  {verb:"HABLAR",   sentence:"Ellos ___ tres idiomas.",               answer:"hablan",   en:"They speak three languages."},
+  // TRABAJAR
+  {verb:"TRABAJAR", sentence:"Yo ___ los lunes y los martes.",        answer:"trabajo",  en:"I work on Mondays and Tuesdays."},
+  {verb:"TRABAJAR", sentence:"¿Dónde ___ tú?",                        answer:"trabajas", en:"Where do you work?"},
+  {verb:"TRABAJAR", sentence:"Mi papá ___ en una oficina.",           answer:"trabaja",  en:"My dad works in an office."},
+  {verb:"TRABAJAR", sentence:"Nosotros ___ de lunes a viernes.",      answer:"trabajamos",en:"We work Monday to Friday."},
+  // ESTUDIAR
+  {verb:"ESTUDIAR", sentence:"Yo ___ español por las noches.",        answer:"estudio",  en:"I study Spanish at night."},
+  {verb:"ESTUDIAR", sentence:"¿Tú ___ mucho?",                        answer:"estudias", en:"Do you study a lot?"},
+  {verb:"ESTUDIAR", sentence:"Ana ___ medicina en la universidad.",   answer:"estudia",  en:"Ana studies medicine at university."},
+  {verb:"ESTUDIAR", sentence:"Nosotros ___ juntos los fines de semana.", answer:"estudiamos", en:"We study together on weekends."},
+  // COMER
+  {verb:"COMER",    sentence:"Yo ___ tacos todos los días.",          answer:"como",     en:"I eat tacos every day."},
+  {verb:"COMER",    sentence:"¿Qué ___ tú en la mañana?",             answer:"comes",    en:"What do you eat in the morning?"},
+  {verb:"COMER",    sentence:"Mi hermana ___ muy poco.",              answer:"come",     en:"My sister eats very little."},
+  {verb:"COMER",    sentence:"Nosotros ___ a las dos.",               answer:"comemos",  en:"We eat at two o'clock."},
+  {verb:"COMER",    sentence:"Ellos ___ pizza los viernes.",          answer:"comen",    en:"They eat pizza on Fridays."},
+  // APRENDER
+  {verb:"APRENDER", sentence:"Yo ___ muchas palabras nuevas.",        answer:"aprendo",  en:"I learn many new words."},
+  {verb:"APRENDER", sentence:"¿Tú ___ rápido?",                       answer:"aprendes", en:"Do you learn fast?"},
+  {verb:"APRENDER", sentence:"Él ___ mejor con música.",              answer:"aprende",  en:"He learns better with music."},
+  {verb:"APRENDER", sentence:"Nosotros ___ juntos en clase.",         answer:"aprendemos",en:"We learn together in class."},
+  // VIVIR
+  {verb:"VIVIR",    sentence:"Yo ___ en la Ciudad de México.",        answer:"vivo",     en:"I live in Mexico City."},
+  {verb:"VIVIR",    sentence:"¿Dónde ___ tú?",                        answer:"vives",    en:"Where do you live?"},
+  {verb:"VIVIR",    sentence:"Mi amigo ___ cerca de aquí.",           answer:"vive",     en:"My friend lives near here."},
+  {verb:"VIVIR",    sentence:"Nosotros ___ en el mismo edificio.",    answer:"vivimos",  en:"We live in the same building."},
+  // ESCRIBIR
+  {verb:"ESCRIBIR", sentence:"Yo ___ en mi diario todos los días.",   answer:"escribo",  en:"I write in my diary every day."},
+  {verb:"ESCRIBIR", sentence:"¿Tú ___ mucho en inglés?",              answer:"escribes", en:"Do you write a lot in English?"},
+  {verb:"ESCRIBIR", sentence:"Ella ___ poemas muy bonitos.",          answer:"escribe",  en:"She writes very beautiful poems."},
+  {verb:"ESCRIBIR", sentence:"Nosotros ___ las respuestas en el cuaderno.", answer:"escribimos", en:"We write the answers in the notebook."},
+];
+
+const CONV_L2 = [
+  {ctx:"Topic: day of the week",         q:"¿Qué día es hoy?",               q_en:"What day is today?",                 ans:"Hoy es [lunes / martes / …].",        ans_en:"Today is [Monday / Tuesday / …].",    note:"<strong>Hoy es</strong> + day of the week (no article needed): <em>Hoy es miércoles.</em>"},
+  {ctx:"Topic: daily routine",           q:"¿A qué hora te levantas?",        q_en:"What time do you get up?",           ans:"Me levanto a las [hora].",            ans_en:"I get up at [time].",                 note:"<strong>Levantarse</strong> is reflexive: <strong>me levanto</strong>. Use <em>a la</em> for 1 o'clock, <em>a las</em> for all others."},
+  {ctx:"Topic: work schedule",           q:"¿Cuándo trabajas?",               q_en:"When do you work?",                  ans:"Trabajo de lunes a viernes.",         ans_en:"I work Monday to Friday.",            note:"<strong>De lunes a viernes</strong> = Monday through Friday. Weekend = <strong>el fin de semana</strong>."},
+  {ctx:"Topic: morning meal",            q:"¿Qué comes en la mañana?",        q_en:"What do you eat in the morning?",    ans:"Como [comida] en la mañana.",         ans_en:"I eat [food] in the morning.",        note:"<strong>Comer</strong> (ER verb): <em>como / comes / come / comemos / comen</em>. Same pattern for leer, aprender, entender."},
+  {ctx:"Topic: study habits",            q:"¿Estudias todos los días?",        q_en:"Do you study every day?",            ans:"Sí, estudio por las noches. / No, solo los fines de semana.", ans_en:"Yes, I study at night. / No, only on weekends.", note:"<strong>Estudiar</strong> (AR): <em>estudio / estudias / estudia / estudiamos / estudian</em>. <em>Por las noches</em> = at night (habitual)."},
+  {ctx:"Topic: where you live",          q:"¿Dónde vives?",                   q_en:"Where do you live?",                 ans:"Vivo en [ciudad].",                   ans_en:"I live in [city].",                   note:"<strong>Vivir</strong> (IR verb): <em>vivo / vives / vive / vivimos / viven</em>. IR verbs in nosotros end in <strong>-imos</strong>, not -emos."},
+  {ctx:"Topic: languages spoken",        q:"¿Hablas otros idiomas?",           q_en:"Do you speak other languages?",      ans:"Sí, hablo [idioma]. / Solo hablo español un poco.", ans_en:"Yes, I speak [language]. / I only speak a little Spanish.", note:"<strong>Hablar</strong> (AR): <em>hablo / hablas / habla / hablamos / hablan</em>. <em>Un poco</em> = a little."},
+  {ctx:"Topic: mealtime",                q:"¿A qué hora comes?",              q_en:"What time do you eat?",              ans:"Como a la una. / Como a las dos.",    ans_en:"I eat at one. / I eat at two.",       note:"Use <strong>a la una</strong> (1 o'clock only). Use <strong>a las + number</strong> for all other hours: a las ocho, a las doce."},
 ];
 
 // ══════════════ MY WORDS ══════════════
@@ -700,6 +889,7 @@ function getDueCards() {
            (data[enesKey]&&data[enesKey].nextReview<=now);
   };
   VOCAB.forEach(v => { if(checkDue(v)) due.push(v); });
+  VOCAB_L2.forEach(v => { if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v); });
   // Also include custom My Words that are due
   loadMyWords().forEach(v => {
     if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v);
@@ -779,12 +969,17 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='myw-es-en'||mode==='myw-en-es'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 Today\'s Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 Today\'s Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
-  } else if(mode==='fill'){show('s-fill');renderFill();}
-  else if(mode==='conv'){show('s-conv');renderConv();}
+  } else if(mode==='fill'||mode==='fill-l2'){
+    document.getElementById('fill-hdr-sub').textContent=mode==='fill-l2'?'Lesson 2 · AR / ER / IR':'Verb Conjugation';
+    show('s-fill');renderFill();
+  } else if(mode==='conv'||mode==='conv-l2'){
+    document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':'Listen · speak · compare';
+    show('s-conv');renderConv();
+  }
 }
 
 function startMode(mode){
@@ -808,7 +1003,10 @@ function resumeSession(){
   let pool;
   if(mode==='myw-es-en'||mode==='myw-en-es') pool=loadMyWords();
   else if(mode==='es-en'||mode==='en-es'||mode==='es-en-review') pool=VOCAB;
+  else if(mode==='es-en-l2'||mode==='en-es-l2') pool=VOCAB_L2;
   else if(mode==='fill') pool=FILL_EXERCISES;
+  else if(mode==='fill-l2') pool=FILL_L2;
+  else if(mode==='conv-l2') pool=CONV_L2;
   else pool=CONVERSATIONS;
   S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
   S.mode=mode; S.idx=saved.idx; S.correct=saved.correct; S.wrong=saved.wrong;
@@ -833,10 +1031,16 @@ function _startFresh(mode){
     const myw=loadMyWords();
     if(!myw.length){goHome();return;}
     S.mode=mode; S.cards=shuffle(myw); S.revealed=false;
+  } else if(mode==='es-en-l2'||mode==='en-es-l2'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L2); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
+  } else if(mode==='fill-l2'){
+    S.mode='fill-l2'; S.cards=shuffle(FILL_L2); S.submitted=false;
   } else if(mode==='conv'){
     S.mode='conv'; S.cards=shuffle(CONVERSATIONS);
+  } else if(mode==='conv-l2'){
+    S.mode='conv-l2'; S.cards=shuffle(CONV_L2);
   }
   navigateToMode(S.mode);
 }
@@ -847,7 +1051,7 @@ function retryMode(){clearSession();startMode(S.mode==='es-en-review'?'review':S
 
 function renderFlash(){
   const item=S.cards[S.idx], total=S.cards.length;
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
   const dir=isEsEn?'es_en':'en_es';
   const alreadyAnswered=(S.idx in S.answered);
 
@@ -892,7 +1096,7 @@ function renderFlash(){
 
 function speakCurrent(){
   const item=S.cards[S.idx];
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
   speak(isEsEn?item.es:item.en,isEsEn?'es-ES':'en-US');
 }
 
@@ -902,7 +1106,7 @@ function revealCard(){
   document.getElementById('fc-answer').classList.add('show');
   document.getElementById('fc-hint').classList.add('hide');
   document.getElementById('vbtn-row').classList.remove('hidden');
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
   if(!isEsEn) speak(S.cards[S.idx].es);
 }
 
@@ -912,7 +1116,7 @@ function verdict(quality){
     S.answered[S.idx]=quality;
     if(quality>=3) S.correct++; else S.wrong++;
     // SM-2 update with direction
-    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en';
+    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
     const dir=isEsEn?'es_en':'en_es';
     const data=loadSR();
     const key=srKey(item.es,dir);
