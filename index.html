@@ -208,6 +208,13 @@ body{max-width:480px;margin:0 auto;}
 .conj-table td:last-child{font-size:12px;color:var(--muted);}
 .grammar-rule{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;line-height:1.5;}
 .grammar-rule strong{color:var(--purple);}
+
+/* ── MNEMONIC & CONJ ON FLASHCARD ── */
+.fc-mem{font-size:12px;color:var(--blue);background:var(--blue-bg);border:1px solid rgba(74,127,191,.2);border-radius:10px;padding:8px 12px;margin-top:10px;display:none;line-height:1.6;text-align:left;width:100%;}
+.fc-mem.show{display:block;}
+.fc-conj{margin-top:10px;display:none;width:100%;}
+.fc-conj.show{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;}
+.conj-pill{background:var(--purple-light);color:var(--purple-dark);border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -322,6 +329,20 @@ body{max-width:480px;margin:0 auto;}
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l2')">📖 View Class Notes</button>
     </div>
 
+    <div class="lesson-card">
+      <div class="lc-head">
+        <div><div class="lc-title">Lesson 3</div><div class="lc-date">April 8, 2026</div></div>
+        <div class="lc-badge">New ✨</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mbtn" onclick="startMode('es-en-l3')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es-l3')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+        <div class="mbtn" onclick="startMode('fill-l3')"><div class="mbtn-icon">✏️</div><div class="mbtn-label">Fill in the Blank</div></div>
+        <div class="mbtn" onclick="startMode('conv-l3')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+      </div>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l3')">📖 View Class Notes</button>
+    </div>
+
     <!-- My Words -->
     <div class="lesson-card">
       <div class="myw-header">
@@ -375,6 +396,8 @@ body{max-width:480px;margin:0 auto;}
       </div>
       <div class="fc-article" id="fc-article"></div>
       <div class="fc-answer" id="fc-answer"></div>
+      <div class="fc-conj" id="fc-conj"></div>
+      <div class="fc-mem" id="fc-mem"></div>
       <div class="fc-hint" id="fc-hint">Tap to reveal →</div>
       <div class="fc-review-tag" id="fc-review-tag">👀 Already answered — review only</div>
     </div>
@@ -595,24 +618,105 @@ body{max-width:480px;margin:0 auto;}
   </div>
 </div>
 
+<!-- ══ NOTES L3 ══ -->
+<div id="s-notes-l3" class="scr">
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 3</div></div></div>
+  <div style="padding:18px;">
+    <div class="note-section">
+      <h3>🍽️ Meals Vocabulary</h3>
+      <div class="vocab-list">
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">el desayuno</span><div class="vocab-en">breakfast</div></div><button class="speak-btn" onclick="speak('el desayuno')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">el almuerzo</span><div class="vocab-en">lunch</div></div><button class="speak-btn" onclick="speak('el almuerzo')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">la cena</span><div class="vocab-en">dinner</div></div><button class="speak-btn" onclick="speak('la cena')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">desayunar · comer · cenar</span><div class="vocab-en">to have breakfast · lunch · dinner</div></div><button class="speak-btn" onclick="speak('desayunar, comer, cenar')">🔊</button></div>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>📊 HACER — to do / to make (irregular!)</h3>
+      <table class="conj-table">
+        <tr><th colspan="3">HACER — to do / to make</th></tr>
+        <tr><td>yo</td><td>hago</td><td>I do / make</td></tr>
+        <tr><td>tú</td><td>haces</td><td>you do / make</td></tr>
+        <tr><td>él/ella</td><td>hace</td><td>he/she does / makes</td></tr>
+        <tr><td>nosotros</td><td>hacemos</td><td>we do / make</td></tr>
+        <tr><td>ellos/ellas</td><td>hacen</td><td>they do / make</td></tr>
+      </table>
+      <div class="grammar-rule" style="margin-top:12px;"><strong>⚠️ Irregular yo form:</strong> yo → <strong>hago</strong> (not "haco"). All other forms are regular ER endings.</div>
+      <div class="grammar-rule"><strong>hacer ejercicio</strong> = to exercise (literally "to do exercise")<br>¿Haces ejercicio? → Sí, hago ejercicio por las mañanas.</div>
+    </div>
+    <div class="note-section">
+      <h3>📊 PENSAR — to think (stem-changing)</h3>
+      <table class="conj-table">
+        <tr><th colspan="3">PENSAR — to think (e → ie)</th></tr>
+        <tr><td>yo</td><td>pienso</td><td>I think</td></tr>
+        <tr><td>tú</td><td>piensas</td><td>you think</td></tr>
+        <tr><td>él/ella</td><td>piensa</td><td>he/she thinks</td></tr>
+        <tr><td>nosotros</td><td>pensamos</td><td>we think ← no change!</td></tr>
+        <tr><td>ellos/ellas</td><td>piensan</td><td>they think</td></tr>
+      </table>
+      <div class="grammar-rule" style="margin-top:12px;">The <strong>e → ie</strong> change happens in yo/tú/él/ellos, but <strong>NOT</strong> in nosotros: <em>pensamos</em>.</div>
+    </div>
+    <div class="note-section">
+      <h3>🪞 Reflexive Verbs — Self-care routine</h3>
+      <div class="grammar-rule"><strong>bañarse</strong> = to shower/bathe oneself<br>me baño · te bañas · se baña · nos bañamos · se bañan</div>
+      <div class="grammar-rule"><strong>lavarse</strong> = to wash oneself<br>me lavo · te lavas · se lava · nos lavamos · se lavan</div>
+      <div class="grammar-rule"><strong>cepillarse</strong> = to brush (teeth/hair)<br>me cepillo · te cepillas · se cepilla · nos cepillamos · se cepillan</div>
+      <div class="grammar-rule"><strong>Rule:</strong> reflexive pronoun (me/te/se/nos/se) matches the subject and goes <em>before</em> the verb.</div>
+    </div>
+    <div class="note-section">
+      <h3>🔤 Pronunciation Rules</h3>
+      <div class="grammar-rule">
+        <strong>Z / C / S</strong> — all the same sound in Mexican Spanish (like English <em>s</em>)<br>
+        <span style="color:var(--purple)">za = sa · ze = se = ce · zi = si = ci · zo = so · zu = su</span><br>
+        <span style="color:var(--muted);font-size:13px;">Example: <em>zapato = sapato</em> (same sound)</span>
+      </div>
+      <div class="grammar-rule">
+        <strong>V / B</strong> — same sound in Spanish (soft "b")<br>
+        <span style="color:var(--muted);font-size:13px;"><em>vaca</em> (cow) and <em>beber</em> (to drink) — v sounds like b</span>
+      </div>
+      <div class="grammar-rule">
+        <strong>J / G (before e/i)</strong> — sounds like English "h"<br>
+        <span style="color:var(--purple)">ja · je · ji · jo · ju</span> → always "h" sound<br>
+        <span style="color:var(--purple)">ge · gi</span> → also "h" sound (<em>gitana, gente</em>)<br>
+        <span style="color:var(--muted);font-size:13px;">Example: <em>Jalisco, Jorge, gitana</em></span>
+      </div>
+      <div class="grammar-rule">
+        <strong>G / GU</strong> — hard "g" sound (like English <em>go</em>)<br>
+        <span style="color:var(--purple)">ga · go · gu</span> → hard g (<em>gato, gordo, gusto</em>)<br>
+        <span style="color:var(--purple)">gue · gui</span> → hard g, the <em>u</em> is silent (<em>guerra, guitarra</em>)
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════ DATA ══════════════
 
 const THINGS = [
-  {es:"botella",en:"bottle",art:"la"},{es:"carro",en:"car",art:"el"},
-  {es:"computadora",en:"computer",art:"la"},{es:"tienda",en:"store / shop",art:"la"},
-  {es:"cafetería",en:"cafeteria",art:"la"},{es:"plato",en:"plate / dish",art:"el"},
-  {es:"cama",en:"bed",art:"la"},{es:"cielo",en:"sky",art:"el"},
-  {es:"invierno",en:"winter",art:"el"},{es:"primavera",en:"spring",art:"la"},
-  {es:"verano",en:"summer",art:"el"},
+  {es:"botella",  en:"bottle",        art:"la", mem:'"BOTTLE + -a" — practically the same word! 🍾'},
+  {es:"carro",    en:"car",           art:"el", mem:'"CAR + -ro" — just add -ro to car 🚗'},
+  {es:"computadora",en:"computer",    art:"la", mem:'"COMPUTER + -adora" — a super-powered computer! 💻'},
+  {es:"tienda",   en:"store / shop",  art:"la", mem:'Think "TEND to your needs" — a store tends to you 🛍️'},
+  {es:"cafetería",en:"cafeteria",     art:"la", mem:'Exact same word as English "cafeteria" ☕'},
+  {es:"plato",    en:"plate / dish",  art:"el", mem:'"PLATE + -o" → plato. Also the name of the philosopher! 🍽️'},
+  {es:"cama",     en:"bed",           art:"la", mem:'A "COMMA" is curved like someone curled up in bed ↩'},
+  {es:"cielo",    en:"sky",           art:"el", mem:'"CELESTIAL" comes from the same root — sky = heavens ✨'},
+  {es:"invierno", en:"winter",        art:"el", mem:'"IN-vier-NO warmth" — no warmth in winter ❄️'},
+  {es:"primavera",en:"spring",        art:"la", mem:'"PRIMA" (first) + "VERA" (green) = first green = spring! 🌱'},
+  {es:"verano",   en:"summer",        art:"el", mem:'Think "VERANDA in summer" — lounging on the porch ☀️'},
 ];
 const FAMILY = [
-  {es:"novio",en:"boyfriend",art:"el"},{es:"tío",en:"uncle",art:"el"},
-  {es:"abuelo",en:"grandfather",art:"el"},{es:"hermano",en:"brother",art:"el"},
-  {es:"hermana",en:"sister",art:"la"},{es:"primo",en:"cousin",art:"el"},
-  {es:"sobrino",en:"nephew",art:"el"},{es:"cuñado",en:"brother-in-law",art:"el"},
-  {es:"prometido",en:"fiancé",art:"el"},{es:"papá",en:"dad / father",art:"el"},
-  {es:"mamá",en:"mom / mother",art:"la"},
+  {es:"novio",     en:"boyfriend",       art:"el", mem:'"NOVELA" (soap opera) = a new love story 💕'},
+  {es:"tío",       en:"uncle",           art:"el", mem:'Picture your uncle wearing a giant TIE — "tee-OH!" 👔'},
+  {es:"abuelo",    en:"grandfather",     art:"el", mem:'Think "ABU" — a kind grandfather figure 👴'},
+  {es:"hermano",   en:"brother",         art:"el", mem:'Your brother "HERMAN-o" 🧑'},
+  {es:"hermana",   en:"sister",          art:"la", mem:'Your sister "HERMAN-a" 👩'},
+  {es:"primo",     en:"cousin",          art:"el", mem:'"PRIMO" = "prime" — your #1 extended family ✌️'},
+  {es:"sobrino",   en:"nephew",          art:"el", mem:'"SOBRino" — your sobering responsibility as an uncle 😄'},
+  {es:"cuñado",    en:"brother-in-law",  art:"el", mem:'"Cuñado" ends in -ado like "married" → in-law 💍'},
+  {es:"prometido", en:"fiancé",          art:"el", mem:'"PROMESA" (promise) — he promised to marry her! 💍'},
+  {es:"papá",      en:"dad / father",    art:"el", mem:'Same as English "papa" — universal word! 👨‍👧'},
+  {es:"mamá",      en:"mom / mother",    art:"la", mem:'Same as English "mama" — universal word! 👩‍👧'},
 ];
 const VOCAB = [...THINGS,...FAMILY];
 
@@ -628,6 +732,12 @@ const VERB_CONJUGATIONS = {
   'APRENDER': ['aprendo','aprendes','aprende','aprendemos','aprenden'],
   'VIVIR':    ['vivo','vives','vive','vivimos','viven'],
   'ESCRIBIR': ['escribo','escribes','escribe','escribimos','escriben'],
+  // Lesson 3
+  'HACER':    ['hago','haces','hace','hacemos','hacen'],
+  'TOMAR':    ['tomo','tomas','toma','tomamos','toman'],
+  'COCINAR':  ['cocino','cocinas','cocina','cocinamos','cocinan'],
+  'CENAR':    ['ceno','cenas','cena','cenamos','cenan'],
+  'PENSAR':   ['pienso','piensas','piensa','pensamos','piensan'],
 };
 
 const FILL_EXERCISES = [
@@ -680,43 +790,43 @@ const CONVERSATIONS = [
 
 const VOCAB_L2 = [
   // Days of the week
-  {es:'lunes',            en:'Monday',                 art:'el'},
-  {es:'martes',           en:'Tuesday',                art:'el'},
-  {es:'miércoles',        en:'Wednesday',              art:'el'},
-  {es:'jueves',           en:'Thursday',               art:'el'},
-  {es:'viernes',          en:'Friday',                 art:'el'},
-  {es:'sábado',           en:'Saturday',               art:'el'},
-  {es:'domingo',          en:'Sunday',                 art:'el'},
+  {es:'lunes',     en:'Monday',               art:'el', mem:'🌙 LUNA (moon) = Moon\'s day = Monday. All weekdays are named after planets!'},
+  {es:'martes',    en:'Tuesday',              art:'el', mem:'♂️ MARTE (Mars) = Mars\'s day. Think Tuesday = "Tues" = Tiw (Norse god of war, like Mars)'},
+  {es:'miércoles', en:'Wednesday',            art:'el', mem:'💨 MERCURIO (Mercury) = Mercury\'s day. Wednesday = "Woden\'s day" (same messenger god idea)'},
+  {es:'jueves',    en:'Thursday',             art:'el', mem:'⚡ JÚPITER (Jupiter) = Jupiter\'s day. Thursday = Thor\'s day. Both are the thunder god!'},
+  {es:'viernes',   en:'Friday',               art:'el', mem:'♀️ VENUS = Venus\'s day. Friday = Freya\'s day. Both are goddesses of love ❤️'},
+  {es:'sábado',    en:'Saturday',             art:'el', mem:'🕎 "SABBATH" — the Hebrew day of rest. Saturday shares this root!'},
+  {es:'domingo',   en:'Sunday',               art:'el', mem:'☀️ "Dominus" (Lord) = Lord\'s Day. Sunday = Sun\'s day. Both the big bright day!'},
   // Time of day
-  {es:'la mañana',        en:'the morning',            art:''},
-  {es:'la tarde',         en:'the afternoon/evening',  art:''},
-  {es:'la noche',         en:'the night',              art:''},
+  {es:'la mañana', en:'the morning',          art:''},
+  {es:'la tarde',  en:'the afternoon/evening',art:'', mem:'"TARDY" = late in the day — la tarde is the late part of the day ⏰'},
+  {es:'la noche',  en:'the night',            art:'', mem:'"NOCTURNAL" animals are active at night — noche/noct are the same root 🦉'},
   // AR verbs (infinitive)
-  {es:'hablar',           en:'to speak',               art:''},
-  {es:'caminar',          en:'to walk',                art:''},
-  {es:'comprar',          en:'to buy',                 art:''},
-  {es:'trabajar',         en:'to work',                art:''},
-  {es:'estudiar',         en:'to study',               art:''},
-  {es:'levantarse',       en:'to get up',              art:''},
-  {es:'desayunar',        en:'to have breakfast',      art:''},
+  {es:'hablar',    en:'to speak',             art:'', mem:'"JABBER" means to talk nonstop — hablar ≈ jabber 🗣️'},
+  {es:'caminar',   en:'to walk',              art:'', mem:'"CAMINO" = path/road (El Camino!) — you walk the camino 🚶'},
+  {es:'comprar',   en:'to buy',               art:'', mem:'"COMPARE" prices before you buy — comprar ≈ compare 🛒'},
+  {es:'trabajar',  en:'to work',              art:'', mem:'Think "tra-BA-HA-r" — the hard "ha" sounds like a grunt of hard work 💼'},
+  {es:'estudiar',  en:'to study',             art:'', mem:'"STUDY + -ar" — same root as English "study" 📚'},
+  {es:'levantarse',en:'to get up',            art:'', mem:'"LEVITATE" — levantarse and levitate both mean to rise up 🎈'},
+  {es:'desayunar', en:'to have breakfast',    art:'', mem:'"DES-AYUN-ar" — "des" = un + "ayuno" (fast) = to un-fast = break-fast! 🍳'},
   // ER verbs (infinitive)
-  {es:'comer',            en:'to eat',                 art:''},
-  {es:'leer',             en:'to read',                art:''},
-  {es:'aprender',         en:'to learn',               art:''},
-  {es:'entender',         en:'to understand',          art:''},
+  {es:'comer',     en:'to eat',               art:'', mem:'"COME and eat-ER" — comer sounds like "come eat!" 🍽️'},
+  {es:'leer',      en:'to read',              art:'', mem:'"LEGIBLE" comes from the same Latin root as leer — to read 📖'},
+  {es:'aprender',  en:'to learn',             art:'', mem:'"APPRENtice" learns from a master — same root! 🔨'},
+  {es:'entender',  en:'to understand',        art:'', mem:'"INTEND" to understand — entender ≈ intend (same root) 💡'},
   // IR verbs (infinitive)
-  {es:'escribir',         en:'to write',               art:''},
-  {es:'vivir',            en:'to live',                art:''},
-  {es:'subir',            en:'to go up / upload',      art:''},
+  {es:'escribir',  en:'to write',             art:'', mem:'"SCRIBE" writes things down — escribir contains "scrib" ✍️'},
+  {es:'vivir',     en:'to live',              art:'', mem:'"¡VIVA!" = long live! — viva and vivir share the same root 🎉'},
+  {es:'subir',     en:'to go up / upload',    art:'', mem:'"SUBway" goes under but "SUBIR" goes UP — think "sub" confused 😄'},
   // Demonstratives
-  {es:'este / esta',      en:'this (m / f)',            art:''},
-  {es:'ese / esa',        en:'that (m / f)',            art:''},
-  {es:'estos / estas',    en:'these (m / f)',           art:''},
-  {es:'esos / esas',      en:'those (m / f)',           art:''},
+  {es:'este / esta',   en:'this (m / f)',     art:'', mem:'"ESTE" sounds like "this-tay" — points to what\'s close to you 👉'},
+  {es:'ese / esa',     en:'that (m / f)',     art:'', mem:'"ESE" sounds like "S" — that thing over there (further away)'},
+  {es:'estos / estas', en:'these (m / f)',    art:''},
+  {es:'esos / esas',   en:'those (m / f)',    art:''},
   // Time expressions
-  {es:'de lunes a viernes', en:'Monday to Friday',     art:''},
-  {es:'el fin de semana',   en:'the weekend',           art:''},
-  {es:'a la / a las',       en:'at (o\'clock)',          art:''},
+  {es:'de lunes a viernes', en:'Monday to Friday',  art:''},
+  {es:'el fin de semana',   en:'the weekend',        art:'', mem:'"FIN" = end of the week. "Fin" also means end in movies — The End 🎬'},
+  {es:'a la / a las',       en:'at (o\'clock)',       art:''},
 ];
 
 const FILL_L2 = [
@@ -770,11 +880,96 @@ const CONV_L2 = [
   {ctx:"Topic: mealtime",                q:"¿A qué hora comes?",              q_en:"What time do you eat?",              ans:"Como a la una. / Como a las dos.",    ans_en:"I eat at one. / I eat at two.",       note:"Use <strong>a la una</strong> (1 o'clock only). Use <strong>a las + number</strong> for all other hours: a las ocho, a las doce."},
 ];
 
+// ══════════════ LESSON 3 DATA ══════════════
+
+const VOCAB_L3 = [
+  // Drinking & cooking
+  {es:'tomar',          en:'to take / to drink',      art:'', mem:'"TOMAR" → "to take" → take a drink. Also think "toma!" (here, take it!) 🥤'},
+  {es:'beber',          en:'to drink',                art:'', mem:'"BEBERage" — beber is hiding inside the word beverage! 🍹'},
+  {es:'cocinar',        en:'to cook',                 art:'', mem:'"CUISINE" and "KITCHEN" come from the same Latin root "coquina" 👨‍🍳'},
+  {es:'cenar',          en:'to have dinner',          art:'', mem:'"Last SUPPER" in Italian is "L\'Ultima Cena" — same root! 🎨'},
+  // Body-care reflexive verbs
+  {es:'lavarse',        en:'to wash oneself',         art:'', mem:'"LAVA" flows and washes everything clean 🌋'},
+  {es:'cepillarse',     en:'to brush (teeth/hair)',   art:'', mem:'"CEPILLO" = brush — imagine "sep-ILL-oh" brushing away the ill 🪥'},
+  // Doing / thinking
+  {es:'hacer',          en:'to do / to make',         art:'', mem:'"HACKSAW" maker hacks things together. Yo HAGO = I make (irregular!) 🛠️'},
+  {es:'pensar',         en:'to think',                art:'', mem:'"PENSIVE" = deep in thought — same Latin root "pensare" 🤔'},
+  {es:'hacer ejercicio',en:'to exercise',             art:'', mem:'"HACER" (make) + "EJERCICIO" → make an exercise effort 💪'},
+  // Meals (nouns)
+  {es:'el desayuno',    en:'breakfast',               art:'el', mem:'"DES" (un) + "AYUNO" (fast) = to un-fast = break-fast! Same idea as English 🍳'},
+  {es:'el almuerzo',    en:'lunch',                   art:'el', mem:'"AL-MUERZ-o" — think "AL\'s MURSel" — Al\'s midday bite 😄'},
+  {es:'la cena',        en:'dinner',                  art:'la', mem:'"Last Supper" = "La Ultima Cena" — la cena is the evening meal 🌙'},
+];
+
+const FILL_L3 = [
+  // HACER
+  {verb:"HACER",   sentence:"Yo ___ ejercicio todos los días.",        answer:"hago",    en:"I exercise every day."},
+  {verb:"HACER",   sentence:"¿Qué ___ tú los fines de semana?",        answer:"haces",   en:"What do you do on weekends?"},
+  {verb:"HACER",   sentence:"Ella ___ la cena a las ocho.",            answer:"hace",    en:"She makes dinner at eight."},
+  {verb:"HACER",   sentence:"Nosotros ___ tacos los viernes.",         answer:"hacemos", en:"We make tacos on Fridays."},
+  {verb:"HACER",   sentence:"Ellos ___ mucho ruido.",                  answer:"hacen",   en:"They make a lot of noise."},
+  {verb:"HACER",   sentence:"¿Tú ___ deporte?",                        answer:"haces",   en:"Do you play sports?"},
+  {verb:"HACER",   sentence:"¿Qué ___ usted aquí?",                    answer:"hace",    en:"What are you doing here? (formal)"},
+  {verb:"HACER",   sentence:"Yo ___ la tarea por las noches.",         answer:"hago",    en:"I do homework at night."},
+  // TOMAR
+  {verb:"TOMAR",   sentence:"Yo ___ café en la mañana.",               answer:"tomo",    en:"I drink coffee in the morning."},
+  {verb:"TOMAR",   sentence:"¿Qué ___ tú en el desayuno?",             answer:"tomas",   en:"What do you drink at breakfast?"},
+  {verb:"TOMAR",   sentence:"Él ___ agua con limón.",                  answer:"toma",    en:"He drinks water with lemon."},
+  {verb:"TOMAR",   sentence:"Nosotros ___ jugo los domingos.",         answer:"tomamos", en:"We drink juice on Sundays."},
+  {verb:"TOMAR",   sentence:"Ellos ___ café todas las mañanas.",       answer:"toman",   en:"They drink coffee every morning."},
+  // COCINAR
+  {verb:"COCINAR", sentence:"Yo no ___ todos los días.",               answer:"cocino",   en:"I don't cook every day."},
+  {verb:"COCINAR", sentence:"¿Tú ___ bien?",                           answer:"cocinas",  en:"Do you cook well?"},
+  {verb:"COCINAR", sentence:"Mi mamá ___ tacos muy ricos.",            answer:"cocina",   en:"My mom cooks very good tacos."},
+  {verb:"COCINAR", sentence:"Nosotros ___ juntos los domingos.",       answer:"cocinamos",en:"We cook together on Sundays."},
+  {verb:"COCINAR", sentence:"Ellos ___ en un restaurante.",            answer:"cocinan",  en:"They cook in a restaurant."},
+  // CENAR
+  {verb:"CENAR",   sentence:"Yo ___ a las nueve de la noche.",         answer:"ceno",    en:"I have dinner at nine at night."},
+  {verb:"CENAR",   sentence:"¿Dónde ___ tú normalmente?",              answer:"cenas",   en:"Where do you normally have dinner?"},
+  {verb:"CENAR",   sentence:"Mi familia ___ junta todos los días.",    answer:"cena",    en:"My family dines together every day."},
+  {verb:"CENAR",   sentence:"Nosotros ___ pizza los sábados.",         answer:"cenamos", en:"We have pizza for dinner on Saturdays."},
+  {verb:"CENAR",   sentence:"Ellos ___ muy tarde.",                    answer:"cenan",   en:"They have dinner very late."},
+  // PENSAR
+  {verb:"PENSAR",  sentence:"Yo ___ que el español es muy bonito.",    answer:"pienso",  en:"I think Spanish is very beautiful."},
+  {verb:"PENSAR",  sentence:"¿Tú ___ mucho en español?",               answer:"piensas", en:"Do you think a lot in Spanish?"},
+  {verb:"PENSAR",  sentence:"Ella ___ que es difícil.",                answer:"piensa",  en:"She thinks it's difficult."},
+  {verb:"PENSAR",  sentence:"Nosotros ___ que es muy importante.",     answer:"pensamos",en:"We think it's very important."},
+  {verb:"PENSAR",  sentence:"Ellos ___ en el futuro.",                 answer:"piensan", en:"They think about the future."},
+  {verb:"PENSAR",  sentence:"¿Qué ___ tú de esta ciudad?",             answer:"piensas", en:"What do you think of this city?"},
+  {verb:"PENSAR",  sentence:"Yo ___ en mi familia todos los días.",    answer:"pienso",  en:"I think about my family every day."},
+];
+
+const CONV_L3 = [
+  {ctx:"Topic: morning routine",     q:"¿A qué hora te bañas?",             q_en:"What time do you shower?",              ans:"Me baño a las [hora] de la mañana.",   ans_en:"I shower at [time] in the morning.",   note:"<strong>Bañarse</strong> is reflexive: <em>me baño / te bañas / se baña / nos bañamos / se bañan</em>. Same for lavarse, cepillarse."},
+  {ctx:"Topic: exercise",            q:"¿Haces ejercicio? ¿Cuándo?",         q_en:"Do you exercise? When?",                ans:"Sí, hago ejercicio por las mañanas. / No, no hago ejercicio.", ans_en:"Yes, I exercise in the mornings. / No, I don't exercise.", note:"<strong>Hacer</strong> is irregular: <strong>yo → hago</strong>. All other forms are regular: haces / hace / hacemos / hacen."},
+  {ctx:"Topic: breakfast drinks",    q:"¿Qué tomas en el desayuno?",          q_en:"What do you drink at breakfast?",       ans:"Tomo café. / Tomo jugo de naranja.",   ans_en:"I drink coffee. / I drink orange juice.", note:"<strong>Tomar</strong> (AR): <em>tomo / tomas / toma / tomamos / toman</em>. Also use <strong>beber</strong> for 'to drink': bebo / bebes / bebe."},
+  {ctx:"Topic: cooking habits",      q:"¿Cocinas todos los días?",            q_en:"Do you cook every day?",                ans:"Sí, cocino todos los días. / No, no cocino todos los días.", ans_en:"Yes, I cook every day. / No, I don't cook every day.", note:"Double negative in Spanish: <strong>No, no cocino</strong> — both 'no' are required. <em>Todos los días</em> = every day."},
+  {ctx:"Topic: dinner time",         q:"¿A qué hora cenas?",                  q_en:"What time do you have dinner?",         ans:"Ceno a las [hora] de la noche.",       ans_en:"I have dinner at [time] at night.",    note:"<strong>Cenar</strong> (AR): <em>ceno / cenas / cena / cenamos / cenan</em>. <em>De la noche</em> = at night (after ~7pm, vs. <em>de la tarde</em> for afternoon)."},
+  {ctx:"Topic: opinion",             q:"¿Qué piensas del español?",           q_en:"What do you think of Spanish?",         ans:"Pienso que es difícil pero muy bonito.", ans_en:"I think it's difficult but very beautiful.", note:"<strong>Pensar</strong> (stem-changing): <strong>pienso / piensas / piensa</strong> — the 'e' becomes 'ie' in yo/tú/él, but NOT in nosotros: <strong>pensamos</strong>."},
+  {ctx:"Topic: oral hygiene",        q:"¿Te cepillas los dientes después de cenar?", q_en:"Do you brush your teeth after dinner?", ans:"Sí, me cepillo los dientes después de cenar.", ans_en:"Yes, I brush my teeth after dinner.", note:"<strong>Los dientes</strong> = the teeth. <strong>Después de + infinitive</strong> = after doing something. Reflexive: <em>me cepillo / te cepillas / se cepilla</em>."},
+  {ctx:"Topic: weekend cooking",     q:"¿Qué hace tu mamá los sábados?",      q_en:"What does your mom do on Saturdays?",   ans:"Mi mamá cocina y hace ejercicio.",     ans_en:"My mom cooks and exercises.",          note:"Third person: <strong>ella → hace</strong>. Two verbs in one sentence: <em>cocina y hace ejercicio</em>. Use <strong>y</strong> to connect."},
+];
+
 // ══════════════ MY WORDS ══════════════
 
 const MYWORDS_KEY = 'mywords_espanol';
 function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
 function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
+
+// Check if a Spanish word already exists in any lesson vocab
+function isInLessonVocab(es) {
+  const q = es.toLowerCase().trim();
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3].some(v => v.es.toLowerCase() === q);
+}
+
+// One-time migration: remove My Words that are already in lesson vocab
+function dedupeMyWords() {
+  if(localStorage.getItem('myw_deduped_v1')) return;
+  const words = loadMyWords();
+  const filtered = words.filter(w => !isInLessonVocab(w.es));
+  if(filtered.length < words.length) saveMyWords(filtered);
+  localStorage.setItem('myw_deduped_v1','1');
+}
 
 function showAddWordModal() {
   document.getElementById('addword-es').value='';
@@ -802,7 +997,7 @@ function doBulkImport() {
     // Strip trailing punctuation from Spanish for key, keep full form as display
     const es = left;
     const en = right;
-    if(!words.find(w=>w.es===es)){
+    if(!words.find(w=>w.es===es) && !isInLessonVocab(es)){
       words.push({es, en, art:'', custom:true, added:Date.now()});
       added++;
     }
@@ -824,6 +1019,10 @@ function saveNewWord() {
   const en=document.getElementById('addword-en').value.trim();
   const art=document.getElementById('addword-art').value.trim().toLowerCase();
   if(!es||!en){alert('Please fill in both Spanish and English.');return;}
+  if(isInLessonVocab(es)){
+    alert(`"${es}" is already in your lesson vocabulary — it'll be reviewed there! No need to add it again ✨`);
+    return;
+  }
   const words=loadMyWords();
   if(!words.find(w=>w.es===es)) words.push({es,en,art,custom:true,added:Date.now()});
   saveMyWords(words);
@@ -890,6 +1089,7 @@ function getDueCards() {
   };
   VOCAB.forEach(v => { if(checkDue(v)) due.push(v); });
   VOCAB_L2.forEach(v => { if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v); });
+  VOCAB_L3.forEach(v => { if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v); });
   // Also include custom My Words that are due
   loadMyWords().forEach(v => {
     if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v);
@@ -969,15 +1169,15 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 Today\'s Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 Today\'s Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
-  } else if(mode==='fill'||mode==='fill-l2'){
-    document.getElementById('fill-hdr-sub').textContent=mode==='fill-l2'?'Lesson 2 · AR / ER / IR':'Verb Conjugation';
+  } else if(mode==='fill'||mode==='fill-l2'||mode==='fill-l3'){
+    document.getElementById('fill-hdr-sub').textContent=mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':'Verb Conjugation';
     show('s-fill');renderFill();
-  } else if(mode==='conv'||mode==='conv-l2'){
-    document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':'Listen · speak · compare';
+  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'){
+    document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':'Listen · speak · compare';
     show('s-conv');renderConv();
   }
 }
@@ -1004,9 +1204,12 @@ function resumeSession(){
   if(mode==='myw-es-en'||mode==='myw-en-es') pool=loadMyWords();
   else if(mode==='es-en'||mode==='en-es'||mode==='es-en-review') pool=VOCAB;
   else if(mode==='es-en-l2'||mode==='en-es-l2') pool=VOCAB_L2;
+  else if(mode==='es-en-l3'||mode==='en-es-l3') pool=VOCAB_L3;
   else if(mode==='fill') pool=FILL_EXERCISES;
   else if(mode==='fill-l2') pool=FILL_L2;
+  else if(mode==='fill-l3') pool=FILL_L3;
   else if(mode==='conv-l2') pool=CONV_L2;
+  else if(mode==='conv-l3') pool=CONV_L3;
   else pool=CONVERSATIONS;
   S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
   S.mode=mode; S.idx=saved.idx; S.correct=saved.correct; S.wrong=saved.wrong;
@@ -1033,14 +1236,20 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(myw); S.revealed=false;
   } else if(mode==='es-en-l2'||mode==='en-es-l2'){
     S.mode=mode; S.cards=shuffle(VOCAB_L2); S.revealed=false;
+  } else if(mode==='es-en-l3'||mode==='en-es-l3'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L3); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
     S.mode='fill-l2'; S.cards=shuffle(FILL_L2); S.submitted=false;
+  } else if(mode==='fill-l3'){
+    S.mode='fill-l3'; S.cards=shuffle(FILL_L3); S.submitted=false;
   } else if(mode==='conv'){
     S.mode='conv'; S.cards=shuffle(CONVERSATIONS);
   } else if(mode==='conv-l2'){
     S.mode='conv-l2'; S.cards=shuffle(CONV_L2);
+  } else if(mode==='conv-l3'){
+    S.mode='conv-l3'; S.cards=shuffle(CONV_L3);
   }
   navigateToMode(S.mode);
 }
@@ -1049,9 +1258,38 @@ function retryMode(){clearSession();startMode(S.mode==='es-en-review'?'review':S
 
 // ══════════════ FLASHCARDS ══════════════
 
+// Show conjugation pills + mnemonic after answer is revealed
+function updateRevealExtras(show) {
+  const item = S.cards[S.idx];
+  const conjEl = document.getElementById('fc-conj');
+  const memEl  = document.getElementById('fc-mem');
+  if(!show) {
+    conjEl.classList.remove('show'); conjEl.innerHTML='';
+    memEl.classList.remove('show');
+    return;
+  }
+  // Conjugation pills — look up by uppercase verb name
+  const pronouns = ['yo','tú','él/ella','nos.','ellos'];
+  const verbKey = item.es.replace(/\s.*$/,'').toUpperCase(); // first word, e.g. "HACER" from "hacer ejercicio"
+  const conj = VERB_CONJUGATIONS[verbKey];
+  if(conj) {
+    conjEl.innerHTML = conj.map((c,i)=>`<span class="conj-pill">${pronouns[i]}: ${c}</span>`).join('');
+    conjEl.classList.add('show');
+  } else {
+    conjEl.classList.remove('show'); conjEl.innerHTML='';
+  }
+  // Mnemonic
+  if(item.mem) {
+    memEl.textContent = '💡 ' + item.mem;
+    memEl.classList.add('show');
+  } else {
+    memEl.classList.remove('show');
+  }
+}
+
 function renderFlash(){
   const item=S.cards[S.idx], total=S.cards.length;
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
   const dir=isEsEn?'es_en':'en_es';
   const alreadyAnswered=(S.idx in S.answered);
 
@@ -1071,7 +1309,6 @@ function renderFlash(){
   const skipBtn=document.getElementById('flash-skip');
 
   if(alreadyAnswered){
-    // Review mode: show revealed, no verdict
     ansEl.classList.add('show');
     hintEl.classList.add('hide');
     vrow.classList.add('hidden');
@@ -1087,6 +1324,7 @@ function renderFlash(){
     skipBtn.classList.add('hidden');
   }
   S.revealed=alreadyAnswered;
+  updateRevealExtras(alreadyAnswered);
 
   // Prev button
   document.getElementById('flash-prev').disabled=(S.idx===0);
@@ -1096,7 +1334,7 @@ function renderFlash(){
 
 function speakCurrent(){
   const item=S.cards[S.idx];
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
   speak(isEsEn?item.es:item.en,isEsEn?'es-ES':'en-US');
 }
 
@@ -1106,7 +1344,8 @@ function revealCard(){
   document.getElementById('fc-answer').classList.add('show');
   document.getElementById('fc-hint').classList.add('hide');
   document.getElementById('vbtn-row').classList.remove('hidden');
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
+  updateRevealExtras(true);
+  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
   if(!isEsEn) speak(S.cards[S.idx].es);
 }
 
@@ -1116,7 +1355,7 @@ function verdict(quality){
     S.answered[S.idx]=quality;
     if(quality>=3) S.correct++; else S.wrong++;
     // SM-2 update with direction
-    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2';
+    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
     const dir=isEsEn?'es_en':'en_es';
     const data=loadSR();
     const key=srKey(item.es,dir);
@@ -1406,6 +1645,7 @@ function seedMyWords(){
 
 buildNotes();
 seedMyWords();
+dedupeMyWords();
 refreshHome();
 
 if('serviceWorker' in navigator){
