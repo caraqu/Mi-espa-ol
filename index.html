@@ -693,30 +693,30 @@ body{max-width:480px;margin:0 auto;}
 // ══════════════ DATA ══════════════
 
 const THINGS = [
-  {es:"botella",  en:"bottle",        art:"la", mem:'"BOTTLE + -a" — practically the same word! 🍾'},
-  {es:"carro",    en:"car",           art:"el", mem:'"CAR + -ro" — just add -ro to car 🚗'},
-  {es:"computadora",en:"computer",    art:"la", mem:'"COMPUTER + -adora" — a super-powered computer! 💻'},
-  {es:"tienda",   en:"store / shop",  art:"la", mem:'Think "TEND to your needs" — a store tends to you 🛍️'},
-  {es:"cafetería",en:"cafeteria",     art:"la", mem:'Exact same word as English "cafeteria" ☕'},
-  {es:"plato",    en:"plate / dish",  art:"el", mem:'"PLATE + -o" → plato. Also the name of the philosopher! 🍽️'},
-  {es:"cama",     en:"bed",           art:"la", mem:'A "COMMA" is curved like someone curled up in bed ↩'},
-  {es:"cielo",    en:"sky",           art:"el", mem:'"CELESTIAL" comes from the same root — sky = heavens ✨'},
-  {es:"invierno", en:"winter",        art:"el", mem:'"IN-vier-NO warmth" — no warmth in winter ❄️'},
-  {es:"primavera",en:"spring",        art:"la", mem:'"PRIMA" (first) + "VERA" (green) = first green = spring! 🌱'},
-  {es:"verano",   en:"summer",        art:"el", mem:'Think "VERANDA in summer" — lounging on the porch ☀️'},
+  {es:"botella",  en:"bottle",        art:"la", mem:'🍾 BOTTLE → botella. Just add -a!'},
+  {es:"carro",    en:"car",           art:"el", mem:'🚗 CAR → carro. Just add -ro!'},
+  {es:"computadora",en:"computer",    art:"la", mem:'💻 COMPUTER → computadora. Same word, Spanish flair!'},
+  {es:"tienda",   en:"store / shop",  art:"la", mem:'🛍️ "TEND" → tienda. A store TENDS to your needs.'},
+  {es:"cafetería",en:"cafeteria",     art:"la", mem:'☕ Exact same word as "cafeteria"!'},
+  {es:"plato",    en:"plate / dish",  art:"el", mem:'🍽️ PLATE → plato. Swap the E for O!'},
+  {es:"cama",     en:"bed",           art:"la", mem:'😴 COMA → cama. Sleep so hard you\'re in a COMA!'},
+  {es:"cielo",    en:"sky",           art:"el", mem:'✨ SEE-EL-oh → you SEE the sky up above you!'},
+  {es:"invierno", en:"winter",        art:"el", mem:'🍺 "in-BEER-no" → stay in and drink BEER, it\'s winter!'},
+  {es:"primavera",en:"spring",        art:"la", mem:'🍝 Primavera pasta! You\'ve seen this on menus — spring veggie pasta!'},
+  {es:"verano",   en:"summer",        art:"el", mem:'☀️ "ver-ANO" sounds like "burn-o" → summer BURNS! Verano = hot season.'},
 ];
 const FAMILY = [
-  {es:"novio",     en:"boyfriend",       art:"el", mem:'"NOVELA" (soap opera) = a new love story 💕'},
-  {es:"tío",       en:"uncle",           art:"el", mem:'Picture your uncle wearing a giant TIE — "tee-OH!" 👔'},
-  {es:"abuelo",    en:"grandfather",     art:"el", mem:'Think "ABU" — a kind grandfather figure 👴'},
-  {es:"hermano",   en:"brother",         art:"el", mem:'Your brother "HERMAN-o" 🧑'},
-  {es:"hermana",   en:"sister",          art:"la", mem:'Your sister "HERMAN-a" 👩'},
-  {es:"primo",     en:"cousin",          art:"el", mem:'"PRIMO" = "prime" — your #1 extended family ✌️'},
-  {es:"sobrino",   en:"nephew",          art:"el", mem:'"SOBRino" — your sobering responsibility as an uncle 😄'},
-  {es:"cuñado",    en:"brother-in-law",  art:"el", mem:'"Cuñado" ends in -ado like "married" → in-law 💍'},
-  {es:"prometido", en:"fiancé",          art:"el", mem:'"PROMESA" (promise) — he promised to marry her! 💍'},
-  {es:"papá",      en:"dad / father",    art:"el", mem:'Same as English "papa" — universal word! 👨‍👧'},
-  {es:"mamá",      en:"mom / mother",    art:"la", mem:'Same as English "mama" — universal word! 👩‍👧'},
+  {es:"novio",     en:"boyfriend",       art:"el", mem:'💕 NOVELa = love story → novio = your love story character!'},
+  {es:"tío",       en:"uncle",           art:"el", mem:'👔 Uncle wears a TIE → "tee-OH!" = tío'},
+  {es:"abuelo",    en:"grandfather",     art:"el", mem:'👴 ABUElo → "Abu" → picture a kind grandpa named Abu'},
+  {es:"hermano",   en:"brother",         art:"el", mem:'🧑 HERMAN-o → your bro is named Herman!'},
+  {es:"hermana",   en:"sister",          art:"la", mem:'👩 HERMAN-a → your sis is Hermana!'},
+  {es:"primo",     en:"cousin",          art:"el", mem:'✌️ PRIME cousin → primo = first quality family!'},
+  {es:"sobrino",   en:"nephew",          art:"el", mem:'🧒 SOBRe = over → your nephew is ALWAYS over at your place'},
+  {es:"cuñado",    en:"brother-in-law",  art:"el", mem:'💒 ends in -ADO like "casado" (married) → the one who married in'},
+  {es:"prometido", en:"fiancé",          art:"el", mem:'💍 PROMESA (promise) → prometido = the one who promised to marry you'},
+  {es:"papá",      en:"dad / father",    art:"el", mem:'👨‍👧 "papa" — same in Spanish and English!'},
+  {es:"mamá",      en:"mom / mother",    art:"la", mem:'👩‍👧 "mama" — same in Spanish and English!'},
 ];
 const VOCAB = [...THINGS,...FAMILY];
 
@@ -790,42 +790,42 @@ const CONVERSATIONS = [
 
 const VOCAB_L2 = [
   // Days of the week
-  {es:'lunes',     en:'Monday',               art:'el', mem:'🌙 LUNA (moon) = Moon\'s day = Monday. All weekdays are named after planets!'},
-  {es:'martes',    en:'Tuesday',              art:'el', mem:'♂️ MARTE (Mars) = Mars\'s day. Think Tuesday = "Tues" = Tiw (Norse god of war, like Mars)'},
-  {es:'miércoles', en:'Wednesday',            art:'el', mem:'💨 MERCURIO (Mercury) = Mercury\'s day. Wednesday = "Woden\'s day" (same messenger god idea)'},
-  {es:'jueves',    en:'Thursday',             art:'el', mem:'⚡ JÚPITER (Jupiter) = Jupiter\'s day. Thursday = Thor\'s day. Both are the thunder god!'},
-  {es:'viernes',   en:'Friday',               art:'el', mem:'♀️ VENUS = Venus\'s day. Friday = Freya\'s day. Both are goddesses of love ❤️'},
-  {es:'sábado',    en:'Saturday',             art:'el', mem:'🕎 "SABBATH" — the Hebrew day of rest. Saturday shares this root!'},
-  {es:'domingo',   en:'Sunday',               art:'el', mem:'☀️ "Dominus" (Lord) = Lord\'s Day. Sunday = Sun\'s day. Both the big bright day!'},
+  {es:'lunes',     en:'Monday',               art:'el', mem:'😫 LOONEY Monday — lunes sounds like "loony". Mondays are looney! 🌙'},
+  {es:'martes',    en:'Tuesday',              art:'el', mem:'🍫 MARS bar Tuesday — "martes" contains MARS. Treat yourself!'},
+  {es:'miércoles', en:'Wednesday',            art:'el', mem:'🪞 MIRROR Wednesday — "miÉRcoles" → look in the MIRROR midweek. Hump day check-in!'},
+  {es:'jueves',    en:'Thursday',             art:'el', mem:'🍊 JUICE Thursday — "jueves" (hoo-EH-bes) → squeeze some JUICE before Friday!'},
+  {es:'viernes',   en:'Friday',               art:'el', mem:'🍺 BEER Friday — "viernes" sounds like BEER-nes. ¡Viernes = Beer day!'},
+  {es:'sábado',    en:'Saturday',             art:'el', mem:'🛌 SABBATH = sábado. Both mean the day of rest. Sáb-a-do → SABbath!'},
+  {es:'domingo',   en:'Sunday',               art:'el', mem:'🎲 DOMINOS Sunday — "domingo" sounds like DOMINO. Go play dominos!'},
   // Time of day
   {es:'la mañana', en:'the morning',          art:''},
-  {es:'la tarde',  en:'the afternoon/evening',art:'', mem:'"TARDY" = late in the day — la tarde is the late part of the day ⏰'},
-  {es:'la noche',  en:'the night',            art:'', mem:'"NOCTURNAL" animals are active at night — noche/noct are the same root 🦉'},
+  {es:'la tarde',  en:'the afternoon/evening',art:'', mem:'⏰ TARDY = late → la tarde = the late part of the day.'},
+  {es:'la noche',  en:'the night',            art:'', mem:'🦉 NOCTURNAL = night animals → noche and noct = same root!'},
   // AR verbs (infinitive)
-  {es:'hablar',    en:'to speak',             art:'', mem:'"JABBER" means to talk nonstop — hablar ≈ jabber 🗣️'},
-  {es:'caminar',   en:'to walk',              art:'', mem:'"CAMINO" = path/road (El Camino!) — you walk the camino 🚶'},
-  {es:'comprar',   en:'to buy',               art:'', mem:'"COMPARE" prices before you buy — comprar ≈ compare 🛒'},
-  {es:'trabajar',  en:'to work',              art:'', mem:'Think "tra-BA-HA-r" — the hard "ha" sounds like a grunt of hard work 💼'},
-  {es:'estudiar',  en:'to study',             art:'', mem:'"STUDY + -ar" — same root as English "study" 📚'},
-  {es:'levantarse',en:'to get up',            art:'', mem:'"LEVITATE" — levantarse and levitate both mean to rise up 🎈'},
-  {es:'desayunar', en:'to have breakfast',    art:'', mem:'"DES-AYUN-ar" — "des" = un + "ayuno" (fast) = to un-fast = break-fast! 🍳'},
+  {es:'hablar',    en:'to speak',             art:'', mem:'🗣️ HOLLER = speak loudly → hablar ≈ holler!'},
+  {es:'caminar',   en:'to walk',              art:'', mem:'🚶 CAMINO = path (El Camino!) → you walk the camino.'},
+  {es:'comprar',   en:'to buy',               art:'', mem:'🛒 COMPARE prices before you buy → comprar ≈ compare.'},
+  {es:'trabajar',  en:'to work',              art:'', mem:'💼 "tra-BA-HAR" → the "ha" grunt = hard work sound!'},
+  {es:'estudiar',  en:'to study',             art:'', mem:'📚 STUDY-ar → same root as "study"!'},
+  {es:'levantarse',en:'to get up',            art:'', mem:'🎈 LEVITATE = rise up → levantarse = get yourself up!'},
+  {es:'desayunar', en:'to have breakfast',    art:'', mem:'🍳 DES (un) + AYUNO (fast) = un-fast = BREAK-fast! Same idea as English!'},
   // ER verbs (infinitive)
-  {es:'comer',     en:'to eat',               art:'', mem:'"COME and eat-ER" — comer sounds like "come eat!" 🍽️'},
-  {es:'leer',      en:'to read',              art:'', mem:'"LEGIBLE" comes from the same Latin root as leer — to read 📖'},
-  {es:'aprender',  en:'to learn',             art:'', mem:'"APPRENtice" learns from a master — same root! 🔨'},
-  {es:'entender',  en:'to understand',        art:'', mem:'"INTEND" to understand — entender ≈ intend (same root) 💡'},
+  {es:'comer',     en:'to eat',               art:'', mem:'😴 Food COMA → co-MER → eat till you\'re in a coma!'},
+  {es:'leer',      en:'to read',              art:'', mem:'📖 LEGIBLE comes from same Latin root as leer → to read.'},
+  {es:'aprender',  en:'to learn',             art:'', mem:'🔨 APPRENtice → aprender has "appren-"! Apprentice learns.'},
+  {es:'entender',  en:'to understand',        art:'', mem:'💡 INTEND → entender ≈ intend. Same root!'},
   // IR verbs (infinitive)
-  {es:'escribir',  en:'to write',             art:'', mem:'"SCRIBE" writes things down — escribir contains "scrib" ✍️'},
-  {es:'vivir',     en:'to live',              art:'', mem:'"¡VIVA!" = long live! — viva and vivir share the same root 🎉'},
-  {es:'subir',     en:'to go up / upload',    art:'', mem:'"SUBway" goes under but "SUBIR" goes UP — think "sub" confused 😄'},
+  {es:'escribir',  en:'to write',             art:'', mem:'✍️ eSCRIBe → SCRIBE writes → scribes "escriben"!'},
+  {es:'vivir',     en:'to live',              art:'', mem:'🎉 ¡VIVA! = long live! → viva and vivir = same root.'},
+  {es:'subir',     en:'to go up / upload',    art:'', mem:'📶 SUBway goes UNDER, but SUBIR goes UP — trick yourself!'},
   // Demonstratives
-  {es:'este / esta',   en:'this (m / f)',     art:'', mem:'"ESTE" sounds like "this-tay" — points to what\'s close to you 👉'},
-  {es:'ese / esa',     en:'that (m / f)',     art:'', mem:'"ESE" sounds like "S" — that thing over there (further away)'},
+  {es:'este / esta',   en:'this (m / f)',     art:'', mem:'👉 ESTE = "eh-STAY" here → this thing close to me!'},
+  {es:'ese / esa',     en:'that (m / f)',     art:'', mem:'👉👉 ESE = "eh-SAY" there → that thing further away.'},
   {es:'estos / estas', en:'these (m / f)',    art:''},
   {es:'esos / esas',   en:'those (m / f)',    art:''},
   // Time expressions
   {es:'de lunes a viernes', en:'Monday to Friday',  art:''},
-  {es:'el fin de semana',   en:'the weekend',        art:'', mem:'"FIN" = end of the week. "Fin" also means end in movies — The End 🎬'},
+  {es:'el fin de semana',   en:'the weekend',        art:'', mem:'🎬 FIN = end → fin de semana = end of the week = weekend!'},
   {es:'a la / a las',       en:'at (o\'clock)',       art:''},
 ];
 
@@ -884,21 +884,21 @@ const CONV_L2 = [
 
 const VOCAB_L3 = [
   // Drinking & cooking
-  {es:'tomar',          en:'to take / to drink',      art:'', mem:'"TOMAR" → "to take" → take a drink. Also think "toma!" (here, take it!) 🥤'},
-  {es:'beber',          en:'to drink',                art:'', mem:'"BEBERage" — beber is hiding inside the word beverage! 🍹'},
-  {es:'cocinar',        en:'to cook',                 art:'', mem:'"CUISINE" and "KITCHEN" come from the same Latin root "coquina" 👨‍🍳'},
-  {es:'cenar',          en:'to have dinner',          art:'', mem:'"Last SUPPER" in Italian is "L\'Ultima Cena" — same root! 🎨'},
+  {es:'tomar',          en:'to take / to drink',      art:'', mem:'🤲 ¡Toma! = Here, take it! → tomar = to take/drink.'},
+  {es:'beber',          en:'to drink',                art:'', mem:'🥤 beBEVERage → beber is hiding inside BEVERAGE!'},
+  {es:'cocinar',        en:'to cook',                 art:'', mem:'👨‍🍳 CUISINE = cocina → same Latin root "coquina" = kitchen!'},
+  {es:'cenar',          en:'to have dinner',          art:'', mem:'🎨 "La Última CENA" = The Last Supper (达芬奇名画) → cena = dinner!'},
   // Body-care reflexive verbs
-  {es:'lavarse',        en:'to wash oneself',         art:'', mem:'"LAVA" flows and washes everything clean 🌋'},
-  {es:'cepillarse',     en:'to brush (teeth/hair)',   art:'', mem:'"CEPILLO" = brush — imagine "sep-ILL-oh" brushing away the ill 🪥'},
+  {es:'lavarse',        en:'to wash oneself',         art:'', mem:'🌋 LAVA flows and washes everything clean → lavarse!'},
+  {es:'cepillarse',     en:'to brush (teeth/hair)',   art:'', mem:'🪥 cepillo = brush → cepilLARSE = brush yourself!'},
   // Doing / thinking
-  {es:'hacer',          en:'to do / to make',         art:'', mem:'"HACKSAW" maker hacks things together. Yo HAGO = I make (irregular!) 🛠️'},
-  {es:'pensar',         en:'to think',                art:'', mem:'"PENSIVE" = deep in thought — same Latin root "pensare" 🤔'},
-  {es:'hacer ejercicio',en:'to exercise',             art:'', mem:'"HACER" (make) + "EJERCICIO" → make an exercise effort 💪'},
+  {es:'hacer',          en:'to do / to make',         art:'', mem:'🛠️ HACKsaw makes things! ⚠️ yo = HAGO (not "haceo"!) — irregular!'},
+  {es:'pensar',         en:'to think',                art:'', mem:'🤔 PENSive = deep in thought → same Latin root. PENsar!'},
+  {es:'hacer ejercicio',en:'to exercise',             art:'', mem:'💪 HACER (do) + ejercicio = do exercise → hago ejercicio!'},
   // Meals (nouns)
-  {es:'el desayuno',    en:'breakfast',               art:'el', mem:'"DES" (un) + "AYUNO" (fast) = to un-fast = break-fast! Same idea as English 🍳'},
-  {es:'el almuerzo',    en:'lunch',                   art:'el', mem:'"AL-MUERZ-o" — think "AL\'s MURSel" — Al\'s midday bite 😄'},
-  {es:'la cena',        en:'dinner',                  art:'la', mem:'"Last Supper" = "La Ultima Cena" — la cena is the evening meal 🌙'},
+  {es:'el desayuno',    en:'breakfast',               art:'el', mem:'🍳 DES (un) + AYUNO (fast) = un-fast = BREAK-fast! 中西同义！'},
+  {es:'el almuerzo',    en:'lunch',                   art:'el', mem:'🥗 al-MUERZ-o → sounds like "morsel" → midday morsel!'},
+  {es:'la cena',        en:'dinner',                  art:'la', mem:'🌙 La Última Cena = The Last Supper → cena = evening meal!'},
 ];
 
 const FILL_L3 = [
@@ -1202,7 +1202,8 @@ function resumeSession(){
   const saved=S._savedSession, mode=saved.mode;
   let pool;
   if(mode==='myw-es-en'||mode==='myw-en-es') pool=loadMyWords();
-  else if(mode==='es-en'||mode==='en-es'||mode==='es-en-review') pool=VOCAB;
+  else if(mode==='es-en'||mode==='en-es') pool=VOCAB;
+  else if(mode==='es-en-review') pool=[...VOCAB,...VOCAB_L2,...VOCAB_L3,...loadMyWords()];
   else if(mode==='es-en-l2'||mode==='en-es-l2') pool=VOCAB_L2;
   else if(mode==='es-en-l3'||mode==='en-es-l3') pool=VOCAB_L3;
   else if(mode==='fill') pool=FILL_EXERCISES;
