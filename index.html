@@ -317,13 +317,21 @@ body{max-width:480px;margin:0 auto;}
       </svg>
     </div>
 
-    <div class="due-card hidden" id="due-card">
-      <div class="due-icon">📅</div>
+    <div class="due-card hidden" id="due-card-es-en">
+      <div class="due-icon">🇪🇸</div>
       <div class="due-text">
-        <div class="due-title">Due for review today</div>
-        <div class="due-sub" id="due-sub"></div>
+        <div class="due-title">SP → EN Review 📅</div>
+        <div class="due-sub" id="due-sub-es-en"></div>
       </div>
-      <button class="due-btn" onclick="startMode('review')">Review</button>
+      <button class="due-btn" onclick="startMode('review-es-en')">Review</button>
+    </div>
+    <div class="due-card hidden" id="due-card-en-es">
+      <div class="due-icon">🇺🇸</div>
+      <div class="due-text">
+        <div class="due-title">EN → SP Review 📅</div>
+        <div class="due-sub" id="due-sub-en-es"></div>
+      </div>
+      <button class="due-btn" onclick="startMode('review-en-es')">Review</button>
     </div>
 
     <div class="lesson-card">
@@ -434,7 +442,7 @@ body{max-width:480px;margin:0 auto;}
     </div>
     <div class="nav-row" style="margin-top:10px;">
       <button class="nav-btn" id="flash-prev" onclick="prevCard()" disabled>← Previous</button>
-      <button class="nav-btn fwd hidden" id="flash-skip" onclick="skipCard()">Next →</button>
+      <button class="nav-btn fwd" id="flash-skip" onclick="skipCard()">Next →</button>
     </div>
   </div>
 </div>
@@ -1223,23 +1231,21 @@ function fmtInterval(days) {
   return `~${Math.round(days/30)} mo`;
 }
 
-function getDueCards() {
+// dir = 'es_en' or 'en_es'. Includes ALL words (auto-enrolled — no lesson study needed first).
+// New words (never reviewed) are always due. Reviewed words appear when nextReview <= now.
+function getDueCards(dir) {
   const data=loadSR(), now=Date.now();
-  const due=[];
-  // Only count words that have been explicitly reviewed before (exist in SR data)
-  // This prevents never-reviewed words (nextReview=0) from always showing as due
-  const checkDue = v => {
-    const esenKey=srKey(v.es,'es_en'), enesKey=srKey(v.es,'en_es');
-    return (data[esenKey]&&data[esenKey].nextReview<=now) ||
-           (data[enesKey]&&data[enesKey].nextReview<=now);
+  const due=[], seen=new Set();
+  const check = v => {
+    if(seen.has(v.es)) return;
+    seen.add(v.es);
+    const k=srKey(v.es,dir);
+    if(!data[k]||data[k].nextReview<=now) due.push(v);
   };
-  VOCAB.forEach(v => { if(checkDue(v)) due.push(v); });
-  VOCAB_L2.forEach(v => { if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v); });
-  VOCAB_L3.forEach(v => { if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v); });
-  // Also include custom My Words that are due
-  loadMyWords().forEach(v => {
-    if(checkDue(v) && !due.find(d=>d.es===v.es)) due.push(v);
-  });
+  VOCAB.forEach(check);
+  VOCAB_L2.forEach(check);
+  VOCAB_L3.forEach(check);
+  loadMyWords().forEach(check);
   return due;
 }
 
@@ -1255,12 +1261,15 @@ function updateStreak() {
 }
 
 function refreshHome() {
-  const due=getDueCards();
-  const dc=document.getElementById('due-card');
-  if (due.length>0) {
-    document.getElementById('due-sub').textContent=`${due.length} word${due.length>1?'s':''} due based on your memory curve`;
-    dc.classList.remove('hidden');
-  } else dc.classList.add('hidden');
+  const dueEsEn=getDueCards('es_en'), dueEnEs=getDueCards('en_es');
+  const fmt=(n,dir)=>`${n} word${n!==1?'s':''} due · ${dir}`;
+  const showCard=(id,subId,n,dir)=>{
+    const el=document.getElementById(id);
+    if(n>0){document.getElementById(subId).textContent=fmt(n,dir);el.classList.remove('hidden');}
+    else el.classList.add('hidden');
+  };
+  showCard('due-card-es-en','due-sub-es-en',dueEsEn.length,'memory curve');
+  showCard('due-card-en-es','due-sub-en-es',dueEnEs.length,'memory curve');
   document.getElementById('sr-streak').textContent=parseInt(localStorage.getItem(STREAK_KEY)||'0');
   // Update My Words section
   const myw=loadMyWords();
@@ -1315,8 +1324,8 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 Today\'s Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='fill'||mode==='fill-l2'||mode==='fill-l3'){
@@ -1330,7 +1339,7 @@ function navigateToMode(mode){
 
 function startMode(mode){
   window.speechSynthesis&&window.speechSynthesis.cancel();
-  const effective=mode==='review'?'es-en-review':mode;
+  const effective=mode==='review-es-en'?'es-en-review':mode==='review-en-es'?'en-es-review':mode;
   const saved=loadSession();
   if(saved&&saved.mode===effective&&saved.idx>0&&saved.idx<saved.cardIds.length){
     S._pendingMode=mode; S._savedSession=saved;
@@ -1349,7 +1358,8 @@ function resumeSession(){
   let pool;
   if(mode==='myw-es-en'||mode==='myw-en-es') pool=loadMyWords();
   else if(mode==='es-en'||mode==='en-es') pool=VOCAB;
-  else if(mode==='es-en-review') pool=[...VOCAB,...VOCAB_L2,...VOCAB_L3,...loadMyWords()];
+  else if(mode==='es-en-review') pool=getDueCards('es_en');
+  else if(mode==='en-es-review') pool=getDueCards('en_es');
   else if(mode==='es-en-l2'||mode==='en-es-l2') pool=VOCAB_L2;
   else if(mode==='es-en-l3'||mode==='en-es-l3') pool=VOCAB_L3;
   else if(mode==='fill') pool=FILL_EXERCISES;
@@ -1373,10 +1383,14 @@ function _startFresh(mode){
   S.idx=0; S.correct=0; S.wrong=0; S.answered={}; S.srUpdates={};
   if(mode==='es-en'||mode==='en-es'){
     S.mode=mode; S.cards=shuffle(VOCAB); S.revealed=false;
-  } else if(mode==='review'){
-    const due=getDueCards();
+  } else if(mode==='review-es-en'){
+    const due=getDueCards('es_en');
     if(!due.length){goHome();return;}
     S.mode='es-en-review'; S.cards=shuffle(due); S.revealed=false;
+  } else if(mode==='review-en-es'){
+    const due=getDueCards('en_es');
+    if(!due.length){goHome();return;}
+    S.mode='en-es-review'; S.cards=shuffle(due); S.revealed=false;
   } else if(mode==='myw-es-en'||mode==='myw-en-es'){
     const myw=loadMyWords();
     if(!myw.length){goHome();return;}
@@ -1401,7 +1415,11 @@ function _startFresh(mode){
   navigateToMode(S.mode);
 }
 
-function retryMode(){clearSession();startMode(S.mode==='es-en-review'?'review':S.mode);}
+function retryMode(){
+  clearSession();
+  const m=S.mode==='es-en-review'?'review-es-en':S.mode==='en-es-review'?'review-en-es':S.mode;
+  startMode(m);
+}
 
 // ══════════════ FLASHCARDS ══════════════
 
@@ -1434,9 +1452,13 @@ function updateRevealExtras(show) {
   }
 }
 
+function cardIsEsEn(item){
+  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
+  // en-es-review, en-es, myw-en-es, en-es-l2/l3 all return false = EN→SP ✓
+}
 function renderFlash(){
   const item=S.cards[S.idx], total=S.cards.length;
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
+  const isEsEn=cardIsEsEn(item);
   const dir=isEsEn?'es_en':'en_es';
   const alreadyAnswered=(S.idx in S.answered);
 
@@ -1461,14 +1483,14 @@ function renderFlash(){
     vrow.classList.add('hidden');
     revTag.classList.add('show');
     fc.classList.add('review-mode');
-    skipBtn.classList.remove('hidden');
+    skipBtn.textContent='Next →';
   } else {
     ansEl.classList.remove('show');
     hintEl.classList.remove('hide');
     vrow.classList.add('hidden');
     revTag.classList.remove('show');
     fc.classList.remove('review-mode');
-    skipBtn.classList.add('hidden');
+    skipBtn.textContent='✓ Got it →';
   }
   S.revealed=alreadyAnswered;
   updateRevealExtras(alreadyAnswered);
@@ -1488,7 +1510,7 @@ function renderFlash(){
 
 function speakCurrent(){
   const item=S.cards[S.idx];
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
+  const isEsEn=cardIsEsEn(item);
   speak(isEsEn?item.es:item.en,isEsEn?'es-ES':'en-US');
 }
 
@@ -1499,7 +1521,7 @@ function revealCard(){
   document.getElementById('fc-hint').classList.add('hide');
   document.getElementById('vbtn-row').classList.remove('hidden');
   updateRevealExtras(true);
-  const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
+  const isEsEn=cardIsEsEn(S.cards[S.idx]);
   if(!isEsEn) speak(S.cards[S.idx].es);
 }
 
@@ -1509,7 +1531,7 @@ function verdict(quality){
     S.answered[S.idx]=quality;
     if(quality>=3) S.correct++; else S.wrong++;
     // SM-2 update with direction
-    const isEsEn=S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
+    const isEsEn=cardIsEsEn(item);
     const dir=isEsEn?'es_en':'en_es';
     const data=loadSR();
     const key=srKey(item.es,dir);
@@ -1530,7 +1552,12 @@ function prevCard(){
 }
 
 function skipCard(){
-  // For already-answered cards in review, just move forward
+  if(!(S.idx in S.answered)&&!S.revealed){
+    // Card not yet revealed → "✓ Got it" without flipping
+    verdict(5);
+    return;
+  }
+  // Already-answered card in review → just move forward
   S.idx++;
   if(S.idx>=S.cards.length){clearSession();showScore();}
   else{S.revealed=false;renderFlash();}
