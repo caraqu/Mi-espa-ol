@@ -376,6 +376,18 @@ body{max-width:480px;margin:0 auto;}
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l3')">📖 View Class Notes</button>
     </div>
 
+    <div class="lesson-card">
+      <div class="lc-head">
+        <div><div class="lc-title">Lesson 4</div><div class="lc-date">April 12, 2026</div></div>
+        <div class="lc-badge">New ✨</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mbtn" onclick="startMode('es-en-l4')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es-l4')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+      </div>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l4')">📖 View Class Notes</button>
+    </div>
+
     <!-- My Words -->
     <div class="lesson-card">
       <div class="myw-header">
@@ -723,6 +735,62 @@ body{max-width:480px;margin:0 auto;}
   </div>
 </div>
 
+<!-- ══ NOTES L4 ══ -->
+<div id="s-notes-l4" class="scr">
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 4</div></div></div>
+  <div style="padding:18px;">
+    <div class="note-section">
+      <h3>⚡ Irregular YO Forms</h3>
+      <div class="grammar-rule">These verbs have irregular <strong>yo</strong> forms only — all other persons are regular:</div>
+      <table class="conj-table" style="margin-top:12px;">
+        <tr><th>Verb</th><th>Meaning</th><th>Yo form</th></tr>
+        <tr><td>hacer</td><td>to do/make</td><td><strong>hago</strong></td></tr>
+        <tr><td>poner</td><td>to put</td><td><strong>pongo</strong></td></tr>
+        <tr><td>saber</td><td>to know</td><td><strong>sé</strong></td></tr>
+        <tr><td>traducir</td><td>to translate</td><td><strong>traduzco</strong></td></tr>
+        <tr><td>decir</td><td>to say</td><td><strong>digo</strong></td></tr>
+        <tr><td>tener</td><td>to have</td><td><strong>tengo</strong></td></tr>
+      </table>
+    </div>
+    <div class="note-section">
+      <h3>🔄 E → IE Stem-changing Verbs</h3>
+      <div class="grammar-rule">The <strong>e</strong> in the stem changes to <strong>ie</strong> in yo/tú/él/ellos — but <strong>NOT</strong> in nosotros.</div>
+      <table class="conj-table" style="margin-top:12px;margin-bottom:16px;">
+        <tr><th colspan="3">QUERER — to want</th></tr>
+        <tr><td>yo</td><td>quiero</td><td>I want</td></tr>
+        <tr><td>tú</td><td>quieres</td><td>you want</td></tr>
+        <tr><td>él/ella</td><td>quiere</td><td>he/she wants</td></tr>
+        <tr><td>nosotros</td><td>queremos</td><td>we want ← no change!</td></tr>
+        <tr><td>ellos/ellas</td><td>quieren</td><td>they want</td></tr>
+      </table>
+      <div class="grammar-rule"><strong>Same E→IE pattern:</strong> preferir → prefiero · empezar → empiezo · comenzar → comienzo · mentir → miento · despertar → despierto · pensar → pienso</div>
+    </div>
+    <div class="note-section">
+      <h3>🔄 O/U → UE Stem-changing Verbs</h3>
+      <div class="grammar-rule">The <strong>o</strong> (or <strong>u</strong> in jugar) changes to <strong>ue</strong> in yo/tú/él/ellos — but <strong>NOT</strong> in nosotros.</div>
+      <table class="conj-table" style="margin-top:12px;margin-bottom:16px;">
+        <tr><th colspan="3">DORMIR — to sleep</th></tr>
+        <tr><td>yo</td><td>duermo</td><td>I sleep</td></tr>
+        <tr><td>tú</td><td>duermes</td><td>you sleep</td></tr>
+        <tr><td>él/ella</td><td>duerme</td><td>he/she sleeps</td></tr>
+        <tr><td>nosotros</td><td>dormimos</td><td>we sleep ← no change!</td></tr>
+        <tr><td>ellos/ellas</td><td>duermen</td><td>they sleep</td></tr>
+      </table>
+      <div class="grammar-rule"><strong>Same O→UE pattern:</strong> poder → puedo · volar → vuelo · contar → cuento · soñar → sueño · recordar → recuerdo</div>
+      <div class="grammar-rule"><strong>Special: jugar</strong> (U→UE) → juego, juegas, juega, jugamos, juegan</div>
+    </div>
+    <div class="note-section">
+      <h3>🔢 vez vs. veces</h3>
+      <div class="grammar-rule">
+        <strong>una vez</strong> = one time / once<br>
+        <strong>dos veces</strong> = two times / twice<br>
+        <strong>muchas veces</strong> = many times / often<br>
+        <span style="color:var(--muted);font-size:13px;">vez → veces (singular → plural)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════ DATA ══════════════
 
@@ -772,6 +840,25 @@ const VERB_CONJUGATIONS = {
   'COCINAR':  ['cocino','cocinas','cocina','cocinamos','cocinan'],
   'CENAR':    ['ceno','cenas','cena','cenamos','cenan'],
   'PENSAR':   ['pienso','piensas','piensa','pensamos','piensan'],
+  // Lesson 4 — Irregular yo
+  'PONER':    ['pongo','pones','pone','ponemos','ponen'],
+  'SABER':    ['sé','sabes','sabe','sabemos','saben'],
+  'TRADUCIR': ['traduzco','traduces','traduce','traducimos','traducen'],
+  'DECIR':    ['digo','dices','dice','decimos','dicen'],
+  // Lesson 4 — E→IE stem-changing
+  'QUERER':   ['quiero','quieres','quiere','queremos','quieren'],
+  'PREFERIR': ['prefiero','prefieres','prefiere','preferimos','prefieren'],
+  'EMPEZAR':  ['empiezo','empiezas','empieza','empezamos','empiezan'],
+  'COMENZAR': ['comienzo','comienzas','comienza','comenzamos','comienzan'],
+  'MENTIR':   ['miento','mientes','miente','mentimos','mienten'],
+  'DESPERTAR':['despierto','despiertas','despierta','despertamos','despiertan'],
+  // Lesson 4 — O→UE stem-changing
+  'DORMIR':   ['duermo','duermes','duerme','dormimos','duermen'],
+  'PODER':    ['puedo','puedes','puede','podemos','pueden'],
+  'VOLAR':    ['vuelo','vuelas','vuela','volamos','vuelan'],
+  'CONTAR':   ['cuento','cuentas','cuenta','contamos','cuentan'],
+  'SOÑAR':    ['sueño','sueñas','sueña','soñamos','sueñan'],
+  'JUGAR':    ['juego','juegas','juega','jugamos','juegan'],
   // My Words — AR verbs
   'LAVAR':    ['lavo','lavas','lava','lavamos','lavan'],
   'CANTAR':   ['canto','cantas','canta','cantamos','cantan'],
@@ -967,6 +1054,28 @@ const VOCAB_L3 = [
   {es:'la cena',        en:'dinner',                  art:'la', mem:'🌙 La Última Cena = The Last Supper → cena = evening meal!'},
 ];
 
+const VOCAB_L4 = [
+  // Irregular yo verbs
+  {es:'poner',      en:'to put / to place', art:'', mem:'📱 PHONE-r → put your phone down! Irregular yo: PONGO'},
+  {es:'saber',      en:'to know (a fact)',   art:'', mem:'🧠 SAVOR knowledge → saber = to know! Yo form is just SÉ'},
+  {es:'traducir',   en:'to translate',       art:'', mem:'🌍 TRADUCe → same root as "translate"! Yo: TRADUZCO'},
+  {es:'decir',      en:'to say / to tell',   art:'', mem:'💬 DECLARE → decir = to say. Yo: DIGO (not "deco"!)'},
+  // E→IE stem-changing
+  {es:'querer',     en:'to want / to love',  art:'', mem:'❤️ KEY-AIR-er → the KEY to my heart! quiero = I want'},
+  {es:'preferir',   en:'to prefer',          art:'', mem:'⭐ PREFER → preferir → same word! prefiero = I prefer'},
+  {es:'empezar',    en:'to start / to begin',art:'', mem:'🚀 em-PIECE-ar → start from a small PIECE! empiezo'},
+  {es:'mentir',     en:'to lie / to deceive',art:'', mem:'🤥 MENTIRa = a lie → mentir = to lie. miento = I lie!'},
+  {es:'despertar',  en:'to wake up',         art:'', mem:'⏰ des-PERT-ar → PERKY in the morning! despierto = I wake up'},
+  // O→UE stem-changing
+  {es:'dormir',     en:'to sleep',           art:'', mem:'😴 DORMITORY → dormir → sleep in the dorm! duermo = I sleep'},
+  {es:'poder',      en:'to be able to / can',art:'', mem:'💪 POWER → poder → have the POWER to do it! puedo = I can'},
+  {es:'soñar',      en:'to dream',           art:'', mem:'🌙 soñar → LUNAR dreams → sueño = I dream under the moon!'},
+  {es:'jugar',      en:'to play',            art:'', mem:'🎮 JUGAR → "WHO-gar" → WHO\'s gaming? juego = I play! (u→ue)'},
+  // Vocabulary
+  {es:'la vez',     en:'time / once',        art:'la', mem:'🔢 UNA VEZ = one time → vez = a single time/occurrence'},
+  {es:'las veces',  en:'times / occasions',  art:'las', mem:'🔢 VECES = times → muchas veces = many times!'},
+];
+
 const FILL_L3 = [
   // HACER
   {verb:"HACER",   sentence:"Yo ___ ejercicio todos los días.",        answer:"hago",    en:"I exercise every day."},
@@ -1025,7 +1134,7 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3].some(v => v.es.toLowerCase() === q);
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4].some(v => v.es.toLowerCase() === q);
 }
 
 // One-time migration: remove My Words that are already in lesson vocab
@@ -1245,6 +1354,7 @@ function getDueCards(dir) {
   VOCAB.forEach(check);
   VOCAB_L2.forEach(check);
   VOCAB_L3.forEach(check);
+  VOCAB_L4.forEach(check);
   loadMyWords().forEach(check);
   return due;
 }
@@ -1324,8 +1434,8 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='fill'||mode==='fill-l2'||mode==='fill-l3'){
@@ -1362,6 +1472,7 @@ function resumeSession(){
   else if(mode==='en-es-review') pool=getDueCards('en_es');
   else if(mode==='es-en-l2'||mode==='en-es-l2') pool=VOCAB_L2;
   else if(mode==='es-en-l3'||mode==='en-es-l3') pool=VOCAB_L3;
+  else if(mode==='es-en-l4'||mode==='en-es-l4') pool=VOCAB_L4;
   else if(mode==='fill') pool=FILL_EXERCISES;
   else if(mode==='fill-l2') pool=FILL_L2;
   else if(mode==='fill-l3') pool=FILL_L3;
@@ -1399,6 +1510,8 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(VOCAB_L2); S.revealed=false;
   } else if(mode==='es-en-l3'||mode==='en-es-l3'){
     S.mode=mode; S.cards=shuffle(VOCAB_L3); S.revealed=false;
+  } else if(mode==='es-en-l4'||mode==='en-es-l4'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L4); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -1453,8 +1566,8 @@ function updateRevealExtras(show) {
 }
 
 function cardIsEsEn(item){
-  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3';
-  // en-es-review, en-es, myw-en-es, en-es-l2/l3 all return false = EN→SP ✓
+  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4';
+  // en-es-review, en-es, myw-en-es, en-es-l2/l3/l4 all return false = EN→SP ✓
 }
 function renderFlash(){
   const item=S.cards[S.idx], total=S.cards.length;
