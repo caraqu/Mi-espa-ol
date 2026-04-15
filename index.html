@@ -891,6 +891,35 @@ const VERB_CONJUGATIONS = {
   'PEINARSE': ['me peino','te peinas','se peina','nos peinamos','se peinan'],
   'SECARSE':  ['me seco','te secas','se seca','nos secamos','se secan'],
   'QUITARSE': ['me quito','te quitas','se quita','nos quitamos','se quitan'],
+  // Quizlet L4 extras — E→IE
+  'CERRAR':     ['cierro','cierras','cierra','cerramos','cierran'],
+  'CONFESAR':   ['confieso','confiesas','confiesa','confesamos','confiesan'],
+  'CONVERTIR':  ['convierto','conviertes','convierte','convertimos','convierten'],
+  'DEFENDER':   ['defiendo','defiendes','defiende','defendemos','defienden'],
+  'HERVIR':     ['hiervo','hierves','hierve','hervimos','hierven'],
+  'NEGAR':      ['niego','niegas','niega','negamos','niegan'],
+  'PERDER':     ['pierdo','pierdes','pierde','perdemos','pierden'],
+  'SENTIR':     ['siento','sientes','siente','sentimos','sienten'],
+  'SUGERIR':    ['sugiero','sugieres','sugiere','sugerimos','sugieren'],
+  // Quizlet L4 extras — O→UE
+  'MOVER':      ['muevo','mueves','mueve','movemos','mueven'],
+  'ALMORZAR':   ['almuerzo','almuerzas','almuerza','almorzamos','almuerzan'],
+  'APROBAR':    ['apruebo','apruebas','aprueba','aprobamos','aprueban'],
+  'VOLVER':     ['vuelvo','vuelves','vuelve','volvemos','vuelven'],
+  'DEVOLVER':   ['devuelvo','devuelves','devuelve','devolvemos','devuelven'],
+  'ENCONTRAR':  ['encuentro','encuentras','encuentra','encontramos','encuentran'],
+  'MORIR':      ['muero','mueres','muere','morimos','mueren'],
+  'MOSTRAR':    ['muestro','muestras','muestra','mostramos','muestran'],
+  'RECORDAR':   ['recuerdo','recuerdas','recuerda','recordamos','recuerdan'],
+  'ENVOLVER':   ['envuelvo','envuelves','envuelve','envolvemos','envuelven'],
+  // Quizlet L4 extras — Reflexive
+  'ACOSTARSE':  ['me acuesto','te acuestas','se acuesta','nos acostamos','se acuestan'],
+  'DESPERTARSE':['me despierto','te despiertas','se despierta','nos despertamos','se despiertan'],
+  'DORMIRSE':   ['me duermo','te duermes','se duerme','nos dormimos','se duermen'],
+  'PROBARSE':   ['me pruebo','te pruebas','se prueba','nos probamos','se prueban'],
+  'SENTARSE':   ['me siento','te sientas','se sienta','nos sentamos','se sientan'],
+  'SENTIRSE':   ['me siento','te sientes','se siente','nos sentimos','se sienten'],
+  'VESTIRSE':   ['me visto','te vistes','se viste','nos vestimos','se visten'],
 };
 
 const FILL_EXERCISES = [
@@ -1937,8 +1966,50 @@ function seedMyWords(){
   localStorage.setItem('myw_seeded_v1','1');
 }
 
+function seedMyWordsV2(){
+  if(localStorage.getItem('myw_seeded_v2')) return;
+  const seed=[
+    // E→IE stem-changing
+    {es:'cerrar',      en:'to close',              art:'', mem:'🚪 CERRAR → "ser-RAR" → a door SLAMS closed! cierro = I close'},
+    {es:'confesar',    en:'to confess',             art:'', mem:'🙏 CONFESS → confesar → same word! confieso = I confess'},
+    {es:'convertir',   en:'to convert',             art:'', mem:'✝️ CONVERT → convertir → same word! convierto = I convert'},
+    {es:'defender',    en:'to defend',              art:'', mem:'🛡️ DEFEND → defender → same word! defiendo = I defend'},
+    {es:'hervir',      en:'to boil',                art:'', mem:'🫧 HERVIR → "her-VEER" → the pot HEAVES when boiling! hiervo'},
+    {es:'negar',       en:'to deny',                art:'', mem:'🙅 NEGATE → negar → to negate = to deny! niego = I deny'},
+    {es:'perder',      en:'to lose',                art:'', mem:'💸 PERDITION = total loss → perder = to lose! pierdo = I lose'},
+    {es:'sentir',      en:'to feel',                art:'', mem:'💔 SENTIMENT → sentir → feelings! siento = I feel'},
+    {es:'sugerir',     en:'to suggest',             art:'', mem:'💡 SUGGEST → sugerir → same idea! sugiero = I suggest'},
+    // O→UE stem-changing
+    {es:'mover',       en:'to move (an object)',    art:'', mem:'📦 MOVE → mover → same word! muevo = I move (things, not people)'},
+    {es:'almorzar',    en:'to eat lunch',           art:'', mem:'🥗 ALMUERZO = lunch → almorzar = to eat lunch! almuerzo = I lunch'},
+    {es:'aprobar',     en:'to approve',             art:'', mem:'✅ APPROVE → aprobar → same idea! apruebo = I approve'},
+    {es:'volver',      en:'to return / come back',  art:'', mem:'🔄 reVOLVE → volver → to come BACK around! vuelvo = I return'},
+    {es:'devolver',    en:'to return (something)',  art:'', mem:'↩️ DE-volver = un-return → give it BACK! devuelvo = I return it'},
+    {es:'encontrar',   en:'to find',                art:'', mem:'🔍 ENCOUNTER → encontrar → you ENCOUNTER = you find! encuentro'},
+    {es:'morir',       en:'to die',                 art:'', mem:'💀 MORTAL → morir → mortal beings die! muero = I die'},
+    {es:'mostrar',     en:'to show',                art:'', mem:'🖼️ MONSTER shows itself → mostrar = to show! muestro = I show'},
+    {es:'recordar',    en:'to remember',            art:'', mem:'💭 RECORD your memories → recordar = to remember! recuerdo'},
+    {es:'envolver',    en:'to wrap',                art:'', mem:'🎁 en-VOLVER = wrap it up → envuelvo = I wrap!'},
+    // Reflexive
+    {es:'acostarse',   en:'to go to bed',           art:'', mem:'🛏️ a-CUESTA = it "costs" effort to go to bed! me acuesto'},
+    {es:'despertarse', en:'to wake up (oneself)',   art:'', mem:'⏰ des-PERT-arse → PERKY awake! me despierto = I wake up'},
+    {es:'dormirse',    en:'to fall asleep',         art:'', mem:'😴 DORMITORY → fall asleep in the dorm! me duermo'},
+    {es:'probarse',    en:'to try on (clothing)',   art:'', mem:'👗 PROBE yourself in it → try it on! me pruebo = I try on'},
+    {es:'sentarse',    en:'to sit down',            art:'', mem:'🪑 SEAT yourself → sentarse! me siento = I sit down'},
+    {es:'sentirse',    en:'to feel (oneself)',      art:'', mem:'💭 SENTIMENT → sentirse → how you feel inside! me siento'},
+    {es:'vestirse',    en:'to get dressed',         art:'', mem:'👔 VEST → vestirse → put on the VEST to get dressed! me visto'},
+  ].map(w=>({...w, custom:true, added:Date.now()}));
+
+  const existing=loadMyWords();
+  const merged=[...existing];
+  seed.forEach(w=>{ if(!merged.find(m=>m.es===w.es) && !isInLessonVocab(w.es)) merged.push(w); });
+  saveMyWords(merged);
+  localStorage.setItem('myw_seeded_v2','1');
+}
+
 buildNotes();
 seedMyWords();
+seedMyWordsV2();
 dedupeMyWords();
 refreshHome();
 
