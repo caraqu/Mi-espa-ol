@@ -1890,6 +1890,9 @@ function importProgress(inputEl) {
       if (data.streak)  localStorage.setItem(STREAK_KEY, data.streak);
       if (data.last)    localStorage.setItem(LAST_KEY,   data.last);
       if (data.myWords) saveMyWords(data.myWords);
+      // Re-seed built-in words after import (dedup logic prevents duplicates)
+      seedMyWords();
+      seedMyWordsV2();
       refreshHome();
       alert('🌸 Progress restored! Your memory curve is back.');
     } catch(err) {
