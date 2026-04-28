@@ -1579,13 +1579,15 @@ function fmtInterval(days) {
 // dir = 'es_en' or 'en_es'. Includes ALL words (auto-enrolled — no lesson study needed first).
 // New words (never reviewed) are always due. Reviewed words appear when nextReview <= now.
 function getDueCards(dir) {
+  const NEW_CARD_LIMIT = 30; // max new (never-reviewed) cards per session
   const data=loadSR(), now=Date.now();
-  const due=[], seen=new Set();
+  const overdue=[], newCards=[], seen=new Set();
   const check = v => {
     if(seen.has(v.es)) return;
     seen.add(v.es);
     const k=srKey(v.es,dir);
-    if(!data[k]||data[k].nextReview<=now) due.push(v);
+    if(!data[k])               newCards.push(v);  // never reviewed
+    else if(data[k].nextReview<=now) overdue.push(v); // past due
   };
   VOCAB.forEach(check);
   VOCAB_L2.forEach(check);
@@ -1594,7 +1596,21 @@ function getDueCards(dir) {
   VOCAB_L5.forEach(check);
   VOCAB_L6.forEach(check);
   loadMyWords().forEach(check);
-  return due;
+  // Always show all overdue; cap new introductions to avoid overwhelm
+  return [...overdue, ...shuffle(newCards).slice(0, NEW_CARD_LIMIT)];
+}
+
+function getDueCardCounts(dir) {
+  const data=loadSR(), now=Date.now();
+  let overdue=0, newCount=0; const seen=new Set();
+  const check = v => {
+    if(seen.has(v.es)) return; seen.add(v.es);
+    const k=srKey(v.es,dir);
+    if(!data[k]) newCount++;
+    else if(data[k].nextReview<=now) overdue++;
+  };
+  [VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,loadMyWords()].forEach(a=>a.forEach(check));
+  return {overdue, newCount};
 }
 
 function updateStreak() {
@@ -1609,15 +1625,22 @@ function updateStreak() {
 }
 
 function refreshHome() {
+  const cEsEn=getDueCardCounts('es_en'), cEnEs=getDueCardCounts('en_es');
   const dueEsEn=getDueCards('es_en'), dueEnEs=getDueCards('en_es');
-  const fmt=(n,dir)=>`${n} word${n!==1?'s':''} due · ${dir}`;
-  const showCard=(id,subId,n,dir)=>{
+  const fmt=(c)=>{
+    const parts=[];
+    if(c.overdue>0) parts.push(`${c.overdue} overdue`);
+    const shown=Math.min(c.newCount,30);
+    if(shown>0) parts.push(`${shown} new${c.newCount>30?' ('+c.newCount+' total)':''}`);
+    return parts.join(' · ') || '0 due';
+  };
+  const showCard=(id,subId,cards,counts)=>{
     const el=document.getElementById(id);
-    if(n>0){document.getElementById(subId).textContent=fmt(n,dir);el.classList.remove('hidden');}
+    if(cards.length>0){document.getElementById(subId).textContent=fmt(counts);el.classList.remove('hidden');}
     else el.classList.add('hidden');
   };
-  showCard('due-card-es-en','due-sub-es-en',dueEsEn.length,'memory curve');
-  showCard('due-card-en-es','due-sub-en-es',dueEnEs.length,'memory curve');
+  showCard('due-card-es-en','due-sub-es-en',dueEsEn,cEsEn);
+  showCard('due-card-en-es','due-sub-en-es',dueEnEs,cEnEs);
   document.getElementById('sr-streak').textContent=parseInt(localStorage.getItem(STREAK_KEY)||'0');
   // Update My Words section
   const myw=loadMyWords();
@@ -1909,12 +1932,12 @@ function prevCard(){
 }
 
 function skipCard(){
-  if(!(S.idx in S.answered)&&!S.revealed){
-    // Card not yet revealed → "✓ Got it" without flipping
-    verdict(5);
+  if(!(S.idx in S.answered)){
+    // Not yet answered: unrevealed = perfect recall (5), revealed = Good (4)
+    verdict(S.revealed ? 4 : 5);
     return;
   }
-  // Already-answered card in review → just move forward
+  // Already-answered card → just move forward
   S.idx++;
   if(S.idx>=S.cards.length){clearSession();showScore();}
   else{S.revealed=false;renderFlash();}
