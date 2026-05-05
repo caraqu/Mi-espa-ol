@@ -402,13 +402,24 @@ body{max-width:480px;margin:0 auto;}
     <div class="lesson-card">
       <div class="lc-head">
         <div><div class="lc-title">Lesson 6</div><div class="lc-date">April 15, 2026</div></div>
-        <div class="lc-badge">New ✨</div>
       </div>
       <div class="mode-grid">
         <div class="mbtn" onclick="startMode('es-en-l6')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
         <div class="mbtn" onclick="startMode('en-es-l6')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
       </div>
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l6')">📖 View Class Notes</button>
+    </div>
+
+    <div class="lesson-card">
+      <div class="lc-head">
+        <div><div class="lc-title">Lesson 7</div><div class="lc-date">April 28, 2026</div></div>
+        <div class="lc-badge">New ✨</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mbtn" onclick="startMode('es-en-l7')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es-l7')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+      </div>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l7')">📖 View Class Notes</button>
     </div>
 
     <!-- My Words -->
@@ -758,6 +769,72 @@ body{max-width:480px;margin:0 auto;}
   </div>
 </div>
 
+<!-- ══ NOTES L7 ══ -->
+<div id="s-notes-l7" class="scr">
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 7</div></div></div>
+  <div style="padding:18px;">
+    <div class="note-section">
+      <h3>✈️ Travel Questions (Preguntas de Viaje)</h3>
+      <div class="grammar-rule">
+        <strong>¿A dónde vas a ir?</strong> → Where are you going to go?<br>
+        <strong>¿Cómo vas a llegar?</strong> → How are you going to get there?<br>
+        <strong>¿Cuánto tiempo vas a estar?</strong> → How long are you going to be there?<br>
+        <strong>¿Dónde vas a hospedarte?</strong> → Where are you going to stay?<br>
+        <strong>¿Con quién vas a ir?</strong> → Who are you going to go with?<br>
+        <strong>¿Qué vas a hacer?</strong> → What are you going to do?<br>
+        <strong>¿Qué ropa vas a llevar?</strong> → What clothes are you going to bring?
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>📍 ESTAR vs SER — Location</h3>
+      <div class="grammar-rule">
+        <strong>ESTAR</strong> = location (where something/someone IS right now)<br>
+        Estoy en México. = I am in Mexico.<br>
+        Voy a estar en Cancún por 7 días. = I'm going to be in Cancún for 7 days.<br>
+        <strong>SER</strong> = origin (where you're FROM)<br>
+        ¿De dónde eres? Soy de China. = Where are you from? I'm from China.<br>
+        <strong>VIVIR</strong> = where you live (permanent)<br>
+        ¿Dónde vives? Vivo en México. = Where do you live? I live in Mexico.
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>⏱️ POR = for (duration of time)</h3>
+      <div class="grammar-rule">
+        <strong>POR + period of time</strong> → for a duration<br>
+        Voy a estar en Cancún <strong>por 7 días</strong>. = I'll be in Cancún for 7 days.<br>
+        Voy a estar en las estacas <strong>por dos horas</strong>. = I'll be there for two hours.
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🏨 HOSPEDARSE — to stay (reflexive)</h3>
+      <div class="grammar-rule">
+        me hospedo · te hospedas · se hospeda · <strong>nos hospedamos</strong> · se hospedan<br>
+        Vamos a hospedarNOS en un hotel. = We're going to stay at a hotel.<br>
+        <span style="color:var(--muted);font-size:13px;">Reflexive pronoun (NOS) attaches to the end of the infinitive, or goes before the conjugated verb.</span>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🚌 Transportation (Medios de transporte)</h3>
+      <div class="grammar-rule">
+        en avión · en tren · en autobús · en bicicleta · en carro · en barco<br>
+        <strong>Voy a ir en autobús.</strong> = I'm going to go by bus.<br>
+        <strong>Llegar</strong> = to arrive → ¿Cómo vas a llegar? → Voy a llegar en avión.
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🧳 Practice sentences from class</h3>
+      <div class="grammar-rule">
+        Voy a viajar a Cancún el próximo mes con mis amigas.<br>
+        Vamos a hospedarnos en un airbnb en Cancún por 7 días.<br>
+        Vamos a surfear y nadar en la alberca.<br>
+        Voy a llevar blusas, shorts y vestidos.<br>
+        Voy a viajar a Alaska el siguiente año con mi prometida.<br>
+        Voy a llevar suéteres y abrigos.
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ NOTES L5 ══ -->
 <div id="s-notes-l5" class="scr">
   <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 5</div></div></div>
@@ -1002,6 +1079,13 @@ const VERB_CONJUGATIONS = {
   // Lesson 5
   'IR':         ['voy','vas','va','vamos','van'],
   'NECESITAR':  ['necesito','necesitas','necesita','necesitamos','necesitan'],
+  // Lesson 7
+  'VIAJAR':     ['viajo','viajas','viaja','viajamos','viajan'],
+  'LLEGAR':     ['llego','llegas','llega','llegamos','llegan'],
+  'HOSPEDARSE': ['me hospedo','te hospedas','se hospeda','nos hospedamos','se hospedan'],
+  'SURFEAR':    ['surfeo','surfeas','surfea','surfeamos','surfean'],
+  'BUCEAR':     ['buceo','buceas','bucea','buceamos','bucean'],
+  'EXPLORAR':   ['exploro','exploras','explora','exploramos','exploran'],
   // My Words — AR verbs
   'LAVAR':    ['lavo','lavas','lava','lavamos','lavan'],
   'CANTAR':   ['canto','cantas','canta','cantamos','cantan'],
@@ -1292,6 +1376,61 @@ const VOCAB_L6 = [
   {es:'chino',         en:'Chinese / Mandarin',     art:'el', mem:'🇨🇳 CHINO → sounds like "China" → Chinese language!'},
 ];
 
+const VOCAB_L7 = [
+  // Key verbs
+  {es:'viajar',           en:'to travel',                    art:'', mem:'✈️ VIAJE = trip → viajar = to travel! viajo = I travel'},
+  {es:'llegar',           en:'to arrive',                    art:'', mem:'🛬 LLEGAR → "yeh-GAR" → finally YELL GAR when you arrive!'},
+  {es:'hospedarse',       en:'to stay (at accommodation)',   art:'', mem:'🏨 HOSPED- → HOSPED-ality → hospedarse = to be hosted/stay!'},
+  {es:'surfear',          en:'to surf',                      art:'', mem:'🏄 SURFEAR → SURF + ear → same word! surfeo = I surf'},
+  {es:'bucear',           en:'to scuba dive',                art:'', mem:'🤿 BUCEAR → "boo-SEA-ar" → go down under the SEA = dive!'},
+  {es:'explorar',         en:'to explore',                   art:'', mem:'🗺️ EXPLORE → explorar → same word! exploro = I explore'},
+  // Transportation
+  {es:'el avión',         en:'airplane',                     art:'el', mem:'✈️ AVIATION → avión → flying! El avión despega.'},
+  {es:'el tren',          en:'train',                        art:'el', mem:'🚂 TRAIN → tren → one letter swap! en tren = by train'},
+  {es:'el autobús',       en:'bus',                          art:'el', mem:'🚌 AUTO + BUS → autobús → self-moving bus!'},
+  {es:'el barco',         en:'boat / ship',                  art:'el', mem:'⚓ BARK → barco → a ship that used to be a wooden BARK!'},
+  // Accommodation
+  {es:'el hostal',        en:'hostel',                       art:'el', mem:'🛏️ HOSTEL → hostal → same word! budget accommodation'},
+  {es:'la cabaña',        en:'cabin',                        art:'la', mem:'🌲 CABIN → cabaña → rustic cabin in the woods!'},
+  {es:'el departamento',  en:'apartment',                    art:'el', mem:'🏢 DEPARTMENT → departamento → your own department = apartment!'},
+  {es:'la posada',        en:'inn / guesthouse',             art:'la', mem:'🏡 LAS POSADAS (Christmas tradition) → posada = inn/place to stay'},
+  // Places
+  {es:'la playa',         en:'beach',                        art:'la', mem:'🏖️ PLAYA → "PLY-ah" → sounds like PLAY-a → play at the beach!'},
+  {es:'la ciudad',        en:'city',                         art:'la', mem:'🏙️ CIUDAD → "see-YOU-dad" → a city where YOU live, DAD!'},
+  {es:'el pueblo',        en:'town / village',               art:'el', mem:'👥 PEOPLE → pueblo → a pueblo is full of people! Small town.'},
+  {es:'la alberca',       en:'swimming pool',                art:'la', mem:'🏊 AL-BERCA → "al-BEAR-ka" → a BEAR splashing in the pool!'},
+  // Summer clothing
+  {es:'los lentes de sol', en:'sunglasses',                  art:'los', mem:'😎 LENTES (lenses) + SOL (sun) → sun lenses = sunglasses!'},
+  {es:'el traje de baño',  en:'swimsuit / bathing suit',     art:'el', mem:'🩱 TRAJE (suit) + BAÑO (bath) → bath suit = swimsuit!'},
+  {es:'el bloqueador solar','en':'sunscreen',                art:'el', mem:'☀️ BLOCK + SOL-ar → solar BLOCKER = sunscreen!'},
+  {es:'el vestido',       en:'dress',                        art:'el', mem:'👗 VEST-ido → VESTMENT → a formal garment = dress!'},
+  {es:'la playera',       en:'t-shirt',                      art:'la', mem:'👕 PLAYA (beach) + -era → beach shirt = t-shirt! (Mexican term)'},
+  {es:'la camisa',        en:'shirt (button-up)',            art:'la', mem:'👔 CAMISA → "ka-MEE-sa" → sounds like "come, see a" nice shirt!'},
+  {es:'la camiseta',      en:'tank top',                     art:'la', mem:'💪 CAMISETA = small camisa → thin sleeveless shirt = tank top!'},
+  {es:'la gorra',         en:'cap / baseball hat',           art:'la', mem:'🧢 GORRA → "GOR-ra" → sounds like "GORE" → gore-tex cap!'},
+  {es:'el sombrero',      en:'hat',                          art:'el', mem:'🎩 SOMBRA = shade → sombrero → a hat that gives SHADE!'},
+  {es:'la sombrilla',     en:'beach umbrella / parasol',     art:'la', mem:'☂️ SOMBRA (shade) + -illa = little shade maker = parasol!'},
+  {es:'las sandalias',    en:'sandals',                      art:'las', mem:'👡 SANDALS → sandalias → same word! Just add -ias'},
+  {es:'los pantalones',   en:'pants / jeans',                art:'los', mem:'👖 PANTALOONS → pantalones → old word for trousers!'},
+  {es:'la blusa',         en:'blouse',                       art:'la', mem:'👚 BLOUSE → blusa → almost identical! feminine top'},
+  {es:'los shorts',       en:'shorts',                       art:'los', mem:'🩳 SHORTS → shorts → exact same word! playa essential'},
+  // Winter clothing
+  {es:'el gorro',         en:'beanie / winter hat',          art:'el', mem:'🧢 GORRO → "GOR-roh" → like a GORE-tex beanie for winter!'},
+  {es:'la chamarra',      en:'jacket (Mexican)',             art:'la', mem:'🧥 CHA-MARRA → Mexican slang for jacket → warmth!'},
+  {es:'el suéter',        en:'sweater',                      art:'el', mem:'🧶 SWEATER → suéter → same word! Just add accent'},
+  {es:'la bufanda',       en:'scarf',                        art:'la', mem:'🧣 BUFANDA → "boo-FAN-da" → a big FAN-shaped wrap = scarf!'},
+  {es:'los guantes',      en:'gloves',                       art:'los', mem:'🧤 GAUNT-lets → guantes → medieval glove = guantes!'},
+  {es:'las botas',        en:'boots',                        art:'las', mem:'👢 BOOTS → botas → one letter difference! las botas = the boots'},
+  {es:'los zapatos',      en:'shoes',                        art:'los', mem:'👟 ZA-PA-TOS → "sa-PA-tos" → your feet go ZAPATO-ing around!'},
+  {es:'los tenis',        en:'sneakers / tennis shoes',      art:'los', mem:'🎾 TENNIS → tenis → tennis shoes = sneakers in Mexican Spanish!'},
+  {es:'el abrigo',        en:'coat',                         art:'el', mem:'🧥 ABRIGO → "ah-BREE-go" → a coat you ABRIGo (shelter) yourself in!'},
+  // Useful travel words
+  {es:'el helado',        en:'ice cream',                    art:'el', mem:'🍦 HELADO → HELO = frozen → helado = frozen = ice cream!'},
+  {es:'por',              en:'for (duration)',               art:'', mem:'⏱️ POR + time = duration → por dos días = for two days'},
+  {es:'hacer senderismo', en:'to go hiking',                art:'', mem:'🥾 SENDERISMO → SENDERO (path) → hiking on the path!'},
+  {es:'andar en bicicleta','en':'to ride a bike',            art:'', mem:'🚲 ANDAR (to walk/go) + BICI = bicicleta → go by bike!'},
+];
+
 const FILL_L3 = [
   // HACER
   {verb:"HACER",   sentence:"Yo ___ ejercicio todos los días.",        answer:"hago",    en:"I exercise every day."},
@@ -1350,7 +1489,7 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6].some(v => v.es.toLowerCase() === q);
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7].some(v => v.es.toLowerCase() === q);
 }
 
 // One-time migration: remove My Words that are already in lesson vocab
@@ -1595,6 +1734,7 @@ function getDueCards(dir) {
   VOCAB_L4.forEach(check);
   VOCAB_L5.forEach(check);
   VOCAB_L6.forEach(check);
+  VOCAB_L7.forEach(check);
   loadMyWords().forEach(check);
   // Always show all overdue; cap new introductions to avoid overwhelm
   return [...overdue, ...shuffle(newCards).slice(0, NEW_CARD_LIMIT)];
@@ -1609,7 +1749,7 @@ function getDueCardCounts(dir) {
     if(!data[k]) newCount++;
     else if(data[k].nextReview<=now) overdue++;
   };
-  [VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,loadMyWords()].forEach(a=>a.forEach(check));
+  [VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,VOCAB_L7,loadMyWords()].forEach(a=>a.forEach(check));
   return {overdue, newCount};
 }
 
@@ -1695,8 +1835,8 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='fill'||mode==='fill-l2'||mode==='fill-l3'){
@@ -1736,6 +1876,7 @@ function resumeSession(){
   else if(mode==='es-en-l4'||mode==='en-es-l4') pool=VOCAB_L4;
   else if(mode==='es-en-l5'||mode==='en-es-l5') pool=VOCAB_L5;
   else if(mode==='es-en-l6'||mode==='en-es-l6') pool=VOCAB_L6;
+  else if(mode==='es-en-l7'||mode==='en-es-l7') pool=VOCAB_L7;
   else if(mode==='fill') pool=FILL_EXERCISES;
   else if(mode==='fill-l2') pool=FILL_L2;
   else if(mode==='fill-l3') pool=FILL_L3;
@@ -1779,6 +1920,8 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(VOCAB_L5); S.revealed=false;
   } else if(mode==='es-en-l6'||mode==='en-es-l6'){
     S.mode=mode; S.cards=shuffle(VOCAB_L6); S.revealed=false;
+  } else if(mode==='es-en-l7'||mode==='en-es-l7'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L7); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -1833,7 +1976,7 @@ function updateRevealExtras(show) {
 }
 
 function cardIsEsEn(item){
-  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4'||S.mode==='es-en-l5'||S.mode==='es-en-l6';
+  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4'||S.mode==='es-en-l5'||S.mode==='es-en-l6'||S.mode==='es-en-l7';
   // en-es-review, en-es, myw-en-es, en-es-l2/l3/l4 all return false = EN→SP ✓
 }
 function renderFlash(){
