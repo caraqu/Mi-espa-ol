@@ -433,6 +433,18 @@ body{max-width:480px;margin:0 auto;}
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l8')">📖 View Class Notes</button>
     </div>
 
+    <div class="lesson-card">
+      <div class="lc-head">
+        <div><div class="lc-title">Lesson 9</div><div class="lc-date">May 2026</div></div>
+        <div class="lc-badge">New ✨</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mbtn" onclick="startMode('es-en-l9')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es-l9')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+      </div>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l9')">📖 View Class Notes</button>
+    </div>
+
     <!-- My Words -->
     <div class="lesson-card">
       <div class="myw-header">
@@ -775,6 +787,67 @@ body{max-width:480px;margin:0 auto;}
         <strong>G / GU</strong> — hard "g" sound (like English <em>go</em>)<br>
         <span style="color:var(--purple)">ga · go · gu</span> → hard g (<em>gato, gordo, gusto</em>)<br>
         <span style="color:var(--purple)">gue · gui</span> → hard g, the <em>u</em> is silent (<em>guerra, guitarra</em>)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NOTES L9 ══ -->
+<div id="s-notes-l9" class="scr">
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 9</div></div></div>
+  <div style="padding:18px;">
+    <div class="note-section">
+      <h3>❤️ GUSTAR — to like (literally "to please")</h3>
+      <div class="grammar-rule"><strong>Structure: indirect pronoun + GUSTA/GUSTAN + thing</strong></div>
+      <table class="conj-table" style="margin-top:12px;">
+        <tr><th>Optional</th><th>Mandatory</th><th>Verb</th><th>Example</th></tr>
+        <tr><td>A mí</td><td><strong>me</strong></td><td rowspan="5">gusta<br><span style="font-size:11px;color:var(--muted)">(singular)</span></td><td>Me gusta el café.</td></tr>
+        <tr><td>A ti</td><td><strong>te</strong></td><td>Te gusta viajar.</td></tr>
+        <tr><td>A él/ella</td><td><strong>le</strong></td><td>Le gusta la música pop.</td></tr>
+        <tr><td>A nosotros</td><td><strong>nos</strong></td><td>Nos gusta correr.</td></tr>
+        <tr><td>A ellos</td><td><strong>les</strong></td><td>Les gusta el senderismo.</td></tr>
+      </table>
+      <div class="grammar-rule" style="margin-top:12px;"><strong>GUSTAN</strong> (plural) when the thing liked is plural:<br>
+        Me gust<strong>an</strong> los gatos. · Me gust<strong>an</strong> las películas románticas.
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🤝 Agreement: también / tampoco</h3>
+      <div class="grammar-rule">
+        <strong>A mí también</strong> = Me too (agreeing with positive)<br>
+        — Me gusta el café. — <strong>A mí también.</strong><br><br>
+        <strong>A mí tampoco</strong> = Me neither (agreeing with negative)<br>
+        — No me gustan los gatos. — <strong>A mí tampoco.</strong><br><br>
+        <strong>A mí sí</strong> = I do (disagreeing with negative)<br>
+        — No me gustan las películas románticas. — <strong>A mí sí.</strong><br><br>
+        <strong>A mí no</strong> = I don't (disagreeing with positive)<br>
+        — Me gustan los perros. — <strong>A mí no.</strong>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🔗 Y → E and O → U</h3>
+      <div class="grammar-rule">
+        <strong>Y</strong> (and) → becomes <strong>E</strong> before words starting with I or HI:<br>
+        México <strong>e</strong> Italia · español <strong>e</strong> inglés<br><br>
+        <strong>O</strong> (or) → becomes <strong>U</strong> before words starting with O or HO:<br>
+        México <strong>u</strong> Holanda · siete <strong>u</strong> ocho
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>👁️ VER — to see / to watch (irregular yo)</h3>
+      <div class="grammar-rule">
+        <strong>veo</strong> · ves · ve · vemos · ven<br>
+        Voy a ver a mi familia este fin de semana.<br>
+        <span style="color:var(--muted);font-size:13px;">Note: "ver A mi familia" — personal A before people!</span>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>📝 Practice sentence from class</h3>
+      <div class="grammar-rule" style="font-size:13px;line-height:1.8;">
+        Me gustan los gatos, pero <strong>a mi prometida le</strong> gustan los perros.<br>
+        Me gusta el senderismo, <strong>a ella también</strong>.<br>
+        <strong>Nos</strong> gusta viajar. No <strong>nos</strong> gusta correr.<br>
+        <span style="color:var(--muted)">→ When subject is "nosotros" → use NOS</span>
       </div>
     </div>
   </div>
@@ -1155,6 +1228,9 @@ const VERB_CONJUGATIONS = {
   // Lesson 5
   'IR':         ['voy','vas','va','vamos','van'],
   'NECESITAR':  ['necesito','necesitas','necesita','necesitamos','necesitan'],
+  // Lesson 9
+  'VER':        ['veo','ves','ve','vemos','ven'],
+  'ESCALAR':    ['escalo','escalas','escala','escalamos','escalan'],
   // Lesson 8
   'RELAJARSE':  ['me relajo','te relajas','se relaja','nos relajamos','se relajan'],
   'DESCANSAR':  ['descanso','descansas','descansa','descansamos','descansan'],
@@ -1550,6 +1626,31 @@ const VOCAB_L8 = [
   {es:'fui',              en:'I went (past tense of ir)',    art:'', mem:'⏮️ FUI → "FWEE" → FLEW = went → fui al cine = I went to the movies!'},
 ];
 
+const VOCAB_L9 = [
+  // GUSTAR structure keywords
+  {es:'me gusta',         en:'I like (singular thing)',      art:'', mem:'❤️ ME = to me, GUSTA = is pleasing → me gusta el café = coffee pleases me'},
+  {es:'me gustan',        en:'I like (plural things)',       art:'', mem:'❤️ GUSTAN = are pleasing (plural) → me gustan los gatos = cats please me'},
+  {es:'no me gusta',      en:"I don't like (singular)",      art:'', mem:"🚫 NO + ME GUSTA → no me gusta el tráfico = I don't like traffic"},
+  {es:'tampoco',          en:'neither / me neither',         art:'', mem:'🙅 TAM-POCO = also-not → A mí tampoco = Me neither!'},
+  {es:'por eso',          en:"that's why / therefore",       art:'', mem:"💡 POR = for/because + ESO = that → for that reason = that's why!"},
+  // Connectors
+  {es:'e',                en:'and (before i/hi sounds)',     art:'', mem:'🔗 Y → E before I sound → México E Italia (not "y Italia")'},
+  {es:'u',                en:'or (before o/ho sounds)',      art:'', mem:'🔀 O → U before O sound → México U Holanda (not "o Holanda")'},
+  // New vocabulary
+  {es:'el tráfico',       en:'traffic',                      art:'el', mem:'🚗 TRAFFIC → tráfico → same word! El tráfico en CDMX es horrible.'},
+  {es:'el fin de semana', en:'weekend',                      art:'el', mem:'📅 FIN (end) + SEMANA (week) → end of the week = weekend!'},
+  {es:'nublado',          en:'cloudy',                       art:'', mem:'☁️ NUBLADO → "noo-BLA-do" → NEBULA = cloud → cloudy!'},
+  {es:'lluvioso',         en:'rainy',                        art:'', mem:'🌧️ LLUVIA = rain → lluvioso = rainy. Los días lluviosos = rainy days'},
+  {es:'las papitas',      en:'chips (crisps)',               art:'las', mem:'🥔 PAPAS = potatoes → papitas = little potatoes = chips! -ito/a = small/cute'},
+  {es:'el bazar',         en:'market / bazaar',              art:'el', mem:'🛍️ BAZAAR → bazar → same word! ir al bazar = go to the market'},
+  {es:'lindo',            en:'cute / lovely / nice',         art:'', mem:'💕 LINDO → "LEEN-do" → lindon (beautiful) → cute/lovely in Spanish!'},
+  {es:'la película',      en:'movie / film',                 art:'la', mem:'🎬 PELÍCULA → "peh-LEE-koo-la" → sounds like "pelicula" → film!'},
+  {es:'romántico',        en:'romantic',                     art:'', mem:'💑 ROMANTIC → romántico → same word! Las películas románticas.'},
+  {es:'escalar',          en:'to climb',                     art:'', mem:'🧗 ESCALATE → escalar → climb up! escalo = I climb'},
+  {es:'ver',              en:'to see / to watch',            art:'', mem:'👁️ VER → "BEAR" without the B → ver una película = to watch a movie. Yo: VEO'},
+  {es:'el jugo',          en:'juice',                        art:'el', mem:'🧃 JUGO → "HOO-go" → sounds like Hugo → Hugo drinks juice! el jugo de naranja'},
+];
+
 const FILL_L3 = [
   // HACER
   {verb:"HACER",   sentence:"Yo ___ ejercicio todos los días.",        answer:"hago",    en:"I exercise every day."},
@@ -1608,7 +1709,7 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8].some(v => v.es.toLowerCase() === q);
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9].some(v => v.es.toLowerCase() === q);
 }
 
 // One-time migration: remove My Words that are already in lesson vocab
@@ -1855,6 +1956,7 @@ function getDueCards(dir) {
   VOCAB_L6.forEach(check);
   VOCAB_L7.forEach(check);
   VOCAB_L8.forEach(check);
+  VOCAB_L9.forEach(check);
   loadMyWords().forEach(check);
   // Always show all overdue; cap new introductions to avoid overwhelm
   return [...overdue, ...shuffle(newCards).slice(0, NEW_CARD_LIMIT)];
@@ -1869,7 +1971,7 @@ function getDueCardCounts(dir) {
     if(!data[k]) newCount++;
     else if(data[k].nextReview<=now) overdue++;
   };
-  [VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,VOCAB_L7,VOCAB_L8,loadMyWords()].forEach(a=>a.forEach(check));
+  [VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,VOCAB_L7,VOCAB_L8,VOCAB_L9,loadMyWords()].forEach(a=>a.forEach(check));
   return {overdue, newCount};
 }
 
@@ -1955,8 +2057,8 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='fill'||mode==='fill-l2'||mode==='fill-l3'){
@@ -1998,6 +2100,7 @@ function resumeSession(){
   else if(mode==='es-en-l6'||mode==='en-es-l6') pool=VOCAB_L6;
   else if(mode==='es-en-l7'||mode==='en-es-l7') pool=VOCAB_L7;
   else if(mode==='es-en-l8'||mode==='en-es-l8') pool=VOCAB_L8;
+  else if(mode==='es-en-l9'||mode==='en-es-l9') pool=VOCAB_L9;
   else if(mode==='fill') pool=FILL_EXERCISES;
   else if(mode==='fill-l2') pool=FILL_L2;
   else if(mode==='fill-l3') pool=FILL_L3;
@@ -2045,6 +2148,8 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(VOCAB_L7); S.revealed=false;
   } else if(mode==='es-en-l8'||mode==='en-es-l8'){
     S.mode=mode; S.cards=shuffle(VOCAB_L8); S.revealed=false;
+  } else if(mode==='es-en-l9'||mode==='en-es-l9'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L9); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -2099,7 +2204,7 @@ function updateRevealExtras(show) {
 }
 
 function cardIsEsEn(item){
-  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4'||S.mode==='es-en-l5'||S.mode==='es-en-l6'||S.mode==='es-en-l7'||S.mode==='es-en-l8';
+  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4'||S.mode==='es-en-l5'||S.mode==='es-en-l6'||S.mode==='es-en-l7'||S.mode==='es-en-l8'||S.mode==='es-en-l9';
   // en-es-review, en-es, myw-en-es, en-es-l2/l3/l4 all return false = EN→SP ✓
 }
 function renderFlash(){
