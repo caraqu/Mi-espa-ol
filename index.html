@@ -2116,7 +2116,7 @@ function renderManageList() {
     return;
   }
   el.innerHTML = words.map((w, i) => {
-    const artEs = (w.art ? w.art + ' ' : '') + w.es;
+    const artEs = fmtEs(w);
     const safeEs = w.es.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     return `<div class="manage-row" id="manage-row-${i}">
       <div class="manage-row-view">
@@ -2386,18 +2386,20 @@ function refreshHome() {
 
 // ══════════════ SESSION SAVE/RESTORE ══════════════
 
-const SESSION_KEY='session_espanol_l1';
+// Per-mode session keys: each lesson/mode has its own slot so studying L1
+// never overwrites L12's saved position.
+function sessionKey(mode){ return `session_espanol_${mode||'_'}`; }
 function getId(c){return c.es||c.sentence||c.q;}
 function saveSession(){
   if(!S.mode||!S.cards.length||S.idx>=S.cards.length)return;
-  localStorage.setItem(SESSION_KEY,JSON.stringify({
+  localStorage.setItem(sessionKey(S.mode),JSON.stringify({
     mode:S.mode, cardIds:S.cards.map(getId),
     idx:S.idx, correct:S.correct, wrong:S.wrong,
     answered:S.answered
   }));
 }
-function clearSession(){localStorage.removeItem(SESSION_KEY);}
-function loadSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY));}catch(e){return null;}}
+function clearSession(mode){ localStorage.removeItem(sessionKey(mode||S.mode)); }
+function loadSession(mode){ try{return JSON.parse(localStorage.getItem(sessionKey(mode)));}catch(e){return null;} }
 
 // ══════════════ STATE ══════════════
 
@@ -2424,6 +2426,7 @@ function show(id){
 }
 function goHome(){
   window.speechSynthesis&&window.speechSynthesis.cancel();
+  saveSession(); // preserve current card position before leaving
   refreshHome(); show('s-home');
 }
 
@@ -2446,7 +2449,7 @@ function navigateToMode(mode){
 function startMode(mode){
   window.speechSynthesis&&window.speechSynthesis.cancel();
   const effective=mode==='review-es-en'?'es-en-review':mode==='review-en-es'?'en-es-review':mode;
-  const saved=loadSession();
+  const saved=loadSession(effective);
   if(saved&&saved.mode===effective&&saved.idx>0&&saved.idx<saved.cardIds.length){
     S._pendingMode=mode; S._savedSession=saved;
     const left=saved.cardIds.length-saved.idx;
@@ -2491,7 +2494,8 @@ function resumeSession(){
 
 function startFresh(){
   document.getElementById('resume-modal').classList.remove('show');
-  clearSession(); _startFresh(S._pendingMode);
+  clearSession(S._savedSession&&S._savedSession.mode||S._pendingMode);
+  _startFresh(S._pendingMode);
 }
 
 function _startFresh(mode){
@@ -2549,7 +2553,7 @@ function _startFresh(mode){
 }
 
 function retryMode(){
-  clearSession();
+  clearSession(S.mode);
   const m=S.mode==='es-en-review'?'review-es-en':S.mode==='en-es-review'?'review-en-es':S.mode;
   startMode(m);
 }
@@ -2589,6 +2593,17 @@ function cardIsEsEn(item){
   return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4'||S.mode==='es-en-l5'||S.mode==='es-en-l6'||S.mode==='es-en-l7'||S.mode==='es-en-l8'||S.mode==='es-en-l9'||S.mode==='es-en-l10'||S.mode==='es-en-l11'||S.mode==='es-en-l12';
   // en-es-review, en-es, myw-en-es, en-es-l2/l3/l4 all return false = EN→SP ✓
 }
+
+// Returns the display form of a Spanish word, combining art + es but NEVER duplicating.
+// Some vocab entries store the article inside es (e.g. es:'el boleto', art:'el'),
+// others store just the root (e.g. es:'boleto', art:'el').
+function fmtEs(v){
+  if(!v.art) return v.es;
+  const lo=v.es.toLowerCase();
+  if(lo.startsWith('el ')||lo.startsWith('la ')||lo.startsWith('los ')||lo.startsWith('las ')||lo.startsWith('un ')||lo.startsWith('una '))
+    return v.es; // article already present in the word
+  return v.art+' '+v.es;
+}
 function renderFlash(){
   const item=S.cards[S.idx], total=S.cards.length;
   const isEsEn=cardIsEsEn(item);
@@ -2600,8 +2615,10 @@ function renderFlash(){
   document.getElementById('flash-sub').textContent=`${S.idx+1} of ${total} words`;
   document.getElementById('fc-label').textContent=isEsEn?'What does this mean in English?':'How do you say this in Spanish?';
   document.getElementById('fc-word').textContent=isEsEn?item.es:item.en;
-  document.getElementById('fc-article').textContent=isEsEn?`(${item.art} ${item.es})`:'';
-  document.getElementById('fc-answer').textContent=isEsEn?item.en:`${item.art} ${item.es}`;
+  const _fullEs=fmtEs(item);
+  // fc-article: show article hint only when es doesn't already carry the article
+  document.getElementById('fc-article').textContent=isEsEn&&(_fullEs!==item.es)?`(${_fullEs})`:'';
+  document.getElementById('fc-answer').textContent=isEsEn?item.en:_fullEs;
 
   const fc=document.getElementById('flashcard');
   const ansEl=document.getElementById('fc-answer');
@@ -2674,7 +2691,7 @@ function verdict(quality){
     S.srUpdates[item.es]=card.interval;
   }
   S.idx++;
-  if(S.idx>=S.cards.length){clearSession();showScore();}
+  if(S.idx>=S.cards.length){clearSession(S.mode);showScore();}
   else{S.revealed=false;saveSession();renderFlash();}
 }
 
@@ -2692,8 +2709,8 @@ function skipCard(){
   }
   // Already-answered card → just move forward
   S.idx++;
-  if(S.idx>=S.cards.length){clearSession();showScore();}
-  else{S.revealed=false;renderFlash();}
+  if(S.idx>=S.cards.length){clearSession(S.mode);showScore();}
+  else{S.revealed=false;saveSession();renderFlash();}
 }
 
 // ══════════════ FILL IN THE BLANK ══════════════
@@ -2766,8 +2783,8 @@ function selectChoice(btnEl,chosen){
 
 function nextFill(){
   S.idx++;
-  if(S.idx>=S.cards.length){clearSession();showScore();}
-  else renderFill();
+  if(S.idx>=S.cards.length){clearSession(S.mode);showScore();}
+  else{saveSession();renderFill();}
 }
 
 function prevFill(){
@@ -2819,8 +2836,8 @@ function checkConv(){
 
 function nextConv(){
   S.idx++;
-  if(S.idx>=S.cards.length){clearSession();showScore();}
-  else renderConv();
+  if(S.idx>=S.cards.length){clearSession(S.mode);showScore();}
+  else{saveSession();renderConv();}
 }
 
 function prevConv(){
@@ -2902,7 +2919,7 @@ function buildNotes(){
   function makeItem(v){
     const div=document.createElement('div');
     div.className='vocab-item';
-    div.innerHTML=`<div class="vocab-text"><div class="vocab-es">${v.art} ${v.es}</div><div class="vocab-en">${v.en}</div></div><button class="speak-btn" onclick="speak('${v.es}')">🔊</button>`;
+    div.innerHTML=`<div class="vocab-text"><div class="vocab-es">${fmtEs(v)}</div><div class="vocab-en">${v.en}</div></div><button class="speak-btn" onclick="speak('${v.es}')">🔊</button>`;
     return div;
   }
   THINGS.forEach(v=>document.getElementById('notes-things').appendChild(makeItem(v)));
