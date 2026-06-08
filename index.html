@@ -493,6 +493,21 @@ body{max-width:480px;margin:0 auto;}
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l13')">📖 View Class Notes</button>
     </div>
 
+    <div class="lesson-card">
+      <div class="lc-head">
+        <div><div class="lc-title">Lesson 14</div><div class="lc-date">June 2026</div></div>
+        <div class="lc-badge">New ✨</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mbtn" onclick="startMode('es-en-l14')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es-l14')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+      </div>
+      <div class="mode-grid" style="margin-top:8px;">
+        <div class="mbtn" onclick="startMode('conv-l14')"><div class="mbtn-icon">💬</div><div class="mbtn-label">Conversation</div></div>
+      </div>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l14')">📚 View Class Notes</button>
+    </div>
+
     <!-- My Words -->
     <div class="lesson-card">
       <div class="myw-header">
@@ -938,6 +953,56 @@ body{max-width:480px;margin:0 auto;}
     </div>
   </div>
 </div>
+
+<!-- ── NOTES L14 ── -->
+<div id="s-notes-l14" class="scr">
+  <div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Class Notes · Lesson 14</div></div></div>
+  <div style="padding:18px;">
+    <div class="note-section">
+      <h3>📖 Key Vocabulary — Comparatives & Preterite context</h3>
+      <div class="vocab-list">
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">exitoso / exitosa</div><div class="vocab-en">successful</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">nacer / nació</div><div class="vocab-en">to be born / he·she was born</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">vivió</div><div class="vocab-en">he·she lived (preterite of vivir)</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">las obras</div><div class="vocab-en">the paintings / works (of art)</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">obtuvo</div><div class="vocab-en">he·she obtained (preterite of obtener)</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">los premios</div><div class="vocab-en">the awards / prizes</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">ya que</div><div class="vocab-en">since / because</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">totalmente</div><div class="vocab-en">totally / completely</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">la ciencia</div><div class="vocab-en">science</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">regresar</div><div class="vocab-en">to return</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">hace + period</div><div class="vocab-en">ago (hace tres meses = 3 months ago)</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">la estación espacial</div><div class="vocab-en">space station</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">permanecer</div><div class="vocab-en">to stay / remain</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">crecer / creció</div><div class="vocab-en">to grow up / grew up</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">el cantante</div><div class="vocab-en">the singer</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">ya</div><div class="vocab-en">already</div></div></div>
+        <div class="vocab-item"><div class="vocab-text"><div class="vocab-es">más</div><div class="vocab-en">more</div></div></div>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>⚖️ Comparatives — más ... que</h3>
+      <div class="grammar-rule"><strong>más + adjective + que</strong> = more ... than<br>
+        <em>La galería es más importante <strong>que</strong> el cine.</em></div>
+      <div class="grammar-rule"><strong>Superlative: el/la + más + adjective</strong><br>
+        <em>la más importante galería de la ciudad</em> = the most important gallery in the city.<br>
+        Use <strong>LA más</strong> for feminine nouns, <strong>EL más</strong> for masculine.</div>
+      <div class="grammar-rule"><strong>menos ... que</strong> = less ... than &nbsp;|&nbsp; <strong>tan ... como</strong> = as ... as</div>
+    </div>
+    <div class="note-section">
+      <h3>🗓️ Preterite time markers</h3>
+      <table class="conj-table">
+        <tr><th>Spanish</th><th>English</th></tr>
+        <tr><td>hace tres meses</td><td>3 months ago</td></tr>
+        <tr><td>hace un tiempo</td><td>a while ago</td></tr>
+        <tr><td>la semana pasada</td><td>last week</td></tr>
+        <tr><td>últimamente</td><td>lately / recently</td></tr>
+        <tr><td>hace unos meses</td><td>a few months ago</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
 
 <!-- ══ NOTES L9 ══ -->
 <!-- ══ NOTES L12 ══ -->
@@ -2246,6 +2311,52 @@ const CONV_L13 = [
 
 // ══════════════ MY WORDS ══════════════
 
+
+const VOCAB_L14 = [
+  // ── Adjectives ──
+  {es:'exitoso',        en:'successful',                           art:'', mem:'🏆 EXIT-oso — Latin EXIT-us = success. Pancho es un pintor muy exitoso.'},
+  {es:'famoso',         en:'famous',                               art:'', mem:'🌟 FAMOUS → famoso — almost identical! Carmen Miranda es famosa.'},
+  {es:'importante',     en:'important',                            art:'', mem:'🎯 IMPORTANT → importante — exact cognate! La más importante galería.'},
+  {es:'barato',         en:'cheap / inexpensive',                  art:'', mem:'💰 bara-TO — think "bar" deals, cheap drinks at a bar!'},
+  {es:'caro',           en:'expensive',                            art:'', mem:'💸 CARO — like "care" — expensive things require careful spending!'},
+  // ── Comparatives & superlatives ──
+  {es:'más ... que',    en:'more ... than',                         art:'', mem:'⚖️ MÁS = more + QUE = than. La galería es más importante que el cine.'},
+  {es:'menos ... que',  en:'less ... than',                         art:'', mem:'🔽 MENOS = less + QUE = than. Es menos caro que el otro.'},
+  {es:'tan ... como',   en:'as ... as',                             art:'', mem:'⚖️ TAN ... COMO = as ... as (equal). Es tan bueno como el otro.'},
+  {es:'el/la más',      en:'the most (superlative)',                art:'', mem:'🥇 EL/LA MÁS + adj = the most. La más importante galería de la ciudad.'},
+  {es:'el/la menos',    en:'the least (superlative)',               art:'', mem:'🥈 EL/LA MENOS + adj = the least. El menos interesante.'},
+  // ── Key verbs (preterite forms) ──
+  {es:'nacer',          en:'to be born',                           art:'', mem:'👶 NAC-er — NATAL = birth. Nació en Oaxaca.'},
+  {es:'nació',          en:'he/she was born (preterite of nacer)',  art:'', mem:'👶 Nació en Brasil — was born in Brazil. Regular -IR pret. él form.'},
+  {es:'vivió',          en:'he/she lived (preterite of vivir)',     art:'', mem:'🏡 VIVIR → vivió (past) — Vivió un tiempo en París.'},
+  {es:'creció',         en:'he/she grew up (preterite of crecer)',  art:'', mem:'🌱 CRECER = to grow. Creció en México = grew up in Mexico.'},
+  {es:'obtuvo',         en:'he/she obtained (preterite of obtener)',art:'', mem:'🏅 OBTENER past: obtuvo (obtuv- stem, like tener→tuvo). Obtuvo muchos premios.'},
+  {es:'expuso',         en:'he/she exhibited (preterite of exponer)',art:'',mem:'🖼 EXPONER past: expuso (pus- stem, like poner→puso). Expuso sus obras.'},
+  {es:'regresar',       en:'to return / go back',                  art:'', mem:'🔙 RE-GRESAR — REGRESAR = go back. Regresó hace tres meses.'},
+  {es:'permanecer',     en:'to stay / remain',                     art:'', mem:'⏳ PERMANECER — PERMANENT = stays. Permaneció por un año.'},
+  // ── Key nouns ──
+  {es:'las obras',      en:'the paintings / works (of art)',       art:'las',mem:'🖼️ OBRA = work (artwork). Sus obras = his paintings.'},
+  {es:'los premios',    en:'the awards / prizes',                  art:'los',mem:'🏆 PREMIO — Obtuvo muchos premios por sus investigaciones.'},
+  {es:'la ciencia',     en:'science',                              art:'la', mem:'🔬 SCIENCE → ciencia — cognate! Se dedicó totalmente a la ciencia.'},
+  {es:'la estación espacial',en:'space station',                   art:'la', mem:'🚀 ESTACIÓN (station) + ESPACIAL (spatial/space).'},
+  {es:'el cantante',    en:'the singer',                           art:'el', mem:'🎵 CANTAR = to sing → cantante = singer. Está casada con un cantante.'},
+  {es:'la galería',     en:'the (art) gallery',                    art:'la', mem:'🖼 GALLERY → galería — cognate! La galería más importante.'},
+  // ── Time markers & connectors ──
+  {es:'ya que',         en:'since / because',                      art:'', mem:'🔗 YA QUE = since/because. Obtuvo premios ya que se dedicó a la ciencia.'},
+  {es:'ya',             en:'already',                              art:'', mem:'✅ YA = already. ¡Ya lo sé! = I already know it!'},
+  {es:'totalmente',     en:'totally / completely',                  art:'', mem:'💯 TOTAL → totalmente. Se dedicó totalmente a la ciencia.'},
+  {es:'hace + tiempo',  en:'ago (time expression)',                 art:'', mem:'⏰ HACE + period = ago. Regresó hace tres meses = returned 3 months ago.'},
+  {es:'últimamente',    en:'lately / recently',                    art:'', mem:'⏳ ÚLTIMAMENTE — from último (last). Últimamente le han llovido ofertas.'},
+];
+
+const CONV_L14 = [
+  {ctx:"Topic: describing a person",    q:"¿Cómo es Pancho Sotelo?",                            q_en:"What is Pancho Sotelo like?",                     ans:"Es un pintor muy exitoso. Nació en Oaxaca y vivió un tiempo en París donde estudió y convivió con artistas.",                    ans_en:"He is a very successful painter. He was born in Oaxaca and lived for a while in Paris where he studied and co-lived with artists.",note:"Preterite: <strong>nació</strong> (nacer), <strong>vivió</strong> (vivir), <strong>estudió</strong> (estudiar). All regular -IR/-AR past."},
+  {ctx:"Topic: comparatives",           q:"¿Es la galería más importante que el cine?",          q_en:"Is the gallery more important than the cinema?",   ans:"Sí, la galería es más importante que el cine. Es la más importante de la ciudad.",                                                  ans_en:"Yes, the gallery is more important than the cinema. It's the most important one in the city.",note:"<strong>más + adj + que</strong> = more ... than. <strong>la más + adj</strong> = the most (superlative)."},
+  {ctx:"Topic: achievements",           q:"¿Por qué obtuvo tantos premios la doctora?",           q_en:"Why did the doctor win so many awards?",           ans:"Obtuvo muchos premios ya que se dedicó totalmente a la ciencia.",                                                                   ans_en:"She won many awards since she dedicated herself completely to science.",                     note:"<strong>Ya que</strong> = since/because. <strong>Obtuvo</strong> = preterite of obtener (obtuv- stem)."},
+  {ctx:"Topic: hace + time",            q:"¿Cuándo regresó del espacio?",                        q_en:"When did she return from space?",                  ans:"Regresó hace tres meses de una estación espacial donde permaneció por un año con otros investigadores.",                            ans_en:"She returned three months ago from a space station where she stayed for a year with other researchers.",note:"<strong>Hace + period = ago</strong>. Permaneció = stayed (preterite of permanecer)."},
+  {ctx:"Topic: equal/unequal comparison",q:"¿Es tan caro como el museo?",                       q_en:"Is it as expensive as the museum?",                ans:"No, es más barato que el museo pero más caro que el mercado.",                                                                       ans_en:"No, it's cheaper than the museum but more expensive than the market.",                       note:"<strong>tan ... como</strong> = as ... as. <strong>más/menos ... que</strong> = more/less ... than."},
+];
+
 const MYWORDS_KEY = 'mywords_espanol';
 function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
 function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
@@ -2253,7 +2364,7 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13].some(v => v.es.toLowerCase() === q);
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14].some(v => v.es.toLowerCase() === q);
 }
 
 // One-time migration: remove My Words that are already in lesson vocab
@@ -2734,12 +2845,14 @@ function resumeSession(){
   else if(mode==='es-en-l11'||mode==='en-es-l11') pool=VOCAB_L11;
   else if(mode==='es-en-l12'||mode==='en-es-l12') pool=VOCAB_L12;
   else if(mode==='es-en-l13'||mode==='en-es-l13') pool=VOCAB_L13;
+  else if(mode==='es-en-l14'||mode==='en-es-l14') pool=VOCAB_L14;
   else if(mode==='fill') pool=FILL_EXERCISES;
   else if(mode==='fill-l2') pool=FILL_L2;
   else if(mode==='fill-l3') pool=FILL_L3;
   else if(mode==='conv-l2') pool=CONV_L2;
   else if(mode==='conv-l3') pool=CONV_L3;
   else if(mode==='conv-l13') pool=CONV_L13;
+  else if(mode==='conv-l14') pool=CONV_L14;
   else pool=CONVERSATIONS;
   S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
   S.mode=mode; S.idx=saved.idx; S.correct=saved.correct; S.wrong=saved.wrong;
@@ -2793,6 +2906,8 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(VOCAB_L12); S.revealed=false;
   } else if(mode==='es-en-l13'||mode==='en-es-l13'){
     S.mode=mode; S.cards=shuffle(VOCAB_L13); S.revealed=false;
+  } else if(mode==='es-en-l14'||mode==='en-es-l14'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L14); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -2807,6 +2922,8 @@ function _startFresh(mode){
     S.mode='conv-l3'; S.cards=shuffle(CONV_L3);
   } else if(mode==='conv-l13'){
     S.mode='conv-l13'; S.cards=shuffle(CONV_L13);
+  } else if(mode==='conv-l14'){
+    S.mode='conv-l14'; S.cards=shuffle(CONV_L14);
   }
   navigateToMode(S.mode);
 }
@@ -2849,7 +2966,7 @@ function updateRevealExtras(show) {
 }
 
 function cardIsEsEn(item){
-  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4'||S.mode==='es-en-l5'||S.mode==='es-en-l6'||S.mode==='es-en-l7'||S.mode==='es-en-l8'||S.mode==='es-en-l9'||S.mode==='es-en-l10'||S.mode==='es-en-l11'||S.mode==='es-en-l12'||S.mode==='es-en-l13';
+  return S.mode==='es-en'||S.mode==='es-en-review'||S.mode==='myw-es-en'||S.mode==='es-en-l2'||S.mode==='es-en-l3'||S.mode==='es-en-l4'||S.mode==='es-en-l5'||S.mode==='es-en-l6'||S.mode==='es-en-l7'||S.mode==='es-en-l8'||S.mode==='es-en-l9'||S.mode==='es-en-l10'||S.mode==='es-en-l11'||S.mode==='es-en-l12'||S.mode==='es-en-l13'||S.mode==='es-en-l14';
   // en-es-review, en-es, myw-en-es, en-es-l2/l3/l4 all return false = EN→SP ✓
 }
 
