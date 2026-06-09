@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mi-espanol-v32';
+const CACHE_NAME = 'mi-espanol-v33';
 const ASSETS = [
   './',
   './index.html',
