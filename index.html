@@ -2913,14 +2913,14 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'){
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'){
     const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='fill'||mode==='fill-l2'||mode==='fill-l3'){
     document.getElementById('fill-hdr-sub').textContent=mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':'Verb Conjugation';
     show('s-fill');renderFill();
-  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'){
+  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'){
     document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':mode==='conv-l13'?'Lesson 13 · Irregular preterite':'Listen · speak · compare';
     show('s-conv');renderConv();
   }
@@ -3026,6 +3026,8 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(VOCAB_L13); S.revealed=false;
   } else if(mode==='es-en-l14'||mode==='en-es-l14'){
     S.mode=mode; S.cards=shuffle(VOCAB_L14); S.revealed=false;
+  } else if(mode==='es-en-l15'||mode==='en-es-l15'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L15); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -3042,6 +3044,8 @@ function _startFresh(mode){
     S.mode='conv-l13'; S.cards=shuffle(CONV_L13);
   } else if(mode==='conv-l14'){
     S.mode='conv-l14'; S.cards=shuffle(CONV_L14);
+  } else if(mode==='conv-l15'){
+    S.mode='conv-l15'; S.cards=shuffle(CONV_L15);
   }
   navigateToMode(S.mode);
 }
