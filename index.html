@@ -524,6 +524,20 @@ body{max-width:480px;margin:0 auto;}
       <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l15')">📖 View Class Notes</button>
     </div>
 
+    <!-- Lesson 16 -->
+    <div class="lesson-card">
+      <div class="lc-head">
+        <div><div class="lc-title">Lesson 16 — Numbers, Months & Biography</div><div class="lc-hint">cien / mil / meses — nací, crecí, me gradué</div><div class="lc-date">June 2026</div></div>
+        <div class="lc-badge">New ✨</div>
+      </div>
+      <div class="mode-grid">
+        <div class="mbtn" onclick="startMode('es-en-l16')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+        <div class="mbtn" onclick="startMode('en-es-l16')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+        <div class="mbtn" onclick="startMode('conv-l16')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+      </div>
+      <button class="secondary-btn" style="margin-top:12px;" onclick="show('s-notes-l16')">📖 View Class Notes</button>
+    </div>
+
     <!-- My Words -->
     <div class="lesson-card">
       <div class="myw-header">
@@ -1663,6 +1677,99 @@ body{max-width:480px;margin:0 auto;}
 </div>
 
 
+<!-- ══ NOTES L16 ══ -->
+<div id="s-notes-l16" class="scr">
+  <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 16</div></div></div>
+  <div style="padding:18px;">
+    <div class="note-section">
+      <h3>🔢 Numbers: 100–1,000</h3>
+      <table class="conj-table" style="margin-top:8px;">
+        <tr><th>Number</th><th>Spanish</th><th>Key note</th></tr>
+        <tr><td>100</td><td><strong>cien</strong></td><td>exactly 100 → CIEN</td></tr>
+        <tr><td>101+</td><td><strong>ciento</strong> uno…</td><td>101–199 → CIENTO</td></tr>
+        <tr><td>200</td><td><strong>DOS</strong>cientos</td><td>stem = DOS</td></tr>
+        <tr><td>300</td><td><strong>TRES</strong>cientos</td><td>stem = TRES</td></tr>
+        <tr><td>400</td><td><strong>CUATRO</strong>cientos</td><td>stem = CUATRO</td></tr>
+        <tr><td>500</td><td><strong>QUINIENTOS</strong></td><td>⚠️ irregular — not "cincocientos"!</td></tr>
+        <tr><td>600</td><td><strong>SEIS</strong>cientos</td><td>stem = SEIS</td></tr>
+        <tr><td>700</td><td><strong>SETE</strong>cientos</td><td>⚠️ SETE- (not "siete-"!)</td></tr>
+        <tr><td>800</td><td><strong>OCHO</strong>cientos</td><td>stem = OCHO</td></tr>
+        <tr><td>900</td><td><strong>NOVE</strong>cientos</td><td>⚠️ NOVE- (not "nueve-"!)</td></tr>
+        <tr><td>1,000</td><td><strong>mil</strong></td><td>dos mil = 2,000 · tres mil = 3,000</td></tr>
+      </table>
+      <div class="grammar-rule" style="margin-top:10px;">
+        <strong>Saying years:</strong><br>
+        1996 → <strong>mil novecientos noventa y seis</strong><br>
+        1524 → <strong>mil quinientos veinticuatro</strong><br>
+        1776 → <strong>mil setecientos setenta y seis</strong><br>
+        <span style="color:var(--muted);font-size:13px;">Pattern: mil + hundreds + tens + units</span>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>📅 Months (Los Meses)</h3>
+      <div class="vocab-list">
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">enero · febrero · marzo</span><div class="vocab-en">January · February · March</div></div><button class="speak-btn" onclick="speak('enero, febrero, marzo')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">abril · mayo · junio</span><div class="vocab-en">April · May · June</div></div><button class="speak-btn" onclick="speak('abril, mayo, junio')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">julio · agosto · septiembre</span><div class="vocab-en">July · August · September</div></div><button class="speak-btn" onclick="speak('julio, agosto, septiembre')">🔊</button></div>
+        <div class="vocab-item"><div class="vocab-text"><span class="vocab-es">octubre · noviembre · diciembre</span><div class="vocab-en">October · November · December</div></div><button class="speak-btn" onclick="speak('octubre, noviembre, diciembre')">🔊</button></div>
+      </div>
+      <div class="grammar-rule" style="margin-top:8px;">
+        <strong>Dates:</strong> Nací el <strong>26 de marzo</strong> de 1996. = I was born on March 26, 1996.<br>
+        <span style="color:var(--muted);font-size:13px;">Use <em>el [day] de [month]</em> for dates. Months are NOT capitalized in Spanish.</span>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🌏 Biography Verbs (Pretérito)</h3>
+      <table class="conj-table" style="margin-top:8px;">
+        <tr><th>Infinitive</th><th>yo (preterite)</th><th>Meaning</th></tr>
+        <tr><td><strong>nacer</strong></td><td>nací</td><td>to be born / I was born</td></tr>
+        <tr><td><strong>crecer</strong></td><td>crecí</td><td>to grow up / I grew up</td></tr>
+        <tr><td><strong>vivir</strong></td><td>viví</td><td>to live / I lived</td></tr>
+        <tr><td><strong>estudiar</strong></td><td>estudié</td><td>to study / I studied</td></tr>
+        <tr><td><strong>aprender</strong></td><td>aprendí</td><td>to learn / I learned</td></tr>
+        <tr><td><strong>empezar</strong></td><td>empecé</td><td>to start / I started</td></tr>
+        <tr><td><strong>terminar</strong></td><td>terminé</td><td>to finish / I finished</td></tr>
+        <tr><td><strong>graduarse</strong></td><td>me gradué</td><td>to graduate / I graduated</td></tr>
+        <tr><td><strong>viajar</strong></td><td>viajé</td><td>to travel / I traveled</td></tr>
+        <tr><td><strong>mudarse</strong></td><td>me mudé</td><td>to move (places) / I moved</td></tr>
+      </table>
+    </div>
+    <div class="note-section">
+      <h3>💬 Classroom Conversations</h3>
+      <div class="grammar-rule" style="font-size:13px;line-height:1.9;">
+        ¿Cuándo te <strong>graduaste</strong>? → Me <strong>gradué</strong> en 2021.<br>
+        ¿Qué <strong>estudiaste</strong>? → Estudié negocios analíticos.<br>
+        ¿Cuándo fue la primera vez que <strong>saliste</strong> de China? → En 2021 fue la primera vez que <strong>salí</strong> de China.<br>
+        <strong>Nací</strong> en China y <strong>crecí</strong> en China.<br>
+        <span style="color:var(--muted);">crecer = to grow up / to raise</span>
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>🔗 Prepositions + Infinitive</h3>
+      <div class="grammar-rule">
+        <strong>POR</strong> + infinitivo → because of / for (doing)<br>
+        <em>Fui a EUA <strong>por</strong> estudiar.</em> = I went to the US because of studying.<br><br>
+        <strong>PARA</strong> + infinitivo → in order to (goal/purpose)<br>
+        <em>Fui a EUA <strong>para</strong> estudiar.</em> = I went to the US in order to study.<br><br>
+        <strong>EN</strong> + infinitivo → while doing / upon doing (less common)<br>
+        <strong>DE</strong> + infinitivo → by doing / from doing
+      </div>
+      <div class="grammar-rule" style="margin-top:8px;">
+        <strong>POR vs PARA (quick rule):</strong><br>
+        <strong>POR</strong> = reason/cause (because of, due to)<br>
+        <strong>PARA</strong> = purpose/goal (in order to, so that)
+      </div>
+    </div>
+    <div class="note-section">
+      <h3>📝 Class Sample Text</h3>
+      <div class="grammar-rule" style="font-size:13px;line-height:1.9;">
+        Me llamo Cara. <strong>Nací</strong> en China en 1996, marzo 26. <strong>Viví</strong> en China, pero estoy viajando por/en México. <strong>Crecí</strong> en China, después <strong>fui</strong> a E.U.A. para estudiar. <strong>Empecé</strong> en 2019 y me <strong>gradué</strong> en 2021. Me gusta viajar. <strong>Viajé</strong> a Oaxaca, Cancún y Tepoztlán con mi prometida en los dos meses pasados.<br>
+        <span style="color:var(--muted);">United States of America = <strong>Estados Unidos de América</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -2473,6 +2580,60 @@ const CONV_L15 = [
 ];
 
 
+// ══════════════ LESSON 16 DATA ══════════════
+
+const VOCAB_L16 = [
+  // ── Numbers 100–1000 ──
+  {es:'cien',           en:'one hundred (100)',                art:'', mem:'💯 CIEN = exactly 100. Use CIENTO when followed by more: ciento uno = 101.'},
+  {es:'ciento',         en:'one hundred and... (101–199)',     art:'', mem:'💯 CIENTO = 100+. Ciento uno = 101 · ciento veinte = 120 · ciento noventa y nueve = 199.'},
+  {es:'doscientos',     en:'two hundred (200)',                art:'', mem:'2️⃣ DOS + CIENTOS → 200. Think: DOS-cientos, stress on DOS!'},
+  {es:'trescientos',    en:'three hundred (300)',              art:'', mem:'3️⃣ TRES + CIENTOS → 300. TREScientos!'},
+  {es:'cuatrocientos',  en:'four hundred (400)',               art:'', mem:'4️⃣ CUATRO + CIENTOS → 400. CUATROcientos!'},
+  {es:'quinientos',     en:'five hundred (500)',               art:'', mem:'5️⃣ ⚠️ QUINIENTOS (not "cincocientos"!) — fully irregular. Just memorize QUINIENTOS.'},
+  {es:'seiscientos',    en:'six hundred (600)',                art:'', mem:'6️⃣ SEIS + CIENTOS → 600. SEIScientos!'},
+  {es:'setecientos',    en:'seven hundred (700)',              art:'', mem:'7️⃣ ⚠️ SETEcientos (not "sietecientos"!) — SETE- drops the IE. 700 = SETEcientos.'},
+  {es:'ochocientos',    en:'eight hundred (800)',              art:'', mem:'8️⃣ OCHO + CIENTOS → 800. OCHOcientos!'},
+  {es:'novecientos',    en:'nine hundred (900)',               art:'', mem:'9️⃣ ⚠️ NOVEcientos (not "nuevecientos"!) — NOVE- drops the UE. 900 = NOVEcientos.'},
+  {es:'mil',            en:'one thousand (1,000)',             art:'', mem:'🔢 MIL = 1,000. DOS MIL = 2,000. TRES MIL = 3,000. No "un" before mil!'},
+  // ── Months ──
+  {es:'enero',          en:'January',                         art:'', mem:'🎊 ENERO = January. Sounds like "hey-NAIR-oh" — New year month!'},
+  {es:'febrero',        en:'February',                        art:'', mem:'💘 FEBRERO = February. FEB-rero — Valentine\'s month, like "February"!'},
+  {es:'marzo',          en:'March',                           art:'', mem:'🌸 MARZO = March. MARS god of war → Marzo. March → Marzo!'},
+  {es:'abril',          en:'April',                           art:'', mem:'🌧️ ABRIL = April. APRIL → Abril — almost the same word!'},
+  {es:'mayo',           en:'May',                             art:'', mem:'🌺 MAYO = May. MAYO sounds like "my-oh" — bloom in MAY!'},
+  {es:'junio',          en:'June',                            art:'', mem:'☀️ JUNIO = June. JUNE → Junio — same root!'},
+  {es:'julio',          en:'July',                            art:'', mem:'🏖️ JULIO = July. JULIUS Caesar → Julio!'},
+  {es:'agosto',         en:'August',                          art:'', mem:'🌻 AGOSTO = August. AUGUSTUS emperor → Agosto!'},
+  {es:'septiembre',     en:'September',                       art:'', mem:'🍂 SEPTIEMBRE = September. SEPT = seven — 7th month in old calendar!'},
+  {es:'octubre',        en:'October',                         art:'', mem:'🎃 OCTUBRE = October. OCT = eight — 8th in old calendar → Octubre!'},
+  {es:'noviembre',      en:'November',                        art:'', mem:'🍁 NOVIEMBRE = November. NOV = nine — 9th old calendar → Noviembre!'},
+  {es:'diciembre',      en:'December',                        art:'', mem:'🎄 DICIEMBRE = December. DEC = ten — 10th old calendar → Diciembre!'},
+  // ── Biography verbs (preterite first person) ──
+  {es:'nací',           en:'I was born (nacer)',               art:'', mem:'👶 NACER → nací. Nací en China en 1996. = I was born in China in 1996.'},
+  {es:'crecí',          en:'I grew up (crecer)',               art:'', mem:'🌱 CRECER = to grow up. Crecí en China. = I grew up in China. Crecer = grow/raise.'},
+  {es:'me gradué',      en:'I graduated (graduarse)',          art:'', mem:'🎓 GRADUARSE → me gradué. Me gradué en 2021. = I graduated in 2021.'},
+  {es:'empecé',         en:'I started (empezar)',              art:'', mem:'🚀 EMPEZAR → empecé (c→c spelling). Empecé en 2019. = I started in 2019.'},
+  {es:'mudarse',        en:'to move (to a new place)',         art:'', mem:'🚚 MUDARSE = to move/relocate. Me mudé a México. = I moved to Mexico.'},
+  // ── Key expressions ──
+  {es:'la primera vez', en:'the first time',                  art:'la', mem:'🥇 LA PRIMERA VEZ = the first time. ¿Cuándo fue la primera vez que saliste?'},
+  {es:'Estados Unidos', en:'United States',                   art:'los', mem:'🇺🇸 ESTADOS (States) + UNIDOS (United) = Estados Unidos = USA!'},
+  {es:'por + infinitivo',en:'because of / for (doing)',        art:'', mem:'🔗 POR estudiar = because of studying / due to studying. Reason/cause.'},
+  {es:'para + infinitivo',en:'in order to (purpose/goal)',     art:'', mem:'🎯 PARA estudiar = in order to study. Purpose/goal. Fui PARA estudiar.'},
+  {es:'los negocios',   en:'business',                        art:'los', mem:'💼 NEGOCIOS = business. Estudié negocios analíticos = I studied business analytics.'},
+  {es:'analítico',      en:'analytical',                      art:'', mem:'📊 ANALÍTICO = analytical. Negocios analíticos = business analytics!'},
+];
+
+const CONV_L16 = [
+  {ctx:"Topic: where you were born",           q:"¿Dónde naciste?",                                    q_en:"Where were you born?",                                      ans:"Nací en China, en 1996, el 26 de marzo.",                          ans_en:"I was born in China, in 1996, on March 26.",                  note:"<strong>Nací</strong> = I was born (nacer). Use <strong>en + year</strong>: nací en 1996. Date: el [day] de [month]."},
+  {ctx:"Topic: where you grew up",             q:"¿Dónde creciste?",                                   q_en:"Where did you grow up?",                                    ans:"Crecí en China. Crecer = grow up / raise.",                        ans_en:"I grew up in China. Crecer = grow up / raise.",               note:"<strong>Crecí</strong> = I grew up (crecer). Crecer means to grow up or to raise."},
+  {ctx:"Topic: what you studied",              q:"¿Qué estudiaste?",                                   q_en:"What did you study?",                                       ans:"Estudié negocios analíticos.",                                     ans_en:"I studied business analytics.",                               note:"<strong>Estudié</strong> = I studied (estudiar, regular -AR preterite). What did you study? → Estudié _____."},
+  {ctx:"Topic: graduation",                    q:"¿Cuándo te graduaste?",                              q_en:"When did you graduate?",                                    ans:"Me gradué en 2021.",                                               ans_en:"I graduated in 2021.",                                         note:"<strong>Me gradué</strong> = I graduated (graduarse, reflexive). ¿Cuándo te graduaste? → Me gradué en [year]."},
+  {ctx:"Topic: first time leaving your country",q:"¿Cuándo fue la primera vez que saliste de China?",  q_en:"When was the first time you left China?",                   ans:"En 2021 fue la primera vez que salí de China.",                    ans_en:"In 2021 was the first time I left China.",                    note:"<strong>La primera vez</strong> = the first time. <strong>Salí</strong> = I left (salir, preterite). Pattern: En [year] fue la primera vez que ___í."},
+  {ctx:"Topic: life timeline",                 q:"¿Puedes contarme sobre tu vida?",                    q_en:"Can you tell me about your life?",                          ans:"Nací en China en 1996. Crecí allí, después fui a EUA para estudiar. Empecé en 2019 y me gradué en 2021.",  ans_en:"I was born in China in 1996. I grew up there, then I went to the USA to study. I started in 2019 and graduated in 2021.",  note:"Biography in preterite: nací → crecí → fui → empecé → me gradué. Use <strong>PARA + infinitive</strong> for purpose."},
+  {ctx:"Topic: months",                        q:"¿En qué mes naciste?",                               q_en:"In what month were you born?",                              ans:"Nací en marzo, el 26 de marzo.",                                   ans_en:"I was born in March, on March 26.",                           note:"Months: enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre. NOT capitalized in Spanish."},
+  {ctx:"Topic: POR vs PARA",                   q:"¿Fuiste a EUA por estudiar o para estudiar?",        q_en:"Did you go to the USA because of studying or in order to study?", ans:"Fui a EUA para estudiar — PARA = purpose/goal. POR estudiar = because of studying (reason).", ans_en:"I went to the USA in order to study — PARA = purpose. POR studying = because of studying.", note:"<strong>PARA</strong> + inf = in order to (goal). <strong>POR</strong> + inf = because of (reason/cause)."},
+];
+
 const MYWORDS_KEY = 'mywords_espanol';
 function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
 function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
@@ -2480,7 +2641,7 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14,...VOCAB_L15].some(v => v.es.toLowerCase() === q);
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14,...VOCAB_L15,...VOCAB_L16].some(v => v.es.toLowerCase() === q);
 }
 
 // One-time migration: remove My Words that are already in lesson vocab
@@ -2913,15 +3074,15 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'||mode==='es-en-l16'||mode==='en-es-l16'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish','es-en-l16':'L16: Spanish → English','en-es-l16':'L16: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='fill'||mode==='fill-l2'||mode==='fill-l3'){
     document.getElementById('fill-hdr-sub').textContent=mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':'Verb Conjugation';
     show('s-fill');renderFill();
-  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'){
-    document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':mode==='conv-l13'?'Lesson 13 · Irregular preterite':'Listen · speak · compare';
+  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'||mode==='conv-l16'){
+    document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':mode==='conv-l13'?'Lesson 13 · Irregular preterite':mode==='conv-l16'?'Lesson 16 · Biography':'Listen · speak · compare';
     show('s-conv');renderConv();
   }
 }
@@ -2963,6 +3124,7 @@ function resumeSession(){
   else if(mode==='es-en-l13'||mode==='en-es-l13') pool=VOCAB_L13;
   else if(mode==='es-en-l14'||mode==='en-es-l14') pool=VOCAB_L14;
   else if(mode==='es-en-l15'||mode==='en-es-l15') pool=VOCAB_L15;
+  else if(mode==='es-en-l16'||mode==='en-es-l16') pool=VOCAB_L16;
   else if(mode==='fill') pool=FILL_EXERCISES;
   else if(mode==='fill-l2') pool=FILL_L2;
   else if(mode==='fill-l3') pool=FILL_L3;
@@ -2971,6 +3133,7 @@ function resumeSession(){
   else if(mode==='conv-l13') pool=CONV_L13;
   else if(mode==='conv-l14') pool=CONV_L14;
   else if(mode==='conv-l15') pool=CONV_L15;
+  else if(mode==='conv-l16') pool=CONV_L16;
   else pool=CONVERSATIONS;
   S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
   S.mode=mode; S.idx=saved.idx; S.correct=saved.correct; S.wrong=saved.wrong;
@@ -3028,6 +3191,8 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(VOCAB_L14); S.revealed=false;
   } else if(mode==='es-en-l15'||mode==='en-es-l15'){
     S.mode=mode; S.cards=shuffle(VOCAB_L15); S.revealed=false;
+  } else if(mode==='es-en-l16'||mode==='en-es-l16'){
+    S.mode=mode; S.cards=shuffle(VOCAB_L16); S.revealed=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -3046,6 +3211,8 @@ function _startFresh(mode){
     S.mode='conv-l14'; S.cards=shuffle(CONV_L14);
   } else if(mode==='conv-l15'){
     S.mode='conv-l15'; S.cards=shuffle(CONV_L15);
+  } else if(mode==='conv-l16'){
+    S.mode='conv-l16'; S.cards=shuffle(CONV_L16);
   }
   navigateToMode(S.mode);
 }
