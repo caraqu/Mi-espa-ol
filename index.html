@@ -3306,6 +3306,90 @@ const CONV_L21 = [
   {ctx:'What would you say?', q:'¿Qué le dirías?', q_en:'What would you say to her/him?', ans:'Le diría la verdad con calma.', ans_en:'I would tell her/him the truth calmly.', note:'diría = I would say/tell. <strong>con calma</strong> = calmly.'},
 ];
 
+
+const VOCAB_L22 = [
+  {es:'si fuera tú', en:'if I were you', art:'', mem:'fuera = imperfect subjunctive of ser.'},
+  {es:'si estuviera en tu lugar', en:'if I were in your place', art:'', mem:'estuviera = imperfect subjunctive of estar.'},
+  {es:'acepté el puesto', en:'I accepted the position', art:'', mem:'acepté = I accepted.'},
+  {es:'mi jefe me ofreció un ascenso', en:'my boss offered me a promotion', art:'', mem:'ofreció = he/she offered.'},
+  {es:'vivir lejos de mi familia', en:'to live far from my family', art:'', mem:'lejos de = far from.'},
+  {es:'perdería un buen salario', en:'I would lose a good salary', art:'', mem:'perder + ía = perdería.'},
+  {es:'ganaría felicidad', en:'I would gain happiness', art:'', mem:'ganar + ía = ganaría.'},
+  {es:'sería mejor', en:'it would be better', art:'', mem:'sería mejor + infinitive.'},
+  {es:'debería hablar con mi jefe', en:'I should talk with my boss', art:'', mem:'debería = should.'},
+  {es:'hace un año', en:'one year ago', art:'', mem:'hace + time = ago.'},
+];
+
+const FILL_L22 = [
+  {verb:'CONDICIONAL', sentence:'Si fuera tú, ___ con tu jefe.', answer:'hablaría', en:'If I were you, I would talk with your boss.'},
+  {verb:'CONDICIONAL', sentence:'Yo ___ un buen salario.', answer:'perdería', en:'I would lose a good salary.'},
+  {verb:'CONDICIONAL', sentence:'Pero ___ felicidad.', answer:'ganaría', en:'But I would gain happiness.'},
+  {verb:'CONSEJO', sentence:'___ mejor hablar con tu familia.', answer:'sería', en:'It would be better to talk with your family.'},
+  {verb:'DEBERÍA', sentence:'¿___ hablar con mi jefe?', answer:'debería', en:'Should I talk with my boss?'},
+];
+
+const CONV_L22 = [
+  {ctx:'If I were you', q:'¿Qué harías si estuvieras en mi lugar?', q_en:'What would you do if you were in my place?', ans:'Si fuera tú, hablaría con mi jefe.', ans_en:'If I were you, I would talk with my boss.', note:'<strong>Si fuera tú</strong> + conditional = advice.'},
+  {ctx:'Promotion dilemma', q:'¿Debería aceptar el ascenso?', q_en:'Should I accept the promotion?', ans:'Depende. Si aceptas, ganarías más dinero, pero vivirías lejos de tu familia.', ans_en:'It depends. If you accept, you would earn more money, but you would live far from your family.', note:'Conditional endings: -ía, -ías, -ía.'},
+  {ctx:'Better option', q:'¿Sería mejor quedarme o regresar?', q_en:'Would it be better to stay or return?', ans:'Sería mejor pensar en tu felicidad y hablar con tu familia.', ans_en:'It would be better to think about your happiness and talk with your family.', note:'<strong>Sería mejor + infinitive</strong> = it would be better to...'},
+];
+
+const VOCAB_L23 = [
+  {es:'el corazón roto', en:'broken heart', art:'el', mem:'corazón roto = broken heart.'},
+  {es:'un perro callejero', en:'a stray dog', art:'un', mem:'calle = street → callejero = street/stray.'},
+  {es:'mientras caminaba', en:'while I was walking', art:'', mem:'imperfect for background action.'},
+  {es:'me compadecí de él', en:'I felt pity for him', art:'', mem:'compadecerse de = to feel pity for.'},
+  {es:'devolverlo', en:'to return him/it', art:'', mem:'devolver + lo.'},
+  {es:'quedármelo', en:'to keep him/it for myself', art:'', mem:'quedarme + lo = quedármelo.'},
+  {es:'lo llevé a mi casa', en:'I took him/it to my house', art:'', mem:'lo receives the action.'},
+  {es:'le di de comer', en:'I gave him food', art:'', mem:'le = to him/her/you formal.'},
+  {es:'he tenido', en:'I have had', art:'', mem:'haber + tenido.'},
+  {es:'me he enamorado de él', en:'I have fallen in love with him', art:'', mem:'enamorarse de alguien.'},
+];
+
+const FILL_L23 = [
+  {verb:'IMPERFECTO', sentence:'Mientras ___ por la calle, vi un perro.', answer:'caminaba', en:'While I was walking down the street, I saw a dog.'},
+  {verb:'IMPERFECTO', sentence:'El perro ___ muy triste.', answer:'estaba', en:'The dog was very sad.'},
+  {verb:'OBJETO DIRECTO', sentence:'___ llevé a mi casa.', answer:'lo', en:'I took him/it to my house.'},
+  {verb:'OBJETO INDIRECTO', sentence:'___ di de comer.', answer:'le', en:'I gave him food.'},
+  {verb:'DILEMA', sentence:'No sé si debo devolverlo o ___.', answer:'quedármelo', en:'I don’t know whether I should return him or keep him.'},
+];
+
+const CONV_L23 = [
+  {ctx:'Lost dog', q:'¿Qué pasó con Sofía?', q_en:'What happened with Sofía?', ans:'Mientras caminaba, encontró un perro callejero y lo llevó a su casa.', ans_en:'While she was walking, she found a stray dog and took him home.', note:'Use <strong>imperfecto</strong> for background: caminaba, estaba.'},
+  {ctx:'Lo vs le', q:'¿Por qué decimos “lo llevé” pero “le di de comer”?', q_en:'Why do we say “lo llevé” but “le di de comer”?', ans:'Porque “lo” recibe la acción, y “le” significa “a él”.', ans_en:'Because “lo” receives the action, and “le” means “to him.”', note:'lo = direct object; le = indirect object.'},
+  {ctx:'Dilemma', q:'¿Debería devolverlo o quedármelo?', q_en:'Should I return him or keep him?', ans:'Si fuera tú, intentaría encontrar a su familia primero.', ans_en:'If I were you, I would try to find his family first.', note:'quedármelo = to keep him for myself.'},
+];
+
+const VOCAB_L24 = [
+  {es:'un consejo urgente', en:'urgent advice', art:'un', mem:'urgente = urgent.'},
+  {es:'salvar mi reputación', en:'to save my reputation', art:'', mem:'salvar = to save.'},
+  {es:'la inauguración', en:'the opening / inauguration', art:'la', mem:'inauguración = opening event.'},
+  {es:'se me quemó la sopa', en:'the soup burned on me', art:'', mem:'se me quemó = it burned on me / accidentally burned.'},
+  {es:'comida enlatada', en:'canned food', art:'', mem:'lata = can → enlatada = canned.'},
+  {es:'sigo usando', en:'I keep using / I am still using', art:'', mem:'seguir + gerundio.'},
+  {es:'sigo aprendiendo español', en:'I keep learning Spanish', art:'', mem:'seguir + -iendo.'},
+  {es:'si confieso la verdad', en:'if I confess the truth', art:'', mem:'confesar = to confess.'},
+  {es:'perderían la confianza', en:'they would lose trust', art:'', mem:'perderían = they would lose.'},
+  {es:'se parezca', en:'that it is similar / resembles', art:'', mem:'parecerse = to resemble.'},
+  {es:'el resto de la semana', en:'the rest of the week', art:'el', mem:'resto = rest/remainder.'},
+];
+
+const FILL_L24 = [
+  {verb:'SEGUIR + GERUNDIO', sentence:'Yo ___ aprendiendo español.', answer:'sigo', en:'I keep learning Spanish.'},
+  {verb:'ACCIDENTAL SE', sentence:'Se me ___ la sopa.', answer:'quemó', en:'The soup burned on me.'},
+  {verb:'CONDICIONAL', sentence:'Los clientes ___ la confianza.', answer:'perderían', en:'The clients would lose trust.'},
+  {verb:'CONFESAR', sentence:'Si ___ la verdad, sería difícil.', answer:'confieso', en:'If I confess the truth, it would be difficult.'},
+  {verb:'PARECERSE', sentence:'Inventaría una receta nueva que se ___.', answer:'parezca', en:'I would invent a new recipe that is similar.'},
+];
+
+const CONV_L24 = [
+  {ctx:'Culinary secret', q:'¿Qué le pasó a Mateo?', q_en:'What happened to Mateo?', ans:'Se le quemó la sopa antes de la inauguración.', ans_en:'His soup burned before the opening.', note:'<strong>Se le quemó</strong> = it burned on him accidentally.'},
+  {ctx:'Advice', q:'¿Debería confesar la verdad?', q_en:'Should he confess the truth?', ans:'Si fuera él, confesaría la verdad o inventaría una receta nueva.', ans_en:'If I were him, I would confess the truth or invent a new recipe.', note:'confesaría / inventaría = conditional.'},
+  {ctx:'Seguir', q:'¿Sigues aprendiendo español?', q_en:'Do you keep learning Spanish?', ans:'Sí, sigo aprendiendo español todos los días.', ans_en:'Yes, I keep learning Spanish every day.', note:'seguir + gerundio = keep doing / still doing.'},
+  {ctx:'Class chat', q:'¿Te gusta más el español que hace dos meses?', q_en:'Do you like Spanish more than two months ago?', ans:'Sí, me gusta más que hace dos meses.', ans_en:'Yes, I like it more than two months ago.', note:'más que hace dos meses = more than two months ago.'},
+];
+
 const MYWORDS_KEY = 'mywords_espanol';
 function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
 function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
