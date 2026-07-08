@@ -3747,6 +3747,16 @@ function seededShuffle(arr, seed) {
 // The 20 % maintenance slice rotates daily, so you always get a fresh sample.
 // Final card list is shuffled so the study order feels natural (not all-hard
 // at the start).
+function getAllReviewVocab() {
+  // One single source of truth for the global review pool.
+  // This keeps the home-page counts and the actual Review button perfectly aligned.
+  return [
+    VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,VOCAB_L7,VOCAB_L8,VOCAB_L9,VOCAB_L10,VOCAB_L11,VOCAB_L12,VOCAB_L13,
+    VOCAB_L14,VOCAB_L15,VOCAB_L16,VOCAB_L17,VOCAB_L18,VOCAB_L19,VOCAB_L20,VOCAB_L21,VOCAB_L22,VOCAB_L23,VOCAB_L24,
+    L25_VOCAB,L26_VOCAB,L27_VOCAB,loadMyWords()
+  ].flat();
+}
+
 function getDueCards(dir) {
   const data=loadSR(), now=Date.now();
   const overdue=[], newCards=[], upcoming=[], wellKnown=[];
@@ -3768,20 +3778,7 @@ function getDueCards(dir) {
       else            wellKnown.push({v, daysLeft, ef:card.ef||2.5});
     }
   };
-  VOCAB.forEach(check);
-  VOCAB_L2.forEach(check);
-  VOCAB_L3.forEach(check);
-  VOCAB_L4.forEach(check);
-  VOCAB_L5.forEach(check);
-  VOCAB_L6.forEach(check);
-  VOCAB_L7.forEach(check);
-  VOCAB_L8.forEach(check);
-  VOCAB_L9.forEach(check);
-  VOCAB_L10.forEach(check);
-  VOCAB_L11.forEach(check);
-  VOCAB_L12.forEach(check);
-  VOCAB_L13.forEach(check);
-  loadMyWords().forEach(check);
+  getAllReviewVocab().forEach(check);
 
   // Sort overdue: most-overdue first, break ties by hardest (lowest EF = most forgettable)
   overdue.sort((a,b)=> b.daysOver-a.daysOver || a.ef-b.ef);
@@ -3822,7 +3819,7 @@ function getDueCardCounts(dir) {
     if(!data[k]) newCount++;
     else if(data[k].nextReview<=now) overdue++;
   };
-  [VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,VOCAB_L7,VOCAB_L8,VOCAB_L9,VOCAB_L10,VOCAB_L11,VOCAB_L12,VOCAB_L13,VOCAB_L14,VOCAB_L15,VOCAB_L16,VOCAB_L17,VOCAB_L18,VOCAB_L19,VOCAB_L20,VOCAB_L21,VOCAB_L22,VOCAB_L23,VOCAB_L24,L25_VOCAB,L26_VOCAB,L27_VOCAB,loadMyWords()].forEach(a=>a.forEach(check));
+  getAllReviewVocab().forEach(check);
   return {overdue, newCount, total:overdue+newCount};
 }
 
@@ -4619,6 +4616,43 @@ function showScore(){
   show('s-score');
 }
 
+
+// ══════════════ APPROVED WORD CLEANUP ══════════════
+// These words were explicitly approved for removal from active study.
+// Run after every import so an older backup cannot resurrect them.
+const APPROVED_REMOVED_WORDS = new Set([
+  'los changuitos','la estación espacial','inauguración','sabor único','reputación','salvar mi reputación','comida tradicional','príncipe','princesa','función','representar','patinar','las escondidas','la casita','saltar la cuerda',
+  'decidí','preparé','permanecer','la ciencia','el cantante','por siempre',
+  'surfear','bucear','el hostal','la cabaña','la posada','la sombrilla','el bazar','las papitas','el castillo','las pirámides','el extranjero','la maestría','anteayer','la navidad pasada','al norte / sur / este / oeste','dentro de / fuera de','en medio de','atrás de','adentro de','afuera de','la costa','los cerezos','sostener','suponer','producir','las obras','los premios','la galería','ísimo','la natación','el anfitrión','la licenciatura','conveniencia','el permanente','pintarse el cabello','arriesgado/a','el par','cabría','valdría','ganaría felicidad','acepté el puesto','mi jefe me ofreció un ascenso','vivir lejos de mi familia','perdería un buen salario','un perro callejero','me compadecí de él','un consejo urgente','sopa original','lata','sopa instantánea','las mezclé con especias','replicar','sabor artificial','de forma natural','chef honesto','explicaría','intentaría','templo','inmigrante','asada','pastor','birria','lengua','tripa','cabeza','campechano','guisado','tinga de pollo','huitlacoche','flor de calabaza','jamaica'
+]);
+
+function normalizeCleanupWord(s){
+  return String(s || '').trim().toLowerCase();
+}
+
+function cleanupApprovedRemovedWords(){
+  const removed = new Set([...APPROVED_REMOVED_WORDS].map(normalizeCleanupWord));
+
+  // Clean My Words imported from old backups.
+  const beforeWords = loadMyWords();
+  const afterWords = beforeWords.filter(w => !removed.has(normalizeCleanupWord(w.es)));
+  if(afterWords.length !== beforeWords.length) saveMyWords(afterWords);
+
+  // Clean both ES→EN and EN→ES spaced-repetition history.
+  const sr = loadSR();
+  let changed = false;
+  Object.keys(sr).forEach(key => {
+    const m = key.match(/^(.*)_(es_en|en_es)$/);
+    if(m && removed.has(normalizeCleanupWord(m[1]))){
+      delete sr[key];
+      changed = true;
+    }
+  });
+  if(changed) saveSR(sr);
+
+  return {myWordsRemoved: beforeWords.length - afterWords.length, srRemoved: changed};
+}
+
 // ══════════════ EXPORT / IMPORT PROGRESS ══════════════
 
 function exportProgress() {
@@ -4656,6 +4690,9 @@ function importProgress(inputEl) {
       localStorage.removeItem('myw_seeded_v2');
       seedMyWords();
       seedMyWordsV2();
+      // IMPORTANT: old backups may contain words Cara already approved for deletion.
+      // Clean AFTER import and AFTER seeding so deleted words cannot come back.
+      cleanupApprovedRemovedWords();
       refreshHome();
       alert('🌸 Progress restored! Your memory curve is back.');
     } catch(err) {
