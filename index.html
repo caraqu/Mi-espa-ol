@@ -123,6 +123,16 @@ body{max-width:480px;margin:0 auto;}
 .ex-reveal-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:6px;}
 .ex-reveal-es{font-size:16px;font-weight:700;color:var(--blue);margin-bottom:5px;line-height:1.5;}
 .ex-reveal-en{font-size:13px;color:var(--muted);font-style:italic;}
+.ex-why{margin-top:12px;padding:12px 14px;border-radius:12px;background:#FFF8E8;border:1px solid #E9C76A;font-size:13px;line-height:1.65;color:var(--ink);}
+.ex-why strong{color:#9A6500;}
+.master-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.master-mini-btn{border:1.5px solid var(--border);background:#fff;border-radius:13px;padding:11px 8px;font-weight:750;color:var(--ink);cursor:pointer;}
+.progress-topic{margin-bottom:14px;}
+.progress-topic-head{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:800;margin-bottom:7px;}
+.progress-track{height:10px;background:#ECE9E2;border-radius:999px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--gold);border-radius:999px;}
+.mistake-empty{text-align:center;padding:38px 20px;color:var(--muted);line-height:1.7;}
+
 
 /* ── BUTTONS ── */
 .primary-btn{width:100%;padding:15px;background:var(--purple);color:#fff;border:none;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:4px;}
@@ -323,8 +333,8 @@ body{max-width:480px;margin:0 auto;}
 <div class="lc-head">
 <div>
 <div class="lc-title">⭐ Master Review — Mixed Practice</div>
-<div class="lc-hint">20 random questions · the forms you are most likely to confuse</div>
-<div class="lc-date">Updated through Lesson 34</div>
+<div class="lc-hint">20 smart questions · forms, rules and error finding</div>
+<div class="lc-date">Updated through Lesson 35</div>
 </div>
 <div class="lc-badge">Daily 10 min</div>
 </div>
@@ -332,7 +342,27 @@ body{max-width:480px;margin:0 auto;}
 <div class="mbtn" onclick="startMode('master-review')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Start 20 Questions</div></div>
 <div class="mbtn" onclick="show('s-master-notes')"><div class="mbtn-icon">🔥</div><div class="mbtn-label">Common Confusions</div></div>
 </div>
-<div class="lc-hint" style="margin-top:12px;">This section should be updated whenever a new lesson is added.</div>
+
+<div class="master-mini-grid">
+<button class="master-mini-btn" onclick="startMasterMistakes()">❌ Practice Mistakes</button>
+<button class="master-mini-btn" onclick="showMasterProgress()">📊 My Progress</button>
+</div>
+<div class="lc-hint" id="master-smart-hint" style="margin-top:12px;">Smart review prioritizes recent lessons, past mistakes and overdue questions.</div>
+</div>
+
+
+<div class="lesson-card">
+<div class="lc-head">
+<div><div class="lc-title">Lesson 35 — Mixed Tenses, Predictions &amp; Rule Choice</div><div class="lc-hint">ha sido · sentías · viajarás · viajaste · fue escrito por</div><div class="lc-date">July 28, 2026</div></div>
+<div class="lc-badge">New ✨</div>
+</div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l35')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l35')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l35')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l35')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div>
+<button class="secondary-btn" onclick="show('s-notes-l35')" style="margin-top:12px;">📖 View Class Notes</button>
 </div>
 
 <div class="lesson-card">
@@ -790,7 +820,7 @@ body{max-width:480px;margin:0 auto;}
 </div>
 <input accept=".json" id="import-input" onchange="importProgress(this)" style="display:none;" type="file"/>
 <div style="text-align:center;color:var(--muted);font-size:11px;margin:10px 0 2px;line-height:1.5;">
-  Version 35.0 · Master Review · Lessons 28–34 · July 2026
+  Version 37.0 · Lesson 35 + Rule Choice · Lessons 28–35 · July 2026
 </div>
 
 </div>
@@ -846,6 +876,7 @@ body{max-width:480px;margin:0 auto;}
 <div class="ex-reveal-label">Full sentence</div>
 <div class="ex-reveal-es" id="ex-reveal-es"></div>
 <div class="ex-reveal-en" id="ex-reveal-en"></div>
+<div class="ex-why" id="ex-why" style="display:none;"></div>
 </div>
 <div class="nav-row">
 <button class="nav-btn" disabled="" id="fill-prev" onclick="prevFill()">← Previous</button>
@@ -881,6 +912,25 @@ body{max-width:480px;margin:0 auto;}
 <button class="nav-btn" disabled="" id="conv-prev" onclick="prevConv()">← Previous</button>
 <button class="nav-btn fwd hidden" id="conv-next" onclick="nextConv()">Next →</button>
 </div>
+</div>
+</div>
+
+<!-- ══ MASTER PROGRESS ══ -->
+<div class="scr" id="s-master-progress">
+<div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Master Review Progress</div><div class="hdr-sub">Your weak spots and growing strengths</div></div></div>
+<div style="padding:18px;">
+<div class="note-section">
+<h3>📊 Topic mastery</h3>
+<div id="master-progress-list"></div>
+</div>
+<div class="note-section">
+<h3>🧠 How smart review chooses questions</h3>
+<div class="grammar-rule"><strong>Higher priority:</strong> questions you missed, questions due for review, and newer lesson material.</div>
+<div class="grammar-rule"><strong>Lower priority:</strong> questions you have answered correctly several times recently.</div>
+<div class="grammar-rule">A correct answer increases the interval: approximately <strong>1 → 3 → 7 → 15 → 30 days</strong>. A mistake brings the question back sooner.</div>
+</div>
+<button class="primary-btn" onclick="startMode('master-review')">Start Smart Review</button>
+<button class="secondary-btn" onclick="startMasterMistakes()">Practice Mistakes Only</button>
 </div>
 </div>
 <!-- ══ SCORE ══ -->
@@ -2520,6 +2570,66 @@ body{max-width:480px;margin:0 auto;}
 </div></div>
 
 
+
+<!-- ══ NOTES L35 ══ -->
+<div class="scr" id="s-notes-l35">
+<div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 35</div><div class="hdr-sub">mixed tenses, predictions and passive voice</div></div></div>
+<div style="padding:18px;">
+
+<div class="note-section"><h3>🔀 One paragraph can use several tenses</h3>
+<div class="grammar-rule">Spanish does not choose one tense for an entire story. Each verb uses the tense that matches its own time and function.</div>
+<table class="conj-table">
+<tr><th>Form</th><th>Main job</th><th>Example</th></tr>
+<tr><td>ha sido / has viajado</td><td>past connected to now</td><td>Este año ha sido complicado.</td></tr>
+<tr><td>sentías / estabas</td><td>past state or background</td><td>Te sentías cansada.</td></tr>
+<tr><td>viajaste / hiciste</td><td>completed past event</td><td>La última vez viajaste a Japón.</td></tr>
+<tr><td>viajarás / tendrás</td><td>future prediction</td><td>Viajarás a un lugar nuevo.</td></tr>
+<tr><td>sentirías</td><td>hypothetical “would”</td><td>Te sentirías cansada si trabajaras más.</td></tr>
+</table>
+</div>
+
+<div class="note-section"><h3>🗓️ Este año ha sido vs el año pasado fue</h3>
+<div class="grammar-rule"><strong>Este año ha sido...</strong><br/>The current year is still connected to now, so Present Perfect is natural.</div>
+<div class="grammar-rule"><strong>El año pasado fue...</strong><br/>Last year is a finished time period, so Pretérito is natural.</div>
+<div class="grammar-rule"><strong>Memory:</strong><br/>unfinished/current time → <em>he/has/ha + participle</em><br/>finished time → Pretérito</div>
+</div>
+
+<div class="note-section"><h3>🎬 sentías vs se sentía</h3>
+<div class="grammar-rule"><strong>Tú sentías el año difícil.</strong> = You personally felt that the year was difficult.</div>
+<div class="grammar-rule"><strong>El año se sentía difícil.</strong> = The year felt difficult in a general/impersonal way.</div>
+<div class="grammar-rule">For a person’s emotional or physical state, Spanish often uses <strong>sentirse</strong>:<br/><em>Te sentías cansada.</em> = You felt tired.</div>
+</div>
+
+<div class="note-section"><h3>🔮 Predictions with the future</h3>
+<div class="grammar-rule"><em>¿Qué harás el fin de semana?</em><br/>What will you do this weekend?</div>
+<div class="grammar-rule"><em>Veré a mis amigos, iré al mercado y veré un show de comedia.</em></div>
+<div class="grammar-rule"><strong>Future endings:</strong> -é · -ás · -á · -emos · -án</div>
+</div>
+
+<div class="note-section"><h3>⚖️ Future vs conditional</h3>
+<div class="grammar-rule"><strong>Necesitarás trabajar más.</strong> = You will need to work more. (prediction)</div>
+<div class="grammar-rule"><strong>Te sentirías cansada si trabajaras más.</strong> = You would feel tired if you worked more. (hypothetical)</div>
+<div class="grammar-rule">Future = will. Conditional = would.</div>
+</div>
+
+<div class="note-section"><h3>📖 Passive voice: fue escrito por</h3>
+<div class="grammar-rule"><strong>ser + past participle + por</strong><br/><em>Fue escrito por un escritor inglés.</em><br/>It was written by an English writer.</div>
+<div class="grammar-rule">The participle agrees with the noun:<br/><em>El libro fue escrito.</em><br/><em>La novela fue escrita.</em></div>
+</div>
+
+<div class="note-section"><h3>🧠 New review formats</h3>
+<div class="grammar-rule"><strong>Rule Choice</strong>: choose the grammatical reason, not merely the verb form.</div>
+<div class="grammar-rule"><strong>Error Finder</strong>: identify the word or form that must change.</div>
+<div class="grammar-rule">These questions train the decision rule behind the answer: unfinished time, background state, completed event, prediction or hypothesis.</div>
+</div>
+
+<div class="note-section"><h3>✍️ Corrected class paragraph</h3>
+<div class="grammar-rule"><em>Este año ha sido un año interesante. Estabas muy feliz, aunque sentías que el año era difícil. Necesitarás trabajar más y descansar más. Te sentirías muy cansada si trabajaras más, pero será bueno. En los próximos meses, terminarás cosas que has estado haciendo durante mucho tiempo.</em></div>
+</div>
+
+<div class="note-section"><h3>📚 Active vocabulary</h3><div class="vocab-list" id="notes-vocab-l35"></div></div>
+</div></div>
+
 <!-- ══ NOTES L34 ══ -->
 <div class="scr" id="s-notes-l34">
 <div class="hdr"><button class="back" onclick="goHome()">←</button><div><div class="hdr-title">Class Notes · Lesson 34</div><div class="hdr-sub">future, conditional and the querer family</div></div></div>
@@ -2614,6 +2724,18 @@ body{max-width:480px;margin:0 auto;}
 <div class="grammar-rule"><strong>ser</strong> = identity or characteristic: <em>Es grande.</em></div>
 <div class="grammar-rule"><strong>estar</strong> = state or location: <em>Está cansada. Está en casa.</em></div>
 <div class="grammar-rule"><strong>hay</strong> = there is / there are: <em>Hay un café aquí.</em></div>
+</div>
+
+<div class="note-section"><h3>🧭 Rule Choice: choose the reason</h3>
+<div class="grammar-rule"><strong>ha sido</strong> → current/unfinished time connected to now</div>
+<div class="grammar-rule"><strong>sentía / estaba</strong> → state, description or background</div>
+<div class="grammar-rule"><strong>viajaste / hiciste</strong> → one completed event</div>
+<div class="grammar-rule"><strong>viajarás / tendrás</strong> → prediction: will</div>
+<div class="grammar-rule"><strong>sentirías / viajarías</strong> → hypothesis: would</div>
+</div>
+<div class="note-section"><h3>📖 Passive voice</h3>
+<div class="grammar-rule"><strong>ser + participle + por</strong><br/><em>El libro fue escrito por Ana.</em></div>
+<div class="grammar-rule">Agreement matters:<br/><em>el libro escrito · la novela escrita</em></div>
 </div>
 </div></div>
 
@@ -3768,7 +3890,7 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14,...VOCAB_L15,...VOCAB_L16,...VOCAB_L17,...VOCAB_L18,...VOCAB_L19,...VOCAB_L20,...VOCAB_L21,...VOCAB_L22,...VOCAB_L23,...VOCAB_L24,...L25_VOCAB,...L26_VOCAB,...L27_VOCAB,...L28_VOCAB,...L29_VOCAB,...L30_VOCAB,...L31_VOCAB,...L32_VOCAB,...L33_VOCAB,...L34_VOCAB].some(v => v.es.toLowerCase() === q);
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14,...VOCAB_L15,...VOCAB_L16,...VOCAB_L17,...VOCAB_L18,...VOCAB_L19,...VOCAB_L20,...VOCAB_L21,...VOCAB_L22,...VOCAB_L23,...VOCAB_L24,...L25_VOCAB,...L26_VOCAB,...L27_VOCAB,...L28_VOCAB,...L29_VOCAB,...L30_VOCAB,...L31_VOCAB,...L32_VOCAB,...L33_VOCAB,...L34_VOCAB,...L35_VOCAB].some(v => v.es.toLowerCase() === q);
 }
 
 // One-time migration: remove My Words that are already in lesson vocab
@@ -4416,6 +4538,13 @@ const CONV_L33=[
 // ══════════════ MASTER REVIEW — update this bank with every new lesson ══════════════
 // A fresh session draws 20 random questions from this bank.
 const MASTER_REVIEW_BANK=[
+
+  {kind:"rule",verb:"rule choice · present perfect",topic:"Past tenses",lesson:35,sentence:"Este año ha sido complicado. ¿Cuál es la razón principal para usar “ha sido”?",answer:"El período “este año” todavía está conectado con el presente.",choices:["El período “este año” todavía está conectado con el presente.","Es una acción habitual del pasado.","Es una predicción.","Es una acción puntual terminada."],en:"Current or unfinished time periods often take Present Perfect."},
+  {kind:"rule",verb:"rule choice · imperfect",topic:"Past tenses",lesson:35,sentence:"Me sentía cansada. ¿Qué regla explica “sentía”?",answer:"Describe un estado o sensación de fondo.",choices:["Describe un estado o sensación de fondo.","Describe una acción puntual.","Expresa el futuro.","Expresa una orden."],en:"Imperfect describes a past state or background feeling."},
+  {kind:"rule",verb:"rule choice · preterite",topic:"Past tenses",lesson:35,sentence:"La última vez viajaste a Japón. ¿Qué regla explica “viajaste”?",answer:"Es un evento concreto y terminado.",choices:["Es un evento concreto y terminado.","Es una rutina repetida.","Es una experiencia conectada con ahora.","Es una hipótesis."],en:"Pretérito marks one completed event."},
+  {kind:"error",verb:"error finder · past contrast",topic:"Past tenses",lesson:35,sentence:"❌ Mientras estudié, el teléfono sonó. ¿Cuál es la corrección?",answer:"estudié → estudiaba",choices:["estudié → estudiaba","sonó → sonaba","mientras → porque","No hay error"],en:"The ongoing background after mientras takes imperfect; the interrupting event stays preterite."},
+  {kind:"error",verb:"error finder · passive agreement",topic:"Other grammar",lesson:35,sentence:"❌ La novela fue escrito por Ana. ¿Cuál es la corrección?",answer:"escrito → escrita",choices:["escrito → escrita","fue → será","por → para","No hay error"],en:"The participle agrees with the feminine noun novela."},
+  {kind:"rule",verb:"rule choice · future vs conditional",topic:"Future & conditional",lesson:35,sentence:"Te sentirías cansada si trabajaras más. ¿Por qué usamos “sentirías”?",answer:"Es el resultado hipotético de una condición.",choices:["Es el resultado hipotético de una condición.","Es una predicción segura.","Es un hábito pasado.","Es una experiencia de vida."],en:"Conditional gives the hypothetical result: would feel."},
   {verb:"querer · present",sentence:"Ahora ___ un café.",answer:"quiero",choices:["quiero","quería","quise","querré"],en:"I want a coffee now. → Present: quiero."},
   {verb:"querer · imperfect",sentence:"Cuando era estudiante, ___ vivir en España.",answer:"quería",choices:["quise","quería","querré","quisiera"],en:"Background/ongoing wish in the past → quería."},
   {verb:"querer · preterite",sentence:"Ayer ___ llamarte, pero no contestaste.",answer:"quise",choices:["quería","quise","querría","quiero"],en:"One specific attempt yesterday → quise."},
@@ -4448,6 +4577,182 @@ const MASTER_REVIEW_BANK=[
   {verb:"present perfect",sentence:"¿Alguna vez ___ paella?",answer:"has comido",choices:["comiste","comías","has comido","comerás"],en:"¿Alguna vez...? usually asks about life experience → present perfect."},
   {verb:"conditional advice",sentence:"Si fuera tú, ___ con el médico.",answer:"hablaría",choices:["hablaré","hablé","hablaría","hablaba"],en:"Si fuera tú + conditional → hablaría."},
   {verb:"future irregular",sentence:"Mañana ___ ejercicio.",answer:"haré",choices:["haceré","haré","haría","hice"],en:"Future of hacer uses har- → haré."}
+];
+
+// ══════════════ SMART MASTER REVIEW ENGINE ══════════════
+const MASTER_STATS_KEY='mi_espanol_master_stats_v1';
+const MASTER_INTERVALS=[1,3,7,15,30];
+
+function masterQuestionId(q){
+  return q.id || ('q_'+Math.abs(hashText((q.sentence||'')+'|'+(q.answer||''))));
+}
+function hashText(s){
+  let h=0;
+  for(let i=0;i<s.length;i++) h=((h<<5)-h+s.charCodeAt(i))|0;
+  return h;
+}
+function inferMasterTopic(q){
+  const v=(q.topic||q.verb||'Other').toLowerCase();
+  if(v.includes('querer')) return 'Querer forms';
+  if(v.includes('preterite')||v.includes('imperfect')||v.includes('past')||v.includes('pasts')) return 'Past tenses';
+  if(v.includes('future')||v.includes('conditional')||v.includes('plan')) return 'Future & conditional';
+  if(v.includes('object')||v.includes('pronoun')) return 'Object pronouns';
+  if(v.includes('ser')||v.includes('estar')||v.includes('hay')) return 'Ser / estar / hay';
+  if(v.includes('ir ')) return 'Ir forms';
+  return 'Other grammar';
+}
+function inferMasterLesson(q){
+  const v=(q.verb||'').toLowerCase();
+  if(v.includes('future')||v.includes('conditional')||v.includes('querer')) return 34;
+  if(v.includes('pronoun')||v.includes('object')) return 33;
+  if(v.includes('three past')||v.includes('present perfect')) return 29;
+  if(v.includes('preterite')||v.includes('imperfect')||v.includes('mientras')) return 28;
+  return 27;
+}
+MASTER_REVIEW_BANK.forEach((q,i)=>{
+  q.id=masterQuestionId(q);
+  q.topic=q.topic||inferMasterTopic(q);
+  q.lesson=q.lesson||inferMasterLesson(q);
+  q.difficulty=q.difficulty||2;
+});
+
+function loadMasterStats(){
+  try{return JSON.parse(localStorage.getItem(MASTER_STATS_KEY))||{};}catch(e){return {};}
+}
+function saveMasterStats(stats){localStorage.setItem(MASTER_STATS_KEY,JSON.stringify(stats));}
+function masterDefaultStat(){return {correct:0,wrong:0,streak:0,level:0,lastSeen:0,due:0,lastChoice:''};}
+function getMasterStat(q,stats=loadMasterStats()){return stats[q.id]||masterDefaultStat();}
+function masterPriority(q,stats,now=Date.now()){
+  const s=getMasterStat(q,stats);
+  let weight=1;
+  if(s.wrong>0) weight += Math.min(10,s.wrong*2.5);
+  if(s.streak===0 && s.wrong>0) weight += 5;
+  if(!s.lastSeen) weight += 3;
+  if(s.due && s.due<=now) weight += 6;
+  if(s.lastSeen && now-s.lastSeen>7*86400000) weight += 3;
+  if(q.lesson>=33) weight += 2.5;
+  weight += (q.difficulty||2)*0.4;
+  weight -= Math.min(4,(s.streak||0)*0.8);
+  return Math.max(0.4,weight);
+}
+function weightedMasterSample(pool,count){
+  const stats=loadMasterStats();
+  const remaining=[...pool], selected=[];
+  while(remaining.length && selected.length<count){
+    const weights=remaining.map(q=>masterPriority(q,stats));
+    const total=weights.reduce((a,b)=>a+b,0);
+    let r=Math.random()*total, idx=0;
+    for(;idx<weights.length;idx++){r-=weights[idx];if(r<=0)break;}
+    selected.push(remaining.splice(Math.min(idx,remaining.length-1),1)[0]);
+  }
+  return selected;
+}
+function updateMasterStat(item,isCorrect,chosen){
+  const stats=loadMasterStats();
+  const s=stats[item.id]||masterDefaultStat();
+  s.lastSeen=Date.now();
+  s.lastChoice=chosen;
+  if(isCorrect){
+    s.correct++; s.streak++; s.level=Math.min(MASTER_INTERVALS.length-1,(s.level||0)+1);
+    s.due=Date.now()+MASTER_INTERVALS[s.level]*86400000;
+  }else{
+    s.wrong++; s.streak=0; s.level=0;
+    s.due=Date.now()+86400000;
+  }
+  stats[item.id]=s; saveMasterStats(stats);
+}
+function getMasterMistakes(){
+  const stats=loadMasterStats();
+  return MASTER_REVIEW_BANK
+    .filter(q=>(stats[q.id]?.wrong||0)>0)
+    .sort((a,b)=>masterPriority(b,stats)-masterPriority(a,stats));
+}
+function startMasterMistakes(){
+  const mistakes=getMasterMistakes();
+  if(!mistakes.length){
+    alert('还没有错题。先完成一次 Master Review，答错的题会自动出现在这里。');
+    return;
+  }
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  S.mode='master-mistakes'; S.idx=0; S.correct=0; S.wrong=0; S.answered={}; S.srUpdates={};
+  S.cards=weightedMasterSample(mistakes,Math.min(20,mistakes.length)); S.submitted=false;
+  navigateToMode('master-mistakes');
+}
+function topicMastery(){
+  const stats=loadMasterStats(), groups={};
+  MASTER_REVIEW_BANK.forEach(q=>{
+    const s=getMasterStat(q,stats);
+    if(!groups[q.topic]) groups[q.topic]={earned:0,max:0,seen:0,wrong:0};
+    groups[q.topic].max+=5;
+    groups[q.topic].earned+=Math.min(5,s.streak||0);
+    if(s.lastSeen) groups[q.topic].seen++;
+    groups[q.topic].wrong+=s.wrong||0;
+  });
+  return groups;
+}
+function showMasterProgress(){
+  const groups=topicMastery();
+  const el=document.getElementById('master-progress-list');
+  el.innerHTML=Object.entries(groups).map(([topic,g])=>{
+    const pct=g.max?Math.round(g.earned/g.max*100):0;
+    const stars=Math.max(0,Math.min(5,Math.round(pct/20)));
+    return `<div class="progress-topic">
+      <div class="progress-topic-head"><span>${topic}</span><span>${'★'.repeat(stars)}${'☆'.repeat(5-stars)} · ${pct}%</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="lc-hint" style="margin-top:5px;">Seen ${g.seen} question${g.seen===1?'':'s'} · ${g.wrong} total mistake${g.wrong===1?'':'s'}</div>
+    </div>`;
+  }).join('');
+  show('s-master-progress');
+}
+function masterWhyHtml(item,chosen){
+  const stats=loadMasterStats(), s=getMasterStat(item,stats);
+  const wrongNow=chosen!==item.answer;
+  const label=wrongNow?'这次混淆点':'这题掌握得不错';
+  const count=s.wrong||0;
+  return `<strong>🧠 ${label}：${item.topic}</strong><br>
+    ${item.en}<br>
+    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。`:`你已经连续答对 ${s.streak||1} 次。`}
+    ${count?`<br>这道题累计答错 <strong>${count}</strong> 次，系统会提高它之后的出现概率。`:''}`;
+}
+
+
+const L35_VOCAB=[
+{es:'este año ha sido',en:'this year has been'},
+{es:'sabiduría',en:'wisdom'},
+{es:'conocimiento',en:'knowledge'},
+{es:'en los próximos meses',en:'in the next few months'},
+{es:'la última vez',en:'the last time'},
+{es:'viajarás',en:'you will travel'},
+{es:'tendrá',en:'it will have'},
+{es:'te sentirías',en:'you would feel'},
+{es:'terminarás',en:'you will finish'},
+{es:'durante mucho tiempo',en:'for a long time'},
+{es:'fue escrito por',en:'it was written by'},
+{es:'estoy pensando en estudiar',en:'I am thinking about studying'}
+];
+
+const FILL_L35=[
+{kind:'rule',verb:'RULE CHOICE · PRESENT PERFECT',sentence:'Este año ha sido un año interesante. ¿Por qué usamos “ha sido” y no “fue”?',answer:'Porque “este año” todavía está conectado con el presente.',choices:['Porque “este año” todavía está conectado con el presente.','Porque describe una acción habitual.','Porque es una predicción futura.','Porque ocurrió una sola vez.'],en:'The current year is an unfinished/current time period, so Present Perfect is natural.'},
+{kind:'rule',verb:'RULE CHOICE · IMPERFECT',sentence:'Te sentías cansada. ¿Por qué usamos “sentías”?',answer:'Porque describe un estado o sensación de fondo en el pasado.',choices:['Porque describe un estado o sensación de fondo en el pasado.','Porque anuncia una acción futura.','Porque es una acción puntual y terminada.','Porque expresa una orden.'],en:'Imperfect describes a past state, feeling or background.'},
+{kind:'rule',verb:'RULE CHOICE · PRETERITE',sentence:'La última vez viajaste a un lugar increíble. ¿Por qué usamos “viajaste”?',answer:'Porque “la última vez” señala un evento pasado terminado.',choices:['Porque “la última vez” señala un evento pasado terminado.','Porque el viaje continúa ahora.','Porque es una descripción habitual.','Porque es una hipótesis.'],en:'La última vez points to one completed past event, so Pretérito is used.'},
+{kind:'rule',verb:'RULE CHOICE · FUTURE',sentence:'En los próximos meses viajarás. ¿Qué regla explica “viajarás”?',answer:'Es una predicción sobre el futuro.',choices:['Es una predicción sobre el futuro.','Es una experiencia hasta ahora.','Es una acción repetida en la infancia.','Es una condición hipotética.'],en:'Future simple expresses a prediction about what will happen.'},
+{kind:'rule',verb:'RULE CHOICE · CONDITIONAL',sentence:'Te sentirías cansada si trabajaras más. ¿Por qué usamos “sentirías”?',answer:'Expresa lo que ocurriría en una situación hipotética.',choices:['Expresa lo que ocurriría en una situación hipotética.','Describe una acción terminada ayer.','Expresa una obligación presente.','Describe una rutina pasada.'],en:'Conditional expresses what would happen under a hypothetical condition.'},
+{kind:'error',verb:'ERROR FINDER · PRESENT PERFECT',sentence:'❌ Este año fue un año complicado. ¿Qué parte cambiarías en este contexto?',answer:'fue → ha sido',choices:['fue → ha sido','este → esta','año → años','No hay ningún error'],en:'When the speaker treats the current year as connected to now, ha sido is the expected form.'},
+{kind:'error',verb:'ERROR FINDER · IMPERFECT',sentence:'❌ Mientras estudié, el teléfono sonó. ¿Qué parte cambiarías?',answer:'estudié → estudiaba',choices:['estudié → estudiaba','sonó → sonaba','mientras → después','No hay ningún error'],en:'Mientras introduces the ongoing background action: estudiaba. Sonó is the completed interrupting event.'},
+{kind:'error',verb:'ERROR FINDER · REFLEXIVE',sentence:'❌ Tú sentías muy cansada. ¿Qué falta?',answer:'te: Tú te sentías muy cansada.',choices:['te: Tú te sentías muy cansada.','lo: Tú lo sentías muy cansada.','le: Tú le sentías muy cansada.','Nada; la oración está completa.'],en:'For “you felt tired,” use sentirse: tú te sentías cansada.'},
+{kind:'error',verb:'ERROR FINDER · FUTURE',sentence:'❌ En los próximos meses terminabas muchas cosas. ¿Qué forma encaja con una predicción?',answer:'terminabas → terminarás',choices:['terminabas → terminarás','meses → mes','cosas → cosa','No hay ningún error'],en:'En los próximos meses points to the future, so terminarás fits the prediction.'},
+{kind:'error',verb:'ERROR FINDER · PASSIVE',sentence:'❌ La novela fue escrito por un escritor inglés. ¿Qué cambiarías?',answer:'escrito → escrita',choices:['escrito → escrita','fue → era','por → para','novela → novel'],en:'The past participle agrees with the feminine noun novela: fue escrita.'},
+{kind:'fill',verb:'MIXED TENSES',sentence:'Este año ___ un poco complicado, pero los próximos meses serán mejores.',answer:'ha sido',choices:['ha sido','fue','era','será'],en:'This year has been a little complicated, but the next few months will be better.'},
+{kind:'fill',verb:'FUTURE',sentence:'¿Qué ___ el fin de semana?',answer:'harás',choices:['harás','hiciste','hacías','harías'],en:'What will you do this weekend?'},
+{kind:'fill',verb:'PASSIVE VOICE',sentence:'La película ___ por una directora mexicana.',answer:'fue dirigida',choices:['fue dirigida','dirigió','era dirigir','fue dirigido'],en:'The movie was directed by a Mexican director.'}
+];
+
+const CONV_L35=[
+{ctx:'Weekend prediction',q:'¿Qué harás el fin de semana?',q_en:'What will you do this weekend?',ans:'Veré a mis amigos, iré al mercado y después veré un show de comedia.',ans_en:'I will see my friends, go to the market, and then see a comedy show.',note:'Use future simple for a prediction or answer about the future.'},
+{ctx:'Current year',q:'¿Cómo ha sido este año para ti?',q_en:'How has this year been for you?',ans:'Este año ha sido complicado, pero también ha sido interesante.',ans_en:'This year has been complicated, but it has also been interesting.',note:'Este año is connected to the present, so Present Perfect is natural.'},
+{ctx:'Past state vs event',q:'¿Cómo te sentías y qué hiciste ayer?',q_en:'How did you feel, and what did you do yesterday?',ans:'Me sentía cansada, pero hice mi tarea y después descansé.',ans_en:'I felt tired, but I did my homework and then rested.',note:'Imperfect for the state; Pretérito for completed actions.'},
+{ctx:'Passive voice',q:'¿Quién escribió el libro?',q_en:'Who wrote the book?',ans:'Fue escrito por un escritor inglés.',ans_en:'It was written by an English writer.',note:'Passive voice: ser + past participle + por.'},
+{ctx:'Thinking about the future',q:'¿Estás pensando en estudiar otro idioma?',q_en:'Are you thinking about studying another language?',ans:'Sí, estoy pensando en estudiar francés, pero será en unos años.',ans_en:'Yes, I am thinking about studying French, but it will be in a few years.',note:'Pensar en + infinitive; future ser → será.'}
 ];
 
 const L34_VOCAB=[
@@ -4516,15 +4821,15 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'||mode==='es-en-l16'||mode==='en-es-l16'||mode==='es-en-l17'||mode==='en-es-l17'||mode==='es-en-l18'||mode==='en-es-l18'||mode==='es-en-l19'||mode==='en-es-l19'||mode==='es-en-l20'||mode==='en-es-l20'||mode==='es-en-l21'||mode==='en-es-l21'||mode==='es-en-l22'||mode==='en-es-l22'||mode==='es-en-l23'||mode==='en-es-l23'||mode==='es-en-l24'||mode==='en-es-l24'||mode==='es-en-l25'||mode==='en-es-l25'||mode==='es-en-l26'||mode==='en-es-l26'||mode==='es-en-l27'||mode==='en-es-l27'||mode==='es-en-l28'||mode==='en-es-l28'||mode==='es-en-l29'||mode==='en-es-l29'||mode==='es-en-l30'||mode==='en-es-l30'||mode==='es-en-l31'||mode==='en-es-l31'||mode==='es-en-l32'||mode==='en-es-l32'||mode==='es-en-l33'||mode==='en-es-l33'||mode==='es-en-l34'||mode==='en-es-l34'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish','es-en-l16':'L16: Spanish → English','en-es-l16':'L16: English → Spanish','es-en-l17':'L17: Spanish → English','en-es-l17':'L17: English → Spanish','es-en-l18':'L18: Spanish → English','en-es-l18':'L18: English → Spanish','es-en-l19':'L19: Spanish → English','en-es-l19':'L19: English → Spanish','es-en-l20':'L20: Spanish → English','en-es-l20':'L20: English → Spanish','es-en-l21':'L21: Spanish → English','en-es-l21':'L21: English → Spanish','es-en-l22':'L22: Spanish → English','en-es-l22':'L22: English → Spanish','es-en-l23':'L23: Spanish → English','en-es-l23':'L23: English → Spanish','es-en-l24':'L24: Spanish → English','en-es-l24':'L24: English → Spanish','es-en-l25':'L25: Spanish → English','en-es-l25':'L25: English → Spanish','es-en-l26':'L26: Spanish → English','en-es-l26':'L26: English → Spanish','es-en-l27':'L27: Spanish → English','en-es-l27':'L27: English → Spanish','es-en-l28':'L28: Spanish → English','en-es-l28':'L28: English → Spanish','es-en-l29':'L29: Spanish → English','en-es-l29':'L29: English → Spanish','es-en-l30':'L30: Spanish → English','en-es-l30':'L30: English → Spanish','es-en-l31':'L31: Spanish → English','en-es-l31':'L31: English → Spanish','es-en-l32':'L32: Spanish → English','en-es-l32':'L32: English → Spanish','es-en-l33':'L33: Spanish → English','en-es-l33':'L33: English → Spanish','es-en-l34':'L34: Spanish → English','en-es-l34':'L34: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'||mode==='es-en-l16'||mode==='en-es-l16'||mode==='es-en-l17'||mode==='en-es-l17'||mode==='es-en-l18'||mode==='en-es-l18'||mode==='es-en-l19'||mode==='en-es-l19'||mode==='es-en-l20'||mode==='en-es-l20'||mode==='es-en-l21'||mode==='en-es-l21'||mode==='es-en-l22'||mode==='en-es-l22'||mode==='es-en-l23'||mode==='en-es-l23'||mode==='es-en-l24'||mode==='en-es-l24'||mode==='es-en-l25'||mode==='en-es-l25'||mode==='es-en-l26'||mode==='en-es-l26'||mode==='es-en-l27'||mode==='en-es-l27'||mode==='es-en-l28'||mode==='en-es-l28'||mode==='es-en-l29'||mode==='en-es-l29'||mode==='es-en-l30'||mode==='en-es-l30'||mode==='es-en-l31'||mode==='en-es-l31'||mode==='es-en-l32'||mode==='en-es-l32'||mode==='es-en-l33'||mode==='en-es-l33'||mode==='es-en-l34'||mode==='en-es-l34'||mode==='es-en-l35'||mode==='en-es-l35'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish','es-en-l16':'L16: Spanish → English','en-es-l16':'L16: English → Spanish','es-en-l17':'L17: Spanish → English','en-es-l17':'L17: English → Spanish','es-en-l18':'L18: Spanish → English','en-es-l18':'L18: English → Spanish','es-en-l19':'L19: Spanish → English','en-es-l19':'L19: English → Spanish','es-en-l20':'L20: Spanish → English','en-es-l20':'L20: English → Spanish','es-en-l21':'L21: Spanish → English','en-es-l21':'L21: English → Spanish','es-en-l22':'L22: Spanish → English','en-es-l22':'L22: English → Spanish','es-en-l23':'L23: Spanish → English','en-es-l23':'L23: English → Spanish','es-en-l24':'L24: Spanish → English','en-es-l24':'L24: English → Spanish','es-en-l25':'L25: Spanish → English','en-es-l25':'L25: English → Spanish','es-en-l26':'L26: Spanish → English','en-es-l26':'L26: English → Spanish','es-en-l27':'L27: Spanish → English','en-es-l27':'L27: English → Spanish','es-en-l28':'L28: Spanish → English','en-es-l28':'L28: English → Spanish','es-en-l29':'L29: Spanish → English','en-es-l29':'L29: English → Spanish','es-en-l30':'L30: Spanish → English','en-es-l30':'L30: English → Spanish','es-en-l31':'L31: Spanish → English','en-es-l31':'L31: English → Spanish','es-en-l32':'L32: Spanish → English','en-es-l32':'L32: English → Spanish','es-en-l33':'L33: Spanish → English','en-es-l33':'L33: English → Spanish','es-en-l34':'L34: Spanish → English','en-es-l34':'L34: English → Spanish','es-en-l35':'L35: Spanish → English','en-es-l35':'L35: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
-  } else if(mode==='master-review'||mode==='fill'||mode==='fill-l2'||mode==='fill-l3'||mode==='fill-l22'||mode==='fill-l23'||mode==='fill-l24'||mode==='fill-l25'||mode==='fill-l26'||mode==='fill-l27'||mode==='fill-l28'||mode==='fill-l29'||mode==='fill-l30'||mode==='fill-l31'||mode==='fill-l32'||mode==='fill-l33'||mode==='fill-l34'){
-    document.getElementById('fill-hdr-sub').textContent=mode==='master-review'?'⭐ Master Review · 20 mixed questions':mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':mode==='fill-l22'?'Lesson 22 · Conditional advice':mode==='fill-l23'?'Lesson 23 · Imperfect & object pronouns':mode==='fill-l24'?'Lesson 24 · Seguir + gerundio':mode==='fill-l25'?'Lesson 25 · Past & conditional':mode==='fill-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='fill-l27'?'Lesson 27 · Childhood memories':mode==='fill-l28'?'Lesson 28 · Photo vs video':mode==='fill-l29'?'Lesson 29 · Three past tenses':mode==='fill-l30'?'Lesson 30 · Imperfect in real life':mode==='fill-l31'?'Lesson 31 · Storytelling':mode==='fill-l32'?'Lesson 32 · Object pronouns':mode==='fill-l33'?'Lesson 33 · Pronoun position':mode==='fill-l34'?'Lesson 34 · Future tense':'Verb Conjugation';
+  } else if(mode==='master-review'||mode==='master-mistakes'||mode==='fill'||mode==='fill-l2'||mode==='fill-l3'||mode==='fill-l22'||mode==='fill-l23'||mode==='fill-l24'||mode==='fill-l25'||mode==='fill-l26'||mode==='fill-l27'||mode==='fill-l28'||mode==='fill-l29'||mode==='fill-l30'||mode==='fill-l31'||mode==='fill-l32'||mode==='fill-l33'||mode==='fill-l34'||mode==='fill-l35'){
+    document.getElementById('fill-hdr-sub').textContent=mode==='master-review'?'⭐ Smart Review · 20 weighted questions':mode==='master-mistakes'?'❌ Mistakes only · smart priority':mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':mode==='fill-l22'?'Lesson 22 · Conditional advice':mode==='fill-l23'?'Lesson 23 · Imperfect & object pronouns':mode==='fill-l24'?'Lesson 24 · Seguir + gerundio':mode==='fill-l25'?'Lesson 25 · Past & conditional':mode==='fill-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='fill-l27'?'Lesson 27 · Childhood memories':mode==='fill-l28'?'Lesson 28 · Photo vs video':mode==='fill-l29'?'Lesson 29 · Three past tenses':mode==='fill-l30'?'Lesson 30 · Imperfect in real life':mode==='fill-l31'?'Lesson 31 · Storytelling':mode==='fill-l32'?'Lesson 32 · Object pronouns':mode==='fill-l33'?'Lesson 33 · Pronoun position':mode==='fill-l34'?'Lesson 34 · Future tense':mode==='fill-l35'?'Lesson 35 · Rules, errors & mixed tenses':'Verb Conjugation';
     show('s-fill');renderFill();
-  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'||mode==='conv-l16'||mode==='conv-l17'||mode==='conv-l18'||mode==='conv-l19'||mode==='conv-l20'||mode==='conv-l21'||mode==='conv-l22'||mode==='conv-l23'||mode==='conv-l24'||mode==='conv-l25'||mode==='conv-l26'||mode==='conv-l27'||mode==='conv-l28'||mode==='conv-l29'||mode==='conv-l30'||mode==='conv-l31'||mode==='conv-l32'||mode==='conv-l33'||mode==='conv-l34'){
-    document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':mode==='conv-l13'?'Lesson 13 · Irregular preterite':mode==='conv-l16'?'Lesson 16 · Biography':mode==='conv-l17'?'Lesson 17 · Present Perfect':mode==='conv-l18'?'Lesson 18 · Experiences & Activities':mode==='conv-l19'?'Lesson 19 · Colors & ¿Alguna vez?':mode==='conv-l20'?'Lesson 20 · Me gustaría & Would (-ía)':mode==='conv-l21'?'Lesson 21 · Advice & ¿Qué harías?':mode==='conv-l22'?'Lesson 22 · If I were you':mode==='conv-l23'?'Lesson 23 · Lost dog dilemma':mode==='conv-l24'?'Lesson 24 · Culinary secret':mode==='conv-l25'?'Lesson 25 · Mateo’s dilemma':mode==='conv-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='conv-l27'?'Lesson 27 · Childhood memories':mode==='conv-l28'?'Lesson 28 · Simple vs imperfect':mode==='conv-l29'?'Lesson 29 · Three pasts & small talk':mode==='conv-l30'?'Lesson 30 · Habits & past plans':mode==='conv-l31'?'Lesson 31 · Storytelling':mode==='conv-l32'?'Lesson 32 · Direct & indirect objects':mode==='conv-l33'?'Lesson 33 · Advanced pronouns':mode==='conv-l34'?'Lesson 34 · Future plans':'Listen · speak · compare';
+  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'||mode==='conv-l16'||mode==='conv-l17'||mode==='conv-l18'||mode==='conv-l19'||mode==='conv-l20'||mode==='conv-l21'||mode==='conv-l22'||mode==='conv-l23'||mode==='conv-l24'||mode==='conv-l25'||mode==='conv-l26'||mode==='conv-l27'||mode==='conv-l28'||mode==='conv-l29'||mode==='conv-l30'||mode==='conv-l31'||mode==='conv-l32'||mode==='conv-l33'||mode==='conv-l34'||mode==='conv-l35'){
+    document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':mode==='conv-l13'?'Lesson 13 · Irregular preterite':mode==='conv-l16'?'Lesson 16 · Biography':mode==='conv-l17'?'Lesson 17 · Present Perfect':mode==='conv-l18'?'Lesson 18 · Experiences & Activities':mode==='conv-l19'?'Lesson 19 · Colors & ¿Alguna vez?':mode==='conv-l20'?'Lesson 20 · Me gustaría & Would (-ía)':mode==='conv-l21'?'Lesson 21 · Advice & ¿Qué harías?':mode==='conv-l22'?'Lesson 22 · If I were you':mode==='conv-l23'?'Lesson 23 · Lost dog dilemma':mode==='conv-l24'?'Lesson 24 · Culinary secret':mode==='conv-l25'?'Lesson 25 · Mateo’s dilemma':mode==='conv-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='conv-l27'?'Lesson 27 · Childhood memories':mode==='conv-l28'?'Lesson 28 · Simple vs imperfect':mode==='conv-l29'?'Lesson 29 · Three pasts & small talk':mode==='conv-l30'?'Lesson 30 · Habits & past plans':mode==='conv-l31'?'Lesson 31 · Storytelling':mode==='conv-l32'?'Lesson 32 · Direct & indirect objects':mode==='conv-l33'?'Lesson 33 · Advanced pronouns':mode==='conv-l34'?'Lesson 34 · Future plans':mode==='conv-l35'?'Lesson 35 · Mixed tenses & predictions':'Listen · speak · compare';
     show('s-conv');renderConv();
   }
 }
@@ -4585,7 +4890,9 @@ function resumeSession(){
   else if(mode==='es-en-l32'||mode==='en-es-l32') pool=L32_VOCAB;
   else if(mode==='es-en-l33'||mode==='en-es-l33') pool=L33_VOCAB;
   else if(mode==='es-en-l34'||mode==='en-es-l34') pool=L34_VOCAB;
+  else if(mode==='es-en-l35'||mode==='en-es-l35') pool=L35_VOCAB;
   else if(mode==='master-review') pool=MASTER_REVIEW_BANK;
+  else if(mode==='master-mistakes') pool=getMasterMistakes();
   else if(mode==='fill') pool=FILL_EXERCISES;
   else if(mode==='fill-l2') pool=FILL_L2;
   else if(mode==='fill-l3') pool=FILL_L3;
@@ -4602,6 +4909,7 @@ function resumeSession(){
   else if(mode==='fill-l32') pool=FILL_L32;
   else if(mode==='fill-l33') pool=FILL_L33;
   else if(mode==='fill-l34') pool=FILL_L34;
+  else if(mode==='fill-l35') pool=FILL_L35;
   else if(mode==='conv-l2') pool=CONV_L2;
   else if(mode==='conv-l3') pool=CONV_L3;
   else if(mode==='conv-l13') pool=CONV_L13;
@@ -4626,6 +4934,7 @@ function resumeSession(){
   else if(mode==='conv-l32') pool=CONV_L32;
   else if(mode==='conv-l33') pool=CONV_L33;
   else if(mode==='conv-l34') pool=CONV_L34;
+  else if(mode==='conv-l35') pool=CONV_L35;
   else pool=CONVERSATIONS;
   S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
   S.mode=mode; S.idx=saved.idx; S.correct=saved.correct; S.wrong=saved.wrong;
@@ -4721,8 +5030,10 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(L33_VOCAB); S.revealed=false;
   } else if(mode==='es-en-l34'||mode==='en-es-l34'){
     S.mode=mode; S.cards=shuffle(L34_VOCAB); S.revealed=false;
+  } else if(mode==='es-en-l35'||mode==='en-es-l35'){
+    S.mode=mode; S.cards=shuffle(L35_VOCAB); S.revealed=false;
   } else if(mode==='master-review'){
-    S.mode='master-review'; S.cards=shuffle(MASTER_REVIEW_BANK).slice(0,20); S.submitted=false;
+    S.mode='master-review'; S.cards=weightedMasterSample(MASTER_REVIEW_BANK,20); S.submitted=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -4755,6 +5066,8 @@ function _startFresh(mode){
     S.mode='fill-l33'; S.cards=shuffle(FILL_L33); S.submitted=false;
   } else if(mode==='fill-l34'){
     S.mode='fill-l34'; S.cards=shuffle(FILL_L34); S.submitted=false;
+  } else if(mode==='fill-l35'){
+    S.mode='fill-l35'; S.cards=shuffle(FILL_L35); S.submitted=false;
   } else if(mode==='conv'){
     S.mode='conv'; S.cards=shuffle(CONVERSATIONS);
   } else if(mode==='conv-l2'){
@@ -4805,6 +5118,8 @@ function _startFresh(mode){
     S.mode='conv-l33'; S.cards=shuffle(CONV_L33);
   } else if(mode==='conv-l34'){
     S.mode='conv-l34'; S.cards=shuffle(CONV_L34);
+  } else if(mode==='conv-l35'){
+    S.mode='conv-l35'; S.cards=shuffle(CONV_L35);
   }
   navigateToMode(S.mode);
 }
@@ -4977,7 +5292,10 @@ function renderFill(){
   const alreadyDone=(S.idx in S.answered);
   document.getElementById('fill-prog').style.width=(S.idx/total*100)+'%';
   document.getElementById('fill-prog-label').textContent=`${S.idx+1} / ${total}`;
-  document.getElementById('ex-verb-tag').textContent=`${item.verb} — pick the correct form`;
+  document.getElementById('ex-verb-tag').textContent=
+    item.kind==='rule'?`${item.verb} — choose the rule`:
+    item.kind==='error'?`${item.verb} — find the error`:
+    `${item.verb} — pick the correct form`;
   const parts=item.sentence.split('___');
   document.getElementById('ex-sentence').innerHTML=
     parts[0]+'<span class="blank-ph">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'+(parts[1]||'');
@@ -5009,10 +5327,16 @@ function renderFill(){
   if(alreadyDone){
     document.getElementById('ex-reveal-es').textContent=item.sentence.replace('___',item.answer);
     document.getElementById('ex-reveal-en').textContent='🇺🇸 '+item.en;
+    const why=document.getElementById('ex-why');
+    if(S.mode==='master-review'||S.mode==='master-mistakes'){
+      why.innerHTML=masterWhyHtml(item,S.answered[S.idx]);
+      why.style.display='block';
+    }else why.style.display='none';
     revealEl.classList.add('show');
     nextBtn.classList.remove('hidden');
   } else {
     revealEl.classList.remove('show');
+    document.getElementById('ex-why').style.display='none';
     nextBtn.classList.add('hidden');
   }
   prevBtn.disabled=(S.idx===0);
@@ -5032,8 +5356,13 @@ function selectChoice(btnEl,chosen){
   });
   S.answered[S.idx]=chosen;
   if(isCorrect) S.correct++; else S.wrong++;
+  if(S.mode==='master-review'||S.mode==='master-mistakes') updateMasterStat(item,isCorrect,chosen);
   document.getElementById('ex-reveal-es').textContent=item.sentence.replace('___',item.answer);
   document.getElementById('ex-reveal-en').textContent='🇺🇸 '+item.en;
+  const why=document.getElementById('ex-why');
+  if(S.mode==='master-review'||S.mode==='master-mistakes'){
+    why.innerHTML=masterWhyHtml(item,chosen); why.style.display='block';
+  }else why.style.display='none';
   document.getElementById('ex-reveal').classList.add('show');
   speak(item.sentence.replace('___',item.answer));
   document.getElementById('fill-next').classList.remove('hidden');
@@ -5115,6 +5444,10 @@ function showScore(){
   const pct=total>0?Math.round(S.correct/total*100):100;
   let emoji,title,sub;
   if(S.mode==='conv'){emoji='🎉';title='Dialogue complete!';sub=`You finished all ${S.cards.length} conversations!`;}
+  else if(S.mode==='master-review'||S.mode==='master-mistakes'){
+    emoji=pct>=80?'🧠':'🌱'; title=pct>=80?'Smart review complete!':'Good diagnostic round!';
+    sub=`${pct}% correct. Mistakes were saved and will return sooner.`;
+  }
   else if(pct===100){emoji='🏆';title='Perfect!';sub='You remembered every word!';}
   else if(pct>=80){emoji='⭐';title='Great job!';sub=`You got ${pct}% correct!`;}
   else if(pct>=50){emoji='💪';title='Good effort!';sub=`You got ${pct}%. Keep practicing!`;}
@@ -5358,6 +5691,7 @@ function renderNewLessonNotes(){
   render('notes-vocab-l32',L32_VOCAB);
   render('notes-vocab-l33',L33_VOCAB);
   render('notes-vocab-l34',L34_VOCAB);
+  render('notes-vocab-l35',L35_VOCAB);
 }
 renderNewLessonNotes();
 
