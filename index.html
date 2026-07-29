@@ -333,7 +333,7 @@ body{max-width:480px;margin:0 auto;}
 <div class="lc-head">
 <div>
 <div class="lc-title">⭐ Master Review — Mixed Practice</div>
-<div class="lc-hint">20 smart questions · forms, rules and error finding</div>
+<div class="lc-hint">20 smart questions · forms, rules and error finding · context-aware explanations</div>
 <div class="lc-date">Updated through Lesson 35</div>
 </div>
 <div class="lc-badge">Daily 10 min</div>
@@ -4707,11 +4707,13 @@ function showMasterProgress(){
 function masterWhyHtml(item,chosen){
   const stats=loadMasterStats(), s=getMasterStat(item,stats);
   const wrongNow=chosen!==item.answer;
-  const label=wrongNow?'这次混淆点':'这题掌握得不错';
+  const label=wrongNow?'⚠️ 易错点复盘':'🧠 知识点复习';
   const count=s.wrong||0;
-  return `<strong>🧠 ${label}：${item.topic}</strong><br>
+  return `<strong>${label}：${item.topic}</strong><br>
     ${item.en}<br>
-    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。`:`你已经连续答对 ${s.streak||1} 次。`}
+    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。<br>
+    💡 如果一个句子缺少明确时间背景，某些表达可能需要结合语境判断。`
+    :`继续保持！这道题已连续答对 ${s.streak||1} 次。`}
     ${count?`<br>这道题累计答错 <strong>${count}</strong> 次，系统会提高它之后的出现概率。`:''}`;
 }
 
