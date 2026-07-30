@@ -834,7 +834,7 @@ body{max-width:480px;margin:0 auto;}
 </div>
 <input accept=".json" id="import-input" onchange="importProgress(this)" style="display:none;" type="file"/>
 <div style="text-align:center;color:var(--muted);font-size:11px;margin:10px 0 2px;line-height:1.5;">
-  Version 37.0 · Lesson 35 + Rule Choice · Lessons 28–35 · July 2026
+  
 </div>
 
 </div>
@@ -4721,14 +4721,11 @@ function showMasterProgress(){
 function masterWhyHtml(item,chosen){
   const stats=loadMasterStats(), s=getMasterStat(item,stats);
   const wrongNow=chosen!==item.answer;
-  const label=wrongNow?'⚠️ 易错点复盘':'🧠 知识点复习';
   const count=s.wrong||0;
-  return `<strong>${label}：${item.topic}</strong><br>
-    ${item.en}<br>
-    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。<br>
-    💡 如果一个句子缺少明确时间背景，某些表达可能需要结合语境判断。`
-    :`继续保持！这道题已连续答对 ${s.streak||1} 次。`}
-    ${count?`<br>这道题累计答错 <strong>${count}</strong> 次，系统会提高它之后的出现概率。`:''}`;
+  return `<strong>${wrongNow?'⚠️ 易错点复盘':'🧠 逻辑解释'}：${item.topic}</strong><br>
+  <b>规则：</b>${item.note||item.en||''}<br>
+  ${wrongNow?`<b>你的选择：</b>${chosen}<br><b>正确逻辑：</b>${item.answer}<br>`:''}
+  ${count?`累计错误 ${count} 次，之后会增加复习概率。`:''}`;
 }
 
 
@@ -5754,5 +5751,5 @@ renderNewLessonNotes();
 </div>
 </div>
 </div>
-<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v36.1<br>Updated: 2026-07-30<br>Changes: Lesson 36 navigation · review integration · explanation redesign</div></body>
+<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v36.2<br>Updated: 2026-07-30<br>Changes: Blue box translation only · Yellow box logic explanation · multi-answer distinction · version cleanup</div></body>
 </html>
