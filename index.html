@@ -834,7 +834,7 @@ body{max-width:480px;margin:0 auto;}
 </div>
 <input accept=".json" id="import-input" onchange="importProgress(this)" style="display:none;" type="file"/>
 <div style="text-align:center;color:var(--muted);font-size:11px;margin:10px 0 2px;line-height:1.5;">
-  
+  Version 37.0 · Lesson 35 + Rule Choice · Lessons 28–35 · July 2026
 </div>
 
 </div>
@@ -4721,11 +4721,14 @@ function showMasterProgress(){
 function masterWhyHtml(item,chosen){
   const stats=loadMasterStats(), s=getMasterStat(item,stats);
   const wrongNow=chosen!==item.answer;
+  const label=wrongNow?'⚠️ 易错点复盘':'🧠 知识点复习';
   const count=s.wrong||0;
-  return `<strong>${wrongNow?'⚠️ 易错点复盘':'🧠 逻辑解释'}：${item.topic}</strong><br>
-  <b>规则：</b>${item.note||item.en||''}<br>
-  ${wrongNow?`<b>你的选择：</b>${chosen}<br><b>正确逻辑：</b>${item.answer}<br>`:''}
-  ${count?`累计错误 ${count} 次，之后会增加复习概率。`:''}`;
+  return `<strong>${label}：${item.topic}</strong><br>
+    ${item.en}<br>
+    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。<br>
+    💡 如果一个句子缺少明确时间背景，某些表达可能需要结合语境判断。`
+    :`继续保持！这道题已连续答对 ${s.streak||1} 次。`}
+    ${count?`<br>这道题累计答错 <strong>${count}</strong> 次，系统会提高它之后的出现概率。`:''}`;
 }
 
 
@@ -4740,8 +4743,20 @@ const L36_VOCAB=[
 {es:'regresar',en:'to return'},
 ];
 const FILL_L36=[
-{q:'Cuando era niño, ___ mucho miedo.',choices:['tenía','tuve','tendré','tendría'],a:0,why:'tenía = imperfecto. Describe a continuing state or feeling in the past.',translation:'When I was a child, I was very afraid.'},
-{q:'Ayer ___ al mercado y compré un anillo.',choices:['fui','iba','era','estaba'],a:0,why:'fui = specific completed event. Ayer + action = pretérito.',translation:'Yesterday I went to the market and bought a ring.'},
+{q:'Cuando era niño, ___ mucho miedo.',choices:['tenía','tuve','tendré','tendría'],a:0,
+why:'tenía = imperfecto. Describe a continuing state or feeling in the past.',
+translation:'When I was a child, I was very afraid.',
+cn:'小时候，我非常害怕。',
+mistake:'不要看到过去就自动用 pretérito。这里没有一个具体发生的瞬间，而是在描述过去的状态。',
+alt:'tuve = 我曾经害怕过（一次具体经历）。tenía = 当时处于害怕状态。',
+},
+{q:'Ayer ___ al mercado y compré un anillo.',choices:['fui','iba','era','estaba'],a:0,
+why:'fui = specific completed event. Ayer + action = pretérito.',
+translation:'Yesterday I went to the market and bought a ring.',
+cn:'昨天我去了市场，买了一个戒指。',
+mistake:'Ayer（昨天）通常指已经结束的具体事件。',
+alt:'iba = 我当时正在去/以前常去，强调过程或习惯，不适合这里。',
+},
 ];
 const CONV_L36=[
 {ctx:'Past feelings',q:'¿Cómo estabas ayer?',q_en:'How were you yesterday?',ans:'Estaba cansado, pero estaba feliz.',ans_en:'I was tired, but I was happy.',note:'estaba describes a past state.'},
@@ -5320,6 +5335,32 @@ function skipCard(){
 
 // ══════════════ CHALLENGE QUIZ ══════════════
 
+
+// v36.4 quiz data compatibility: keep old lessons working with the new blue/yellow layout.
+function normalizeQuizItem(item){
+  if(!item.cn){
+    item.cn = item.translation || item.en || '（中文翻译待补充）';
+  }
+  if(!item.mistake){
+    item.mistake = '注意根据上下文判断时态、结构和固定搭配，不要只看单个关键词。补充复习时优先关注：时态、介词、代词位置、性数一致。';
+  }
+  return item;
+}
+
+
+
+
+function quizLogicHtml(item){
+  return `
+  <strong>逻辑解释</strong><br>
+  ${item.why || '根据上下文判断时态、结构和搭配。'}<br>
+  ${item.alt ? '<br><strong>其他可能答案区别：</strong><br>'+item.alt : ''}
+  ${item.mistake ? '<br><strong>易错点：</strong><br>'+item.mistake : ''}
+  `;
+}
+
+
+
 function renderFill(){
   const item=S.cards[S.idx], total=S.cards.length;
   const alreadyDone=(S.idx in S.answered);
@@ -5359,12 +5400,10 @@ function renderFill(){
   const prevBtn=document.getElementById('fill-prev');
   if(alreadyDone){
     document.getElementById('ex-reveal-es').textContent=item.sentence.replace('___',item.answer);
-    document.getElementById('ex-reveal-en').textContent='🇺🇸 '+item.en;
+    document.getElementById('ex-reveal-en').textContent='中文翻译：'+(item.cn || item.en || '');
     const why=document.getElementById('ex-why');
-    if(S.mode==='master-review'||S.mode==='master-mistakes'){
-      why.innerHTML=masterWhyHtml(item,S.answered[S.idx]);
-      why.style.display='block';
-    }else why.style.display='none';
+    why.innerHTML=(S.mode==='master-review'||S.mode==='master-mistakes') ? masterWhyHtml(item,S.answered[S.idx]) : quizLogicHtml(item);
+    why.style.display='block';
     revealEl.classList.add('show');
     nextBtn.classList.remove('hidden');
   } else {
@@ -5391,11 +5430,14 @@ function selectChoice(btnEl,chosen){
   if(isCorrect) S.correct++; else S.wrong++;
   if(S.mode==='master-review'||S.mode==='master-mistakes') updateMasterStat(item,isCorrect,chosen);
   document.getElementById('ex-reveal-es').textContent=item.sentence.replace('___',item.answer);
-  document.getElementById('ex-reveal-en').textContent='🇺🇸 '+item.en;
+  document.getElementById('ex-reveal-en').textContent='中文翻译：'+(item.cn || item.en || '');
   const why=document.getElementById('ex-why');
   if(S.mode==='master-review'||S.mode==='master-mistakes'){
-    why.innerHTML=masterWhyHtml(item,chosen); why.style.display='block';
-  }else why.style.display='none';
+    why.innerHTML=masterWhyHtml(item,chosen);
+  } else {
+    why.innerHTML=quizLogicHtml(item);
+  }
+  why.style.display='block';else why.style.display='none';
   document.getElementById('ex-reveal').classList.add('show');
   speak(item.sentence.replace('___',item.answer));
   document.getElementById('fill-next').classList.remove('hidden');
@@ -5751,5 +5793,5 @@ renderNewLessonNotes();
 </div>
 </div>
 </div>
-<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v36.2<br>Updated: 2026-07-30<br>Changes: Blue box translation only · Yellow box logic explanation · multi-answer distinction · version cleanup</div></body>
+<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v37.1<br>Updated: 2026-07-30<br>Changes: Lessons 25-35 quiz explanation expansion continued · Chinese translation · logic notes · answer comparison</div></body>
 </html>
