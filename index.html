@@ -834,7 +834,7 @@ body{max-width:480px;margin:0 auto;}
 </div>
 <input accept=".json" id="import-input" onchange="importProgress(this)" style="display:none;" type="file"/>
 <div style="text-align:center;color:var(--muted);font-size:11px;margin:10px 0 2px;line-height:1.5;">
-  Version 37.0 · Lesson 35 + Rule Choice · Lessons 28–35 · July 2026
+  Index Version v36 · Lesson 36 + Smart Review Update · Lessons 28–36 · July 30, 2026<br>✨ Updates: Quiz translation/logic split · Lesson navigation fix · Version tracking
 </div>
 
 </div>
@@ -4721,14 +4721,10 @@ function showMasterProgress(){
 function masterWhyHtml(item,chosen){
   const stats=loadMasterStats(), s=getMasterStat(item,stats);
   const wrongNow=chosen!==item.answer;
-  const label=wrongNow?'⚠️ 易错点复盘':'🧠 知识点复习';
-  const count=s.wrong||0;
-  return `<strong>${label}：${item.topic}</strong><br>
-    ${item.en}<br>
-    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。<br>
-    💡 如果一个句子缺少明确时间背景，某些表达可能需要结合语境判断。`
-    :`继续保持！这道题已连续答对 ${s.streak||1} 次。`}
-    ${count?`<br>这道题累计答错 <strong>${count}</strong> 次，系统会提高它之后的出现概率。`:''}`;
+  return `<strong>${wrongNow?'⚠️ Grammar Logic':'🧠 Grammar Review'}：${item.topic}</strong><br>
+    🔵 Translation:<br>${item.answer}<br><br>
+    🟡 Logic:<br>${item.en}
+    ${wrongNow?`<br><br>Focus: compare the meaning and grammar context, not only the verb form.`:''}`;
 }
 
 
@@ -4907,6 +4903,7 @@ function resumeSession(){
   else if(mode==='es-en-l33'||mode==='en-es-l33') pool=L33_VOCAB;
   else if(mode==='es-en-l34'||mode==='en-es-l34') pool=L34_VOCAB;
   else if(mode==='es-en-l35'||mode==='en-es-l35') pool=L35_VOCAB;
+  else if(mode==='es-en-l36'||mode==='en-es-l36') pool=L36_VOCAB;
   else if(mode==='master-review') pool=MASTER_REVIEW_BANK;
   else if(mode==='master-mistakes') pool=getMasterMistakes();
   else if(mode==='fill') pool=FILL_EXERCISES;
