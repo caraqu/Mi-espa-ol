@@ -834,7 +834,7 @@ body{max-width:480px;margin:0 auto;}
 </div>
 <input accept=".json" id="import-input" onchange="importProgress(this)" style="display:none;" type="file"/>
 <div style="text-align:center;color:var(--muted);font-size:11px;margin:10px 0 2px;line-height:1.5;">
-  Index Version v36 · Lesson 36 + Smart Review Update · Lessons 28–36 · July 30, 2026<br>✨ Updates: Quiz translation/logic split · Lesson navigation fix · Version tracking
+  Version 37.0 · Lesson 35 + Rule Choice · Lessons 28–35 · July 2026
 </div>
 
 </div>
@@ -3904,7 +3904,7 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14,...VOCAB_L15,...VOCAB_L16,...VOCAB_L17,...VOCAB_L18,...VOCAB_L19,...VOCAB_L20,...VOCAB_L21,...VOCAB_L22,...VOCAB_L23,...VOCAB_L24,...L25_VOCAB,...L26_VOCAB,...L27_VOCAB,...L28_VOCAB,...L29_VOCAB,...L30_VOCAB,...L31_VOCAB,...L32_VOCAB,...L33_VOCAB,...L34_VOCAB,...L35_VOCAB].some(v => v.es.toLowerCase() === q);
+  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14,...VOCAB_L15,...VOCAB_L16,...VOCAB_L17,...VOCAB_L18,...VOCAB_L19,...VOCAB_L20,...VOCAB_L21,...VOCAB_L22,...VOCAB_L23,...VOCAB_L24,...L25_VOCAB,...L26_VOCAB,...L27_VOCAB,...L28_VOCAB,...L29_VOCAB,...L30_VOCAB,...L31_VOCAB,...L32_VOCAB,...L33_VOCAB,...L34_VOCAB,...L35_VOCAB,...L36_VOCAB].some(v => v.es.toLowerCase() === q);
 }
 
 // One-time migration: remove My Words that are already in lesson vocab
@@ -4721,12 +4721,34 @@ function showMasterProgress(){
 function masterWhyHtml(item,chosen){
   const stats=loadMasterStats(), s=getMasterStat(item,stats);
   const wrongNow=chosen!==item.answer;
-  return `<strong>${wrongNow?'⚠️ Grammar Logic':'🧠 Grammar Review'}：${item.topic}</strong><br>
-    🔵 Translation:<br>${item.answer}<br><br>
-    🟡 Logic:<br>${item.en}
-    ${wrongNow?`<br><br>Focus: compare the meaning and grammar context, not only the verb form.`:''}`;
+  const label=wrongNow?'⚠️ 易错点复盘':'🧠 知识点复习';
+  const count=s.wrong||0;
+  return `<strong>${label}：${item.topic}</strong><br>
+    ${item.en}<br>
+    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。<br>
+    💡 如果一个句子缺少明确时间背景，某些表达可能需要结合语境判断。`
+    :`继续保持！这道题已连续答对 ${s.streak||1} 次。`}
+    ${count?`<br>这道题累计答错 <strong>${count}</strong> 次，系统会提高它之后的出现概率。`:''}`;
 }
 
+
+const L36_VOCAB=[
+{es:'tenía',en:'had / used to have'},
+{es:'quería',en:'wanted / used to want'},
+{es:'estaba',en:'was (state/location)'},
+{es:'sentía',en:'felt'},
+{es:'con',en:'with'},
+{es:'por',en:'because of / by / through'},
+{es:'regresarme',en:'to return (myself)'},
+{es:'regresar',en:'to return'},
+];
+const FILL_L36=[
+{q:'Cuando era niño, ___ mucho miedo.',choices:['tenía','tuve','tendré','tendría'],a:0,why:'tenía = imperfecto. Describe a continuing state or feeling in the past.',translation:'When I was a child, I was very afraid.'},
+{q:'Ayer ___ al mercado y compré un anillo.',choices:['fui','iba','era','estaba'],a:0,why:'fui = specific completed event. Ayer + action = pretérito.',translation:'Yesterday I went to the market and bought a ring.'},
+];
+const CONV_L36=[
+{ctx:'Past feelings',q:'¿Cómo estabas ayer?',q_en:'How were you yesterday?',ans:'Estaba cansado, pero estaba feliz.',ans_en:'I was tired, but I was happy.',note:'estaba describes a past state.'},
+];
 
 const L35_VOCAB=[
 {es:'este año ha sido',en:'this year has been'},
@@ -4833,14 +4855,14 @@ function goHome(){
 // ══════════════ MODE LAUNCHERS ══════════════
 
 function navigateToMode(mode){
-  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'||mode==='es-en-l16'||mode==='en-es-l16'||mode==='es-en-l17'||mode==='en-es-l17'||mode==='es-en-l18'||mode==='en-es-l18'||mode==='es-en-l19'||mode==='en-es-l19'||mode==='es-en-l20'||mode==='en-es-l20'||mode==='es-en-l21'||mode==='en-es-l21'||mode==='es-en-l22'||mode==='en-es-l22'||mode==='es-en-l23'||mode==='en-es-l23'||mode==='es-en-l24'||mode==='en-es-l24'||mode==='es-en-l25'||mode==='en-es-l25'||mode==='es-en-l26'||mode==='en-es-l26'||mode==='es-en-l27'||mode==='en-es-l27'||mode==='es-en-l28'||mode==='en-es-l28'||mode==='es-en-l29'||mode==='en-es-l29'||mode==='es-en-l30'||mode==='en-es-l30'||mode==='es-en-l31'||mode==='en-es-l31'||mode==='es-en-l32'||mode==='en-es-l32'||mode==='es-en-l33'||mode==='en-es-l33'||mode==='es-en-l34'||mode==='en-es-l34'||mode==='es-en-l35'||mode==='en-es-l35'){
-    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish','es-en-l16':'L16: Spanish → English','en-es-l16':'L16: English → Spanish','es-en-l17':'L17: Spanish → English','en-es-l17':'L17: English → Spanish','es-en-l18':'L18: Spanish → English','en-es-l18':'L18: English → Spanish','es-en-l19':'L19: Spanish → English','en-es-l19':'L19: English → Spanish','es-en-l20':'L20: Spanish → English','en-es-l20':'L20: English → Spanish','es-en-l21':'L21: Spanish → English','en-es-l21':'L21: English → Spanish','es-en-l22':'L22: Spanish → English','en-es-l22':'L22: English → Spanish','es-en-l23':'L23: Spanish → English','en-es-l23':'L23: English → Spanish','es-en-l24':'L24: Spanish → English','en-es-l24':'L24: English → Spanish','es-en-l25':'L25: Spanish → English','en-es-l25':'L25: English → Spanish','es-en-l26':'L26: Spanish → English','en-es-l26':'L26: English → Spanish','es-en-l27':'L27: Spanish → English','en-es-l27':'L27: English → Spanish','es-en-l28':'L28: Spanish → English','en-es-l28':'L28: English → Spanish','es-en-l29':'L29: Spanish → English','en-es-l29':'L29: English → Spanish','es-en-l30':'L30: Spanish → English','en-es-l30':'L30: English → Spanish','es-en-l31':'L31: Spanish → English','en-es-l31':'L31: English → Spanish','es-en-l32':'L32: Spanish → English','en-es-l32':'L32: English → Spanish','es-en-l33':'L33: Spanish → English','en-es-l33':'L33: English → Spanish','es-en-l34':'L34: Spanish → English','en-es-l34':'L34: English → Spanish','es-en-l35':'L35: Spanish → English','en-es-l35':'L35: English → Spanish'};
+  if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'||mode==='es-en-l16'||mode==='en-es-l16'||mode==='es-en-l17'||mode==='en-es-l17'||mode==='es-en-l18'||mode==='en-es-l18'||mode==='es-en-l19'||mode==='en-es-l19'||mode==='es-en-l20'||mode==='en-es-l20'||mode==='es-en-l21'||mode==='en-es-l21'||mode==='es-en-l22'||mode==='en-es-l22'||mode==='es-en-l23'||mode==='en-es-l23'||mode==='es-en-l24'||mode==='en-es-l24'||mode==='es-en-l25'||mode==='en-es-l25'||mode==='es-en-l26'||mode==='en-es-l26'||mode==='es-en-l27'||mode==='en-es-l27'||mode==='es-en-l28'||mode==='en-es-l28'||mode==='es-en-l29'||mode==='en-es-l29'||mode==='es-en-l30'||mode==='en-es-l30'||mode==='es-en-l31'||mode==='en-es-l31'||mode==='es-en-l32'||mode==='en-es-l32'||mode==='es-en-l33'||mode==='en-es-l33'||mode==='es-en-l34'||mode==='en-es-l34'||mode==='es-en-l35'||mode==='en-es-l35'||mode==='es-en-l36'||mode==='en-es-l36'){
+    const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish','es-en-l16':'L16: Spanish → English','en-es-l16':'L16: English → Spanish','es-en-l17':'L17: Spanish → English','en-es-l17':'L17: English → Spanish','es-en-l18':'L18: Spanish → English','en-es-l18':'L18: English → Spanish','es-en-l19':'L19: Spanish → English','en-es-l19':'L19: English → Spanish','es-en-l20':'L20: Spanish → English','en-es-l20':'L20: English → Spanish','es-en-l21':'L21: Spanish → English','en-es-l21':'L21: English → Spanish','es-en-l22':'L22: Spanish → English','en-es-l22':'L22: English → Spanish','es-en-l23':'L23: Spanish → English','en-es-l23':'L23: English → Spanish','es-en-l24':'L24: Spanish → English','en-es-l24':'L24: English → Spanish','es-en-l25':'L25: Spanish → English','en-es-l25':'L25: English → Spanish','es-en-l26':'L26: Spanish → English','en-es-l26':'L26: English → Spanish','es-en-l27':'L27: Spanish → English','en-es-l27':'L27: English → Spanish','es-en-l28':'L28: Spanish → English','en-es-l28':'L28: English → Spanish','es-en-l29':'L29: Spanish → English','en-es-l29':'L29: English → Spanish','es-en-l30':'L30: Spanish → English','en-es-l30':'L30: English → Spanish','es-en-l31':'L31: Spanish → English','en-es-l31':'L31: English → Spanish','es-en-l32':'L32: Spanish → English','en-es-l32':'L32: English → Spanish','es-en-l33':'L33: Spanish → English','en-es-l33':'L33: English → Spanish','es-en-l34':'L34: Spanish → English','en-es-l34':'L34: English → Spanish','es-en-l35':'L35: Spanish → English','en-es-l35':'L35: English → Spanish','es-en-l36':'L36: Spanish → English','en-es-l36':'L36: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
-  } else if(mode==='master-review'||mode==='master-mistakes'||mode==='fill'||mode==='fill-l2'||mode==='fill-l3'||mode==='fill-l22'||mode==='fill-l23'||mode==='fill-l24'||mode==='fill-l25'||mode==='fill-l26'||mode==='fill-l27'||mode==='fill-l28'||mode==='fill-l29'||mode==='fill-l30'||mode==='fill-l31'||mode==='fill-l32'||mode==='fill-l33'||mode==='fill-l34'||mode==='fill-l35'){
+  } else if(mode==='master-review'||mode==='master-mistakes'||mode==='fill'||mode==='fill-l2'||mode==='fill-l3'||mode==='fill-l22'||mode==='fill-l23'||mode==='fill-l24'||mode==='fill-l25'||mode==='fill-l26'||mode==='fill-l27'||mode==='fill-l28'||mode==='fill-l29'||mode==='fill-l30'||mode==='fill-l31'||mode==='fill-l32'||mode==='fill-l33'||mode==='fill-l34'||mode==='fill-l35'||mode==='fill-l36'){
     document.getElementById('fill-hdr-sub').textContent=mode==='master-review'?'⭐ Smart Review · 20 weighted questions':mode==='master-mistakes'?'❌ Mistakes only · smart priority':mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':mode==='fill-l22'?'Lesson 22 · Conditional advice':mode==='fill-l23'?'Lesson 23 · Imperfect & object pronouns':mode==='fill-l24'?'Lesson 24 · Seguir + gerundio':mode==='fill-l25'?'Lesson 25 · Past & conditional':mode==='fill-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='fill-l27'?'Lesson 27 · Childhood memories':mode==='fill-l28'?'Lesson 28 · Photo vs video':mode==='fill-l29'?'Lesson 29 · Three past tenses':mode==='fill-l30'?'Lesson 30 · Imperfect in real life':mode==='fill-l31'?'Lesson 31 · Storytelling':mode==='fill-l32'?'Lesson 32 · Object pronouns':mode==='fill-l33'?'Lesson 33 · Pronoun position':mode==='fill-l34'?'Lesson 34 · Future tense':mode==='fill-l35'?'Lesson 35 · Rules, errors & mixed tenses':'Verb Conjugation';
     show('s-fill');renderFill();
-  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'||mode==='conv-l16'||mode==='conv-l17'||mode==='conv-l18'||mode==='conv-l19'||mode==='conv-l20'||mode==='conv-l21'||mode==='conv-l22'||mode==='conv-l23'||mode==='conv-l24'||mode==='conv-l25'||mode==='conv-l26'||mode==='conv-l27'||mode==='conv-l28'||mode==='conv-l29'||mode==='conv-l30'||mode==='conv-l31'||mode==='conv-l32'||mode==='conv-l33'||mode==='conv-l34'||mode==='conv-l35'){
+  } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'||mode==='conv-l16'||mode==='conv-l17'||mode==='conv-l18'||mode==='conv-l19'||mode==='conv-l20'||mode==='conv-l21'||mode==='conv-l22'||mode==='conv-l23'||mode==='conv-l24'||mode==='conv-l25'||mode==='conv-l26'||mode==='conv-l27'||mode==='conv-l28'||mode==='conv-l29'||mode==='conv-l30'||mode==='conv-l31'||mode==='conv-l32'||mode==='conv-l33'||mode==='conv-l34'||mode==='conv-l35'||mode==='conv-l36'){
     document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':mode==='conv-l13'?'Lesson 13 · Irregular preterite':mode==='conv-l16'?'Lesson 16 · Biography':mode==='conv-l17'?'Lesson 17 · Present Perfect':mode==='conv-l18'?'Lesson 18 · Experiences & Activities':mode==='conv-l19'?'Lesson 19 · Colors & ¿Alguna vez?':mode==='conv-l20'?'Lesson 20 · Me gustaría & Would (-ía)':mode==='conv-l21'?'Lesson 21 · Advice & ¿Qué harías?':mode==='conv-l22'?'Lesson 22 · If I were you':mode==='conv-l23'?'Lesson 23 · Lost dog dilemma':mode==='conv-l24'?'Lesson 24 · Culinary secret':mode==='conv-l25'?'Lesson 25 · Mateo’s dilemma':mode==='conv-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='conv-l27'?'Lesson 27 · Childhood memories':mode==='conv-l28'?'Lesson 28 · Simple vs imperfect':mode==='conv-l29'?'Lesson 29 · Three pasts & small talk':mode==='conv-l30'?'Lesson 30 · Habits & past plans':mode==='conv-l31'?'Lesson 31 · Storytelling':mode==='conv-l32'?'Lesson 32 · Direct & indirect objects':mode==='conv-l33'?'Lesson 33 · Advanced pronouns':mode==='conv-l34'?'Lesson 34 · Future plans':mode==='conv-l35'?'Lesson 35 · Mixed tenses & predictions':'Listen · speak · compare';
     show('s-conv');renderConv();
   }
@@ -4902,8 +4924,7 @@ function resumeSession(){
   else if(mode==='es-en-l32'||mode==='en-es-l32') pool=L32_VOCAB;
   else if(mode==='es-en-l33'||mode==='en-es-l33') pool=L33_VOCAB;
   else if(mode==='es-en-l34'||mode==='en-es-l34') pool=L34_VOCAB;
-  else if(mode==='es-en-l35'||mode==='en-es-l35') pool=L35_VOCAB;
-  else if(mode==='es-en-l36'||mode==='en-es-l36') pool=L36_VOCAB;
+  else if(mode==='es-en-l35'||mode==='en-es-l35'||mode==='es-en-l36'||mode==='en-es-l36') pool=L35_VOCAB;
   else if(mode==='master-review') pool=MASTER_REVIEW_BANK;
   else if(mode==='master-mistakes') pool=getMasterMistakes();
   else if(mode==='fill') pool=FILL_EXERCISES;
@@ -4922,7 +4943,7 @@ function resumeSession(){
   else if(mode==='fill-l32') pool=FILL_L32;
   else if(mode==='fill-l33') pool=FILL_L33;
   else if(mode==='fill-l34') pool=FILL_L34;
-  else if(mode==='fill-l35') pool=FILL_L35;
+  else if(mode==='fill-l35'||mode==='fill-l36') pool=FILL_L35;
   else if(mode==='conv-l2') pool=CONV_L2;
   else if(mode==='conv-l3') pool=CONV_L3;
   else if(mode==='conv-l13') pool=CONV_L13;
@@ -4947,7 +4968,7 @@ function resumeSession(){
   else if(mode==='conv-l32') pool=CONV_L32;
   else if(mode==='conv-l33') pool=CONV_L33;
   else if(mode==='conv-l34') pool=CONV_L34;
-  else if(mode==='conv-l35') pool=CONV_L35;
+  else if(mode==='conv-l35'||mode==='conv-l36') pool=CONV_L35;
   else pool=CONVERSATIONS;
   S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
   S.mode=mode; S.idx=saved.idx; S.correct=saved.correct; S.wrong=saved.wrong;
@@ -5043,8 +5064,10 @@ function _startFresh(mode){
     S.mode=mode; S.cards=shuffle(L33_VOCAB); S.revealed=false;
   } else if(mode==='es-en-l34'||mode==='en-es-l34'){
     S.mode=mode; S.cards=shuffle(L34_VOCAB); S.revealed=false;
-  } else if(mode==='es-en-l35'||mode==='en-es-l35'){
+  } else if(mode==='es-en-l35'||mode==='en-es-l35'||mode==='es-en-l36'||mode==='en-es-l36'){
     S.mode=mode; S.cards=shuffle(L35_VOCAB); S.revealed=false;
+  } else if(mode==='es-en-l36'||mode==='en-es-l36'){
+    S.mode=mode; S.cards=shuffle(L36_VOCAB); S.revealed=false;
   } else if(mode==='master-review'){
     S.mode='master-review'; S.cards=weightedMasterSample(MASTER_REVIEW_BANK,20); S.submitted=false;
   } else if(mode==='fill'){
@@ -5079,7 +5102,7 @@ function _startFresh(mode){
     S.mode='fill-l33'; S.cards=shuffle(FILL_L33); S.submitted=false;
   } else if(mode==='fill-l34'){
     S.mode='fill-l34'; S.cards=shuffle(FILL_L34); S.submitted=false;
-  } else if(mode==='fill-l35'){
+  } else if(mode==='fill-l35'||mode==='fill-l36'){
     S.mode='fill-l35'; S.cards=shuffle(FILL_L35); S.submitted=false;
   } else if(mode==='conv'){
     S.mode='conv'; S.cards=shuffle(CONVERSATIONS);
@@ -5131,7 +5154,7 @@ function _startFresh(mode){
     S.mode='conv-l33'; S.cards=shuffle(CONV_L33);
   } else if(mode==='conv-l34'){
     S.mode='conv-l34'; S.cards=shuffle(CONV_L34);
-  } else if(mode==='conv-l35'){
+  } else if(mode==='conv-l35'||mode==='conv-l36'){
     S.mode='conv-l35'; S.cards=shuffle(CONV_L35);
   }
   navigateToMode(S.mode);
@@ -5731,5 +5754,5 @@ renderNewLessonNotes();
 </div>
 </div>
 </div>
-</body>
+<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v36.1<br>Updated: 2026-07-30<br>Changes: Lesson 36 navigation · review integration · explanation redesign</div></body>
 </html>
