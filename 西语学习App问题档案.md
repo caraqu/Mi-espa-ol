@@ -36,7 +36,8 @@
 - 冷启动和跨课切换的四种模式已通过数据层与导航层回归；所有直接页面目标存在，页面 ID 无重复。
 - 共享代码已改动，因此本次对 Lesson 1–47 执行了注册表、题库、Master Review、单词复习与存储迁移的全量自动检查；这不等于重新人工校订 Lesson 1–35 的全部西语内容。
 - `BUG-005` 的代码修复已在 `index v44.1`、`sw.js v44.1` 和稳定 manifest identity 中完成；本地 Service Worker 生命周期与页面状态测试已验证安装、waiting、用户确认接管、版本化缓存清理、离线回退和 localStorage 保留。
-- 当前没有尚未实施的档案代码问题。仍需在实际发布网址和用户真实 iPhone 上完成一次端到端更新验证；这属于发布验收，不影响当前文件的代码完整性。
+- 当前有两个已确认但按用户要求暂不修改代码的问题：`BUG-006`（Daily Review 的 80/20 配额不足时没有自动补满每日 60 张）和 `BUG-007`（词汇评分按钮左右顺序不符合操作习惯）。
+- 仍需在实际发布网址和用户真实 iPhone 上完成一次端到端更新验证；这属于 `BUG-005` 的发布验收，不影响当前文件的代码完整性。
 
 ### 下一次修改开始时
 
@@ -45,6 +46,8 @@
 3. 如修改共享导航、状态、存储或渲染函数，对 Lesson 1–47 做全量自动回归检查。
 4. 新课 Class Notes 继续执行“保留全部有效内容、合并重复、尽量精简；标题、副标题与章节标题统一英文”的规范。
 5. 每次发布新版本都要同步递增 index 的 `APP_VERSION`、页脚版本和 `sw.js` 的 `APP_VERSION` / cache name，并重跑 PWA 更新测试。
+6. 下次修改 App 时优先处理 `BUG-006`：把 80/20 从固定配额改为优先比例，并验证任一池不足时会由另一池补位至每日上限 60。
+7. 同次处理 `BUG-007`：词汇答题后的三枚评分按钮固定为左侧 `Missed`、中间 `Sort of`、右侧 `Got it`，并回归两个复习方向的记录逻辑。
 
 ## ENH-001：Master Review 缺少按语法点覆盖和掌握退出机制
 
@@ -164,6 +167,60 @@ Master Review 使用 `mi_espanol_master_stats_v1` 保存在浏览器本地存储
 4. `getDueCards()` 完全排除 mastered 方向，不再放入 maintenance 抽样。
 5. 自动测试确认：错→对→错→对仍出现；下一次再对才退出；一个方向 mastered 不隐藏另一个方向；旧进度迁移后立即按新规则生效。
 6. v44.1 新增 `Mastered Vocabulary` 列表；可查看两个方向的独立状态，并只重新激活所选方向。重置后该方向立即回到常规复习，不影响另一个方向的记录。
+
+## BUG-006：Daily Review 的 80/20 配额不足时没有自动补满每日上限
+
+- 发现日期：2026-08-27
+- 当前状态：已诊断并记录；按用户要求本次暂不修改代码，下次更新优先处理
+- 严重程度：中（不会丢失学习记录，但会在仍有大量待复习词时浪费每日容量）
+- 影响范围：普通单词 Review、`getDueCards()`、两个复习方向、Today / more later 计数
+
+### 用户看到的问题
+
+- 西语 → 英语显示 `50 today, 497 more later`。
+- 英语 → 西语显示 `48 today, 559 more later`。
+- 页面摘要没有显示 Mastered 数量，用户需要确认已掌握记录是否丢失，以及 Today 没有达到 60 是否符合新规则。
+
+### 诊断依据
+
+1. 当前 `DAILY_LIMIT = 60`，但 `getDueCards()` 把每日选择固定拆为 80% hard pool 和 20% maintenance pool，即最多 48 张 overdue/new + 12 张 maintenance。
+2. 当前进度中，西语 → 英语只有 2 张可用 maintenance card，因此选择结果是 `48 + 2 = 50`；英语 → 西语没有可用 maintenance card，因此只有 `48 + 0 = 48`。
+3. maintenance 名额不足时，现有实现不会再从仍在等待的 overdue/new 中补位，所以即使 `more later` 仍有数百张，Today 也不会补满 60。
+4. Mastered 记录没有丢失：按当前 Lesson 1–47 词库映射，西语 → 英语约 254 个方向记录 mastered，英语 → 西语约 195 个方向记录 mastered；至少一个方向 mastered 的去重词约 273 个。
+5. Today / more later 摘要只显示活动队列，不显示 Mastered 数量；Mastered 可在 `Mastered Vocabulary` 列表查看。mastered 方向已正确排除在 Today 和 more later 之外。
+6. 进度会随作答时间和卡片状态实时变化，因此 `more later` 偶尔相差 1 张不代表数据丢失；验收应以同一时刻的队列总数核算。
+
+### 下次修改的确认规则
+
+- 80/20 只作为优先比例，不作为不能互相借用的固定配额。
+- hard pool 或 maintenance pool 任一不足时，剩余名额由另一池自动补位。
+- 只要未 mastered 的 active cards 总数不少于 60，Today 就应显示并抽取 60；不足 60 时才显示实际可用数量。
+- Mastered 方向继续完全退出常规队列，不得为了补满 60 而重新抽入。
+- `more later = 当前 active cards 总数 - Today 实际选择数`；两个方向分别计算，不能互相影响。
+- 修复后使用本次 progress JSON 做回归：在同一快照下，西语 → 英语应由 50 补满到 60，英语 → 西语应由 48 补满到 60；并验证 mastered 数量与历史记录不变。
+- 修改共享筛题逻辑后，必须对 Lesson 1–47、My Words、两个方向、空池/小池/大池边界和 JSON 导入迁移执行全量回归。
+
+## BUG-007：词汇评分按钮左右顺序不符合操作习惯
+
+- 发现日期：2026-08-27
+- 当前状态：已根据 iPhone 实机截图记录；按用户要求本次暂不修改代码，下次更新时处理
+- 严重程度：低（不影响数据，但容易误触并增加操作负担）
+- 影响范围：普通单词 Review 的答案评分区、Spanish → English、English → Spanish、移动端布局与键盘焦点顺序
+
+### 用户看到的问题
+
+- 当前答案下方三枚评分按钮从左到右排列为：`Got it`、`Sort of`、`Missed`。
+- 用户确认期望顺序为：左侧 `Missed`、中间 `Sort of`、右侧 `Got it`。
+- 本问题只指三枚评分按钮；下方导航继续保持 `Previous` 在左、继续/确认操作在右。
+
+### 下次修改的确认规则
+
+1. 三枚评分按钮的视觉顺序和 DOM / 键盘焦点顺序都必须是：`Missed` → `Sort of` → `Got it`。
+2. 保持现有语义和颜色：`Missed` 为红色、`Sort of` 为黄色、`Got it` 为绿色；不得只换文字而错接原按钮事件。
+3. `Missed` 仍记录未记住并清零连续次数；`Sort of` 仍不计为完全记住；`Got it` 仍按连续两次完全记住规则推进 mastery。
+4. Spanish → English 与 English → Spanish 两个方向必须使用相同顺序，并分别验证各按钮写入了正确方向的记录。
+5. 在 iPhone 窄屏及常规桌面宽度下，三个按钮不得重叠、错位或因为 CSS `order` 导致视觉顺序与点击/焦点顺序不一致。
+6. 该改动属于共享 Review UI 变更；完成后必须回归 `BUG-003` 的双方向 mastery、重新激活和进度导入逻辑。
 
 ## BUG-004：全局单词 Review 词库只接入到 Lesson 27
 
