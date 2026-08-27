@@ -199,6 +199,10 @@ body{max-width:480px;margin:0 auto;}
 .manage-row-edit{display:none;flex-direction:column;gap:8px;padding-top:8px;}
 .manage-edit-row{display:flex;gap:8px;}
 .manage-save-row{display:flex;gap:8px;margin-top:4px;}
+.mastered-status{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.reactivate-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.reactivate-btn{border:1.5px solid var(--border);background:var(--purple-light);color:var(--purple-dark);border-radius:9px;padding:7px 6px;font-size:11px;font-weight:700;cursor:pointer;}
+.reactivate-btn:disabled{background:var(--bg);color:var(--muted);opacity:.55;cursor:default;}
 
 /* ── BACKUP CARD ── */
 .backup-card{background:var(--white);border-radius:18px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;}
@@ -211,6 +215,16 @@ body{max-width:480px;margin:0 auto;}
 .backup-btn:active{background:var(--border);}
 .backup-btn.imp{background:var(--gold);color:#5a3e00;}
 .backup-btn.imp:active{background:var(--gold-dark);}
+.storage-status{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.4;}
+
+/* ── SAFE PWA UPDATE BANNER ── */
+.update-banner{display:none;position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:calc(100% - 28px);max-width:452px;background:var(--text);color:#fff;border-radius:16px;padding:13px 14px;z-index:500;box-shadow:0 8px 30px rgba(44,30,82,.34);align-items:center;gap:10px;}
+.update-banner.show{display:flex;}
+.update-copy{flex:1;min-width:0;}
+.update-title{font-size:13px;font-weight:800;}
+.update-sub{font-size:11px;opacity:.78;line-height:1.4;margin-top:2px;}
+.update-now{border:0;border-radius:10px;background:var(--gold);color:#4A3500;padding:9px 11px;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;}
+.update-later{border:0;background:transparent;color:#fff;font-size:18px;line-height:1;padding:6px 2px;cursor:pointer;opacity:.75;}
 
 /* ── RESUME MODAL ── */
 .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(44,30,82,.5);z-index:200;align-items:flex-end;justify-content:center;}
@@ -287,6 +301,11 @@ body{max-width:480px;margin:0 auto;}
 </style>
 </head>
 <body>
+<div aria-live="polite" class="update-banner" id="pwa-update-banner" role="status">
+<div class="update-copy"><div class="update-title">New version available</div><div class="update-sub">Your saved progress stays on this device.</div></div>
+<button class="update-now" id="pwa-update-button" onclick="applyPwaUpdate()">Update now</button>
+<button aria-label="Update later" class="update-later" onclick="hidePwaUpdate()">×</button>
+</div>
 <!-- ══ BULK IMPORT MODAL ══ -->
 <div class="modal-backdrop" id="bulk-modal">
 <div class="modal-sheet">
@@ -323,6 +342,15 @@ body{max-width:480px;margin:0 auto;}
 <div class="modal-sub" style="margin-bottom:10px;">Tap ✏️ to edit, 🗑️ to delete</div>
 <div class="manage-list" id="manage-list"></div>
 <button class="secondary-btn" onclick="document.getElementById('manage-modal').classList.remove('show')" style="margin-top:14px;flex-shrink:0;">Done</button>
+</div>
+</div>
+<!-- ══ MASTERED VOCABULARY MODAL ══ -->
+<div class="modal-backdrop" id="mastered-vocab-modal">
+<div class="modal-sheet" style="max-height:82vh;display:flex;flex-direction:column;padding-bottom:24px;">
+<div class="modal-title">Mastered Vocabulary ✅</div>
+<div class="modal-sub" style="margin-bottom:10px;">Each direction is independent. Reactivate only the direction you want to review again.</div>
+<div class="manage-list" id="mastered-vocab-list"></div>
+<button class="secondary-btn" onclick="document.getElementById('mastered-vocab-modal').classList.remove('show')" style="margin-top:14px;flex-shrink:0;">Done</button>
 </div>
 </div>
 <!-- ══ RESUME MODAL ══ -->
@@ -375,13 +403,13 @@ body{max-width:480px;margin:0 auto;}
 <div class="lc-head">
 <div>
 <div class="lc-title">⭐ Master Review — Mixed Practice</div>
-<div class="lc-hint">20 smart questions · forms, rules and error finding · context-aware explanations</div>
-<div class="lc-date">Updated through Lesson 38 (expanded)</div>
+<div class="lc-hint">dynamic skill cycle · forms, rules and error finding · context-aware explanations</div>
+<div class="lc-date">Updated through Lesson 47</div>
 </div>
 <div class="lc-badge">Daily 10 min</div>
 </div>
 <div class="mode-grid">
-<div class="mbtn" onclick="startMode('master-review')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Start 20 Questions</div></div>
+<div class="mbtn" onclick="startMode('master-review')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Start Smart Cycle</div></div>
 <div class="mbtn" onclick="show('s-master-notes')"><div class="mbtn-icon">🔥</div><div class="mbtn-label">Common Confusions</div></div>
 </div>
 
@@ -389,7 +417,98 @@ body{max-width:480px;margin:0 auto;}
 <button class="master-mini-btn" onclick="startMasterMistakes()">❌ Practice Mistakes</button>
 <button class="master-mini-btn" onclick="showMasterProgress()">📊 My Progress</button>
 </div>
-<div class="lc-hint" id="master-smart-hint" style="margin-top:12px;">Smart review prioritizes recent lessons, past mistakes and overdue questions.</div>
+<div class="lc-hint" id="master-smart-hint" style="margin-top:12px;">Every active skill gets representative questions; mastered skills leave the regular cycle.</div>
+</div>
+
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 47 — Reflexive Routines &amp; Verb Chains</div><div class="lc-hint">reflexive and pronominal verbs · gerund vs participle · pronoun position · irregular yo forms</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l47')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l47')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l47')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l47')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l47')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 46 — Stem Changes &amp; Spelling</div><div class="lc-hint">e→ie · o/u→ue · e→i · nosotros pattern · g/gu/j pronunciation</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l46')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l46')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l46')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l46')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l46')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 45 — Places, Weather &amp; Core Predicates</div><div class="lc-hint">ser · estar · tener · hay · countries and cities · climate and geography</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l45')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l45')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l45')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l45')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l45')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 44 — Time, Frequency &amp; Daily Routines</div><div class="lc-hint">telling time · frequency expressions · time phrases · routine sequencing</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l44')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l44')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l44')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l44')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l44')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 43 — Classroom Fragments &amp; Feedback</div><div class="lc-hint">time estimates · online shopping · usefulness feedback · complete context</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l43')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l43')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l43')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l43')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l43')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 42 — Appearance, Personality &amp; Possession</div><div class="lc-hint">ser vs estar · adjective agreement · possessive adjectives and pronouns</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l42')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l42')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l42')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l42')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l42')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 41 — Family, Demonstratives &amp; Comparisons</div><div class="lc-hint">family relationships · de for possession · este/ese · comparatives and superlatives</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l41')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l41')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l41')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l41')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l41')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 40 — Core Tense Review</div><div class="lc-hint">present · progressive · three pasts · ir a · simple future · weekly plans</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l40')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l40')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l40')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l40')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l40')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 39 — Future Life, Goals &amp; Promises</div><div class="lc-hint">future writing · ser/estar/tener · New Year goals · marriage and honeymoon plans</div><div class="lc-date">Updated August 24, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l39')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l39')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l39')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l39')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l39')" style="margin-top:12px;">📖 View Class Notes</button>
 </div>
 
 
@@ -397,9 +516,9 @@ body{max-width:480px;margin:0 auto;}
 <div class="lesson-card">
 <div class="lc-head">
 <div>
-<div class="lc-title">Lesson 38 — Future Predictions &amp; Writing</div>
-<div class="lc-hint">futuro · habrá · será · podrán · predictions · future writing</div>
-<div class="lc-date">August 3, 2026</div>
+<div class="lc-title">Lesson 38 — Future Predictions &amp; Persuasive Writing</div>
+<div class="lc-hint">future vs conditional · CDMX travel ad · the world in 2050 · future writing</div>
+<div class="lc-date">Updated August 24, 2026</div>
 </div>
 <div class="lc-badge">New ✨</div>
 </div>
@@ -415,9 +534,9 @@ body{max-width:480px;margin:0 auto;}
 <div class="lesson-card">
 <div class="lc-head">
 <div>
-<div class="lc-title">Lesson 37 — Future &amp; Conditional</div>
-<div class="lc-hint">si clauses · futuro · condicional · irregular stems</div>
-<div class="lc-date">August 3, 2026</div>
+<div class="lc-title">Lesson 37 — Real Conditions &amp; Simple Future</div>
+<div class="lc-hint">real vs hypothetical si clauses · regular future · irregular stems · travel promotion</div>
+<div class="lc-date">Updated August 24, 2026</div>
 </div>
 <div class="lc-badge">New ✨</div>
 </div>
@@ -433,7 +552,7 @@ body{max-width:480px;margin:0 auto;}
 
 <div class="lesson-card">
 <div class="lc-head">
-<div><div class="lc-title">Lesson 36 — Future &amp; Conditional Review</div><div class="lc-hint">future tense · conditional · irregular stems · mixed practice</div><div class="lc-date">August 1, 2026</div></div>
+<div><div class="lc-title">Lesson 36 — Past Tenses &amp; Two Uses of A</div><div class="lc-hint">imperfect vs preterite · result state vs event · pronoun position · movement and personal a</div><div class="lc-date">Updated August 24, 2026</div></div>
 <div class="lc-badge">New ✨</div>
 </div>
 <div class="mode-grid">
@@ -905,16 +1024,18 @@ body{max-width:480px;margin:0 auto;}
 <div class="backup-icon">💾</div>
 <div class="backup-text">
 <div class="backup-title">My Progress</div>
-<div class="backup-sub">Save or restore your memory curve data</div>
+<div class="backup-sub">Save or restore vocabulary, Master Review and streak data</div>
+<div class="storage-status" id="storage-status">Checking device storage protection…</div>
 </div>
 <div class="backup-btns">
 <button class="backup-btn" onclick="exportProgress()">⬇ Export</button>
 <button class="backup-btn imp" onclick="document.getElementById('import-input').click()">⬆ Import</button>
 </div>
 </div>
+<button class="secondary-btn" onclick="showMasteredVocabulary()" style="margin:-4px 0 14px;">✅ View Mastered Vocabulary</button>
 <input accept=".json" id="import-input" onchange="importProgress(this)" style="display:none;" type="file"/>
 <div style="text-align:center;color:var(--muted);font-size:11px;margin:10px 0 2px;line-height:1.5;">
-  Version 37.0 · Lesson 35 + Rule Choice · Lessons 28–35 · July 2026
+  Version 44.1 · Lessons 36–47 · Safe in-app updates · August 2026
 </div>
 
 </div>
@@ -942,9 +1063,9 @@ body{max-width:480px;margin:0 auto;}
 <div class="fc-review-tag" id="fc-review-tag">👀 Already answered — review only</div>
 </div>
 <div class="vbtn-row hidden" id="vbtn-row">
-<button class="vbtn great" onclick="verdict(5)">✓ Got it<span class="vbtn-hint">~6 days</span></button>
+<button class="vbtn great" onclick="verdict(5)">✓ Got it<span class="vbtn-hint">confirm tomorrow</span></button>
 <button class="vbtn ok" onclick="verdict(3)">🤔 Sort of<span class="vbtn-hint">tomorrow</span></button>
-<button class="vbtn no" onclick="verdict(1)">✗ Missed<span class="vbtn-hint">today</span></button>
+<button class="vbtn no" onclick="verdict(1)">✗ Missed<span class="vbtn-hint">tomorrow</span></button>
 </div>
 <div class="nav-row" style="margin-top:10px;">
 <button class="nav-btn" disabled="" id="flash-prev" onclick="prevCard()">← Previous</button>
@@ -1018,10 +1139,10 @@ body{max-width:480px;margin:0 auto;}
 <div id="master-progress-list"></div>
 </div>
 <div class="note-section">
-<h3>🧠 How smart review chooses questions</h3>
-<div class="grammar-rule"><strong>Higher priority:</strong> questions you missed, questions due for review, and newer lesson material.</div>
-<div class="grammar-rule"><strong>Lower priority:</strong> questions you have answered correctly several times recently.</div>
-<div class="grammar-rule">A correct answer increases the interval: approximately <strong>1 → 3 → 7 → 15 → 30 days</strong>. A mistake brings the question back sooner.</div>
+<h3>🧠 How Smart Review Works</h3>
+<div class="grammar-rule"><strong>Guaranteed coverage:</strong> new questions enter the current cycle, and each active skill receives representative questions.</div>
+<div class="grammar-rule"><strong>Mastery:</strong> two representative questions must each be correct twice across at least two sessions, with no recent error.</div>
+<div class="grammar-rule"><strong>Exit and reactivate:</strong> mastered skills leave regular review; a later mistake or a new related question activates them again.</div>
 </div>
 <button class="primary-btn" onclick="startMode('master-review')">Start Smart Review</button>
 <button class="secondary-btn" onclick="startMasterMistakes()">Practice Mistakes Only</button>
@@ -1041,7 +1162,7 @@ body{max-width:480px;margin:0 auto;}
 </div>
 <div class="sr-info" id="sr-info" style="display:none;">
         💜 <strong>Memory curve updated!</strong><br/>
-        Words you missed will come back tomorrow. Words you got right will return in ~6 days.
+        Missed and Sort of return tomorrow. Two consecutive Got it answers master that direction and remove it from regular review.
       </div>
 <button class="primary-btn" onclick="goHome()">🏠 Home</button>
 <button class="secondary-btn" onclick="retryMode()">↺ Try Again</button>
@@ -3977,6 +4098,8 @@ const CONV_L24 = [
   {ctx:'Class chat', q:'¿Te gusta más el español que hace dos meses?', q_en:'Do you like Spanish more than two months ago?', ans:'Sí, me gusta más que hace dos meses.', ans_en:'Yes, I like it more than two months ago.', note:'más que hace dos meses = more than two months ago.'},
 ];
 
+const APP_VERSION = 'v44.1';
+const PROGRESS_SCHEMA_VERSION = 3;
 const MYWORDS_KEY = 'mywords_espanol';
 function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
 function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
@@ -3984,16 +4107,17 @@ function saveMyWords(w) { localStorage.setItem(MYWORDS_KEY,JSON.stringify(w)); }
 // Check if a Spanish word already exists in any lesson vocab
 function isInLessonVocab(es) {
   const q = es.toLowerCase().trim();
-  return [...VOCAB,...VOCAB_L2,...VOCAB_L3,...VOCAB_L4,...VOCAB_L5,...VOCAB_L6,...VOCAB_L7,...VOCAB_L8,...VOCAB_L9,...VOCAB_L10,...VOCAB_L11,...VOCAB_L12,...VOCAB_L13,...VOCAB_L14,...VOCAB_L15,...VOCAB_L16,...VOCAB_L17,...VOCAB_L18,...VOCAB_L19,...VOCAB_L20,...VOCAB_L21,...VOCAB_L22,...VOCAB_L23,...VOCAB_L24,...L25_VOCAB,...L26_VOCAB,...L27_VOCAB,...L28_VOCAB,...L29_VOCAB,...L30_VOCAB,...L31_VOCAB,...L32_VOCAB,...L33_VOCAB,...L34_VOCAB,...L35_VOCAB,...L36_VOCAB].some(v => v.es.toLowerCase() === q);
+  return Object.values(LESSON_REGISTRY).some(lesson =>
+    (lesson.vocab||[]).some(v => String(v.es||'').toLowerCase().trim()===q)
+  );
 }
 
-// One-time migration: remove My Words that are already in lesson vocab
+// Re-run on every startup so a newly published Lesson can immediately remove
+// matching My Words without relying on a manually bumped migration flag.
 function dedupeMyWords() {
-  if(localStorage.getItem('myw_deduped_v1')) return;
   const words = loadMyWords();
   const filtered = words.filter(w => !isInLessonVocab(w.es));
   if(filtered.length < words.length) saveMyWords(filtered);
-  localStorage.setItem('myw_deduped_v1','1');
 }
 
 function showAddWordModal() {
@@ -4170,15 +4294,38 @@ function migrateSRKeys() {
   localStorage.setItem('sr_migrated_v1','1');
 }
 
+// v3 mastery migration: old records did not distinguish a full Got it from
+// other successful SM-2 grades. reps >= 2 is the safest available evidence
+// that the direction had already been recalled twice.
+function migrateSRMastery(){
+  if(localStorage.getItem('sr_mastery_migrated_v3')) return;
+  const data=loadSR();
+  Object.values(data).forEach(card=>{
+    if(typeof card.fullRecallStreak!=='number') card.fullRecallStreak=(card.reps||0)>=2?2:0;
+    if(typeof card.mastered!=='boolean') card.mastered=(card.reps||0)>=2;
+    if(card.lastQuality===undefined) card.lastQuality=null;
+    if(card.masteredAt===undefined) card.masteredAt=card.mastered?Date.now():0;
+  });
+  saveSR(data);
+  localStorage.setItem('sr_mastery_migrated_v3','1');
+}
+
 // key = "botella_es_en" or "botella_en_es"
 function srKey(word, dir) { return `${word}_${dir}`; }
 
 function getSRCard(key, data) {
-  if (!data[key]) data[key]={interval:1,reps:0,ef:2.5,nextReview:0};
+  if (!data[key]) data[key]={interval:1,reps:0,ef:2.5,nextReview:0,fullRecallStreak:0,lastQuality:null,mastered:false,masteredAt:0};
+  const card=data[key];
+  if(typeof card.fullRecallStreak!=='number') card.fullRecallStreak=(card.reps||0)>=2?2:0;
+  if(typeof card.mastered!=='boolean') card.mastered=(card.reps||0)>=2;
   return data[key];
 }
 
 function sm2Update(card, q) {
+  card.lastQuality=q;
+  if(q===5) card.fullRecallStreak=(card.fullRecallStreak||0)+1;
+  else card.fullRecallStreak=0;
+  if(q<5){card.mastered=false;card.masteredAt=0;}
   if (q < 3) { card.reps=0; card.interval=1; }
   else {
     if (card.reps===0) card.interval=1;
@@ -4186,8 +4333,13 @@ function sm2Update(card, q) {
     else card.interval=Math.round(card.interval*card.ef);
     card.reps++;
   }
+  if(q<5) card.interval=1;
   card.ef=Math.max(1.3, card.ef+0.1-(5-q)*(0.08+(5-q)*0.02));
   card.nextReview=Date.now()+card.interval*86400000;
+  if(card.fullRecallStreak>=2){
+    card.mastered=true;
+    card.masteredAt=Date.now();
+  }
   return card;
 }
 
@@ -4248,13 +4400,7 @@ function seededShuffle(arr, seed) {
 // Final card list is shuffled so the study order feels natural (not all-hard
 // at the start).
 function getAllReviewVocab() {
-  // One single source of truth for the global review pool.
-  // This keeps the home-page counts and the actual Review button perfectly aligned.
-  return [
-    VOCAB,VOCAB_L2,VOCAB_L3,VOCAB_L4,VOCAB_L5,VOCAB_L6,VOCAB_L7,VOCAB_L8,VOCAB_L9,VOCAB_L10,VOCAB_L11,VOCAB_L12,VOCAB_L13,
-    VOCAB_L14,VOCAB_L15,VOCAB_L16,VOCAB_L17,VOCAB_L18,VOCAB_L19,VOCAB_L20,VOCAB_L21,VOCAB_L22,VOCAB_L23,VOCAB_L24,
-    L25_VOCAB,L26_VOCAB,L27_VOCAB,loadMyWords()
-  ].flat();
+  return [...Object.values(LESSON_REGISTRY).flatMap(lesson=>lesson.vocab||[]),...loadMyWords()];
 }
 
 function getDueCards(dir) {
@@ -4269,6 +4415,8 @@ function getDueCards(dir) {
     const card=data[k];
     if(!card) {
       newCards.push(v);
+    } else if(card.mastered) {
+      return;
     } else if(card.nextReview<=now) {
       const daysOver=(now-card.nextReview)/86400000;
       overdue.push({v, daysOver, ef:card.ef||2.5, reps:card.reps||0});
@@ -4317,10 +4465,65 @@ function getDueCardCounts(dir) {
     if(seen.has(v.es)) return; seen.add(v.es);
     const k=srKey(v.es,dir);
     if(!data[k]) newCount++;
+    else if(data[k].mastered) return;
     else if(data[k].nextReview<=now) overdue++;
   };
   getAllReviewVocab().forEach(check);
   return {overdue, newCount, total:overdue+newCount};
+}
+
+let masteredVocabularyRows=[];
+function escapeHtml(value){
+  return String(value??'').replace(/[&<>"']/g,ch=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[ch]);
+}
+
+function collectMasteredVocabulary(){
+  const data=loadSR(),unique=new Map();
+  getAllReviewVocab().forEach(v=>{
+    const key=String(v.es||'').trim().toLowerCase();
+    if(key&&!unique.has(key))unique.set(key,v);
+  });
+  return [...unique.values()].map(v=>({
+    ...v,
+    esEn:!!data[srKey(v.es,'es_en')]?.mastered,
+    enEs:!!data[srKey(v.es,'en_es')]?.mastered
+  })).filter(v=>v.esEn||v.enEs).sort((a,b)=>a.es.localeCompare(b.es,'es'));
+}
+
+function renderMasteredVocabulary(){
+  masteredVocabularyRows=collectMasteredVocabulary();
+  const el=document.getElementById('mastered-vocab-list');
+  if(!masteredVocabularyRows.length){
+    el.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;line-height:1.6;">No mastered vocabulary yet.<br>Two consecutive “Got it” answers master one direction.</div>';
+    return;
+  }
+  el.innerHTML=masteredVocabularyRows.map((v,i)=>`<div class="manage-row">
+    <div class="manage-word-es">${escapeHtml(fmtEs(v))}</div>
+    <div class="manage-word-en" style="white-space:normal;margin-top:2px;">${escapeHtml(v.en)}</div>
+    <div class="mastered-status">SP→EN: ${v.esEn?'Mastered':'Active'} · EN→SP: ${v.enEs?'Mastered':'Active'}</div>
+    <div class="reactivate-grid">
+      <button class="reactivate-btn" ${v.esEn?'':'disabled'} onclick="reactivateMasteredVocabulary(${i},'es_en')">Reactivate SP→EN</button>
+      <button class="reactivate-btn" ${v.enEs?'':'disabled'} onclick="reactivateMasteredVocabulary(${i},'en_es')">Reactivate EN→SP</button>
+    </div>
+  </div>`).join('');
+}
+
+function showMasteredVocabulary(){
+  renderMasteredVocabulary();
+  document.getElementById('mastered-vocab-modal').classList.add('show');
+}
+
+function reactivateMasteredVocabulary(index,dir){
+  const word=masteredVocabularyRows[index];
+  if(!word||!['es_en','en_es'].includes(dir))return;
+  const data=loadSR(),card=getSRCard(srKey(word.es,dir),data);
+  card.mastered=false;card.masteredAt=0;card.fullRecallStreak=0;card.reps=0;
+  card.interval=1;card.nextReview=0;card.lastQuality=null;
+  saveSR(data);
+  renderMasteredVocabulary();
+  refreshHome();
 }
 
 function updateStreak() {
@@ -4675,25 +4878,26 @@ const MASTER_REVIEW_BANK=[
 
 // ══════════════ SMART MASTER REVIEW ENGINE ══════════════
 const MASTER_STATS_KEY='mi_espanol_master_stats_v1';
+const MASTER_SKILL_KEY='mi_espanol_master_skill_stats_v1';
+const MASTER_CYCLE_KEY='mi_espanol_master_cycle_v1';
 const MASTER_INTERVALS=[1,3,7,15,30];
+const MASTER_PART_SIZE=24;
 
-function masterQuestionId(q){
-  return q.id || ('q_'+Math.abs(hashText((q.sentence||'')+'|'+(q.answer||''))));
-}
 function hashText(s){
   let h=0;
   for(let i=0;i<s.length;i++) h=((h<<5)-h+s.charCodeAt(i))|0;
   return h;
 }
+function legacyMasterQuestionId(q){return 'q_'+Math.abs(hashText((q.sentence||'')+'|'+(q.answer||'')));}
 function inferMasterTopic(q){
   const v=(q.topic||q.verb||'Other').toLowerCase();
-  if(v.includes('querer')) return 'Querer forms';
-  if(v.includes('preterite')||v.includes('imperfect')||v.includes('past')||v.includes('pasts')) return 'Past tenses';
-  if(v.includes('future')||v.includes('conditional')||v.includes('plan')) return 'Future & conditional';
-  if(v.includes('object')||v.includes('pronoun')) return 'Object pronouns';
-  if(v.includes('ser')||v.includes('estar')||v.includes('hay')) return 'Ser / estar / hay';
-  if(v.includes('ir ')) return 'Ir forms';
-  return 'Other grammar';
+  if(v.includes('querer')) return 'Querer Forms';
+  if(v.includes('preterite')||v.includes('imperfect')||v.includes('past')||v.includes('pasts')) return 'Past Tenses';
+  if(v.includes('future')||v.includes('conditional')||v.includes('plan')) return 'Future & Conditional';
+  if(v.includes('object')||v.includes('pronoun')) return 'Object Pronouns';
+  if(v.includes('ser')||v.includes('estar')||v.includes('hay')) return 'Ser / Estar / Hay';
+  if(v.includes('ir ')) return 'Ir Forms';
+  return 'Core Grammar';
 }
 function inferMasterLesson(q){
   const v=(q.verb||'').toLowerCase();
@@ -4703,143 +4907,616 @@ function inferMasterLesson(q){
   if(v.includes('preterite')||v.includes('imperfect')||v.includes('mientras')) return 28;
   return 27;
 }
-MASTER_REVIEW_BANK.forEach((q,i)=>{
-  q.id=masterQuestionId(q);
-  q.topic=q.topic||inferMasterTopic(q);
-  q.lesson=q.lesson||inferMasterLesson(q);
-  q.difficulty=q.difficulty||2;
-});
+function inferMasterSkill(q){
+  const v=`${q.topic||''} ${q.verb||''} ${q.sentence||''}`.toLowerCase();
+  if(v.includes('passive')||v.includes('fue escrito')) return 'L36-RESULT-PASSIVE';
+  if(v.includes('querer')) return 'LEGACY-QUERER-FORMS';
+  if(v.includes('present perfect')||v.includes('three past')||v.includes('he ido')||v.includes('has comido')) return 'LEGACY-PRESENT-PERFECT';
+  if(v.includes('preterite')||v.includes('imperfect')||v.includes('past contrast')||v.includes('mientras')||v.includes('de repente')) return 'LEGACY-PAST-CONTRAST';
+  if(v.includes('future')||v.includes('conditional')||v.includes('plan')||v.includes('si fuera')) return 'LEGACY-FUTURE-CONDITIONAL';
+  if(v.includes('direct object')||v.includes('indirect object')||v.includes('double pronoun')||v.includes('personal a')||v.includes('pronoun position')||v.includes('command')) return 'LEGACY-OBJECT-PRONOUNS';
+  if(v.includes('ser vs estar')||v.includes('hay vs estar')) return 'LEGACY-SER-ESTAR-HAY';
+  if(v.includes('time expression')||v.includes('después')||v.includes('gustar')) return 'LEGACY-CORE-CONNECTORS';
+  return 'LEGACY-CORE-GRAMMAR';
+}
+function normalizeMasterBank(){
+  MASTER_REVIEW_BANK.forEach((q,i)=>{
+    if(!q.questionId){
+      q.legacyId=q.legacyId||q.id||legacyMasterQuestionId(q);
+      q.questionId=`MR-LEGACY-${String(i+1).padStart(3,'0')}`;
+    }
+    q.id=q.questionId;
+    q.topic=q.topic||inferMasterTopic(q);
+    q.skillId=q.skillId||inferMasterSkill(q);
+    q.lesson=q.lesson||inferMasterLesson(q);
+    q.difficulty=q.difficulty||2;
+    q.cn=q.cn||q.translation||q.en||'（中文翻译待补充）';
+  });
+}
+normalizeMasterBank();
 
+function masterDefaultStat(){
+  return {correct:0,wrong:0,streak:0,level:0,lastSeen:0,due:0,lastChoice:'',firstTryCorrect:0,correctSessions:[],history:[],mastered:false,active:true};
+}
 function loadMasterStats(){
-  try{return JSON.parse(localStorage.getItem(MASTER_STATS_KEY))||{};}catch(e){return {};}
+  let raw={};
+  try{raw=JSON.parse(localStorage.getItem(MASTER_STATS_KEY))||{};}catch(e){raw={};}
+  let changed=false;
+  MASTER_REVIEW_BANK.forEach(q=>{
+    if(!raw[q.questionId]&&q.legacyId&&raw[q.legacyId]){
+      raw[q.questionId]={...raw[q.legacyId]};
+      changed=true;
+    }
+    const s=raw[q.questionId];
+    if(!s)return;
+    if(typeof s.firstTryCorrect!=='number'){s.firstTryCorrect=s.correct||0;changed=true;}
+    if(!Array.isArray(s.correctSessions)){
+      const n=Math.min(2,s.streak||0);
+      s.correctSessions=Array.from({length:n},(_,i)=>`legacy-${i+1}`);
+      changed=true;
+    }
+    if(!Array.isArray(s.history)){
+      s.history=[];
+      const n=Math.min(2,s.streak||0);
+      for(let i=0;i<n;i++)s.history.push({sessionId:`legacy-${i+1}`,correct:true,at:(s.lastSeen||Date.now())-((n-i)*1000)});
+      changed=true;
+    }
+    if(typeof s.mastered!=='boolean'){s.mastered=s.correctSessions.length>=2&&s.firstTryCorrect>=2;changed=true;}
+    if(typeof s.active!=='boolean'){s.active=!s.mastered;changed=true;}
+  });
+  if(changed)saveMasterStats(raw);
+  return raw;
 }
 function saveMasterStats(stats){localStorage.setItem(MASTER_STATS_KEY,JSON.stringify(stats));}
-function masterDefaultStat(){return {correct:0,wrong:0,streak:0,level:0,lastSeen:0,due:0,lastChoice:''};}
-function getMasterStat(q,stats=loadMasterStats()){return stats[q.id]||masterDefaultStat();}
+function loadMasterSkillStats(){try{return JSON.parse(localStorage.getItem(MASTER_SKILL_KEY))||{};}catch(e){return {};}}
+function saveMasterSkillStats(stats){localStorage.setItem(MASTER_SKILL_KEY,JSON.stringify(stats));}
+function loadMasterCycle(){try{return JSON.parse(localStorage.getItem(MASTER_CYCLE_KEY))||null;}catch(e){return null;}}
+function saveMasterCycle(cycle){if(cycle)localStorage.setItem(MASTER_CYCLE_KEY,JSON.stringify(cycle));else localStorage.removeItem(MASTER_CYCLE_KEY);}
+function getMasterStat(q,stats=loadMasterStats()){return stats[q.questionId]||masterDefaultStat();}
+function createMasterSessionId(){return `ms-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;}
+
 function masterPriority(q,stats,now=Date.now()){
   const s=getMasterStat(q,stats);
   let weight=1;
-  if(s.wrong>0) weight += Math.min(10,s.wrong*2.5);
-  if(s.streak===0 && s.wrong>0) weight += 5;
-  if(!s.lastSeen) weight += 3;
-  if(s.due && s.due<=now) weight += 6;
-  if(s.lastSeen && now-s.lastSeen>7*86400000) weight += 3;
-  if(q.lesson>=33) weight += 2.5;
-  weight += (q.difficulty||2)*0.4;
-  weight -= Math.min(4,(s.streak||0)*0.8);
-  return Math.max(0.4,weight);
+  if(!s.lastSeen) weight+=20;
+  if(s.wrong>0) weight+=Math.min(12,s.wrong*2.5);
+  if(s.streak===0&&s.wrong>0) weight+=5;
+  if(s.due&&s.due<=now) weight+=7;
+  if(s.lastSeen&&now-s.lastSeen>7*86400000) weight+=3;
+  const maxLesson=typeof MAX_LESSON==='number'?MAX_LESSON:47;
+  const distance=Math.max(0,maxLesson-(q.lesson||0));
+  weight+=Math.max(0,6-distance*0.4);
+  weight+=(q.difficulty||2)*0.4;
+  if(s.mastered) weight-=20;
+  return Math.max(0.1,weight);
 }
+
+function recomputeMasterSkills(stats=loadMasterStats()){
+  const previous=loadMasterSkillStats(), next={}, groups={};
+  MASTER_REVIEW_BANK.forEach(q=>(groups[q.skillId]||(groups[q.skillId]=[])).push(q));
+  Object.entries(groups).forEach(([skillId,questions])=>{
+    const entries=questions.map(q=>({q,s:getMasterStat(q,stats)}));
+    entries.forEach(({s})=>{
+      const sessions=[...new Set(s.correctSessions||[])];
+      const recent=(s.history||[]).slice(-2);
+      s.mastered=sessions.length>=2&&(s.firstTryCorrect||0)>=2&&recent.length>=2&&recent.every(h=>h.correct);
+      s.active=!s.mastered;
+    });
+    const qualified=entries.filter(({s})=>s.mastered);
+    const allHistory=entries.flatMap(({s})=>s.history||[]).sort((a,b)=>(a.at||0)-(b.at||0));
+    const recentFour=allHistory.slice(-4);
+    const sessionIds=new Set(qualified.flatMap(({s})=>s.correctSessions||[]));
+    const hasNew=entries.some(({s})=>!s.lastSeen);
+    const mastered=questions.length>=2&&qualified.length>=2&&sessionIds.size>=2&&recentFour.length>=4&&recentFour.every(h=>h.correct)&&!hasNew;
+    next[skillId]={
+      skillId,topic:questions[0].topic,lesson:Math.max(...questions.map(q=>q.lesson||0)),questionIds:questions.map(q=>q.questionId),
+      coverageCount:entries.filter(({s})=>s.lastSeen).length,correctSessions:[...sessionIds],mastered,active:!mastered,
+      reactivatedAt:previous[skillId]?.mastered&&!mastered?Date.now():(previous[skillId]?.reactivatedAt||0),
+      lastUpdated:Date.now()
+    };
+  });
+  saveMasterStats(stats);
+  saveMasterSkillStats(next);
+  return next;
+}
+
+function buildMasterReviewPlan(){
+  const stats=loadMasterStats(), skills=recomputeMasterSkills(stats), groups={};
+  MASTER_REVIEW_BANK.forEach(q=>{if(skills[q.skillId]?.active)(groups[q.skillId]||(groups[q.skillId]=[])).push(q);});
+  const orderedSkills=Object.values(groups).sort((a,b)=>Math.max(...b.map(q=>masterPriority(q,stats)))-Math.max(...a.map(q=>masterPriority(q,stats))));
+  const selected=[];
+  orderedSkills.forEach(questions=>{
+    const unseen=questions.filter(q=>!getMasterStat(q,stats).lastSeen);
+    const chosen=[...unseen];
+    const rest=questions.filter(q=>!chosen.includes(q)).sort((a,b)=>masterPriority(b,stats)-masterPriority(a,stats));
+    while(chosen.length<Math.min(2,questions.length)&&rest.length)chosen.push(rest.shift());
+    selected.push(...chosen);
+  });
+  const ids=[...new Set(selected.map(q=>q.questionId))];
+  const cycle={cycleId:`mc-${Date.now()}`,createdAt:Date.now(),part:0,totalQuestions:ids.length,remaining:ids,current:[],completed:[],activeSkillIds:Object.keys(groups),completedAt:0};
+  saveMasterCycle(cycle);
+  return cycle;
+}
+
+function getNextMasterPart(){
+  let cycle=loadMasterCycle();
+  if(!cycle||cycle.completedAt)cycle=buildMasterReviewPlan();
+  const known=new Set([...(cycle.remaining||[]),...(cycle.current||[]),...(cycle.completed||[])]);
+  const stats=loadMasterStats();
+  MASTER_REVIEW_BANK.forEach(q=>{if(!getMasterStat(q,stats).lastSeen&&!known.has(q.questionId))cycle.remaining.push(q.questionId);});
+  if(!(cycle.current||[]).length){
+    cycle.part=(cycle.part||0)+1;
+    cycle.current=cycle.remaining.splice(0,MASTER_PART_SIZE);
+  }
+  saveMasterCycle(cycle);
+  const byId=new Map(MASTER_REVIEW_BANK.map(q=>[q.questionId,q]));
+  return {cycle,cards:cycle.current.map(id=>byId.get(id)).filter(Boolean)};
+}
+function completeMasterPart(){
+  const cycle=loadMasterCycle();
+  if(!cycle||!cycle.current?.length)return 0;
+  cycle.completed=[...(cycle.completed||[]),...cycle.current];
+  cycle.current=[];
+  if(!cycle.remaining.length)cycle.completedAt=Date.now();
+  saveMasterCycle(cycle);
+  return cycle.remaining.length;
+}
+
 function weightedMasterSample(pool,count){
   const stats=loadMasterStats();
-  const remaining=[...pool], selected=[];
-  while(remaining.length && selected.length<count){
-    const weights=remaining.map(q=>masterPriority(q,stats));
-    const total=weights.reduce((a,b)=>a+b,0);
-    let r=Math.random()*total, idx=0;
-    for(;idx<weights.length;idx++){r-=weights[idx];if(r<=0)break;}
-    selected.push(remaining.splice(Math.min(idx,remaining.length-1),1)[0]);
-  }
-  return selected;
+  return [...pool].sort((a,b)=>masterPriority(b,stats)-masterPriority(a,stats)).slice(0,count);
 }
 function updateMasterStat(item,isCorrect,chosen){
-  const stats=loadMasterStats();
-  const s=stats[item.id]||masterDefaultStat();
-  s.lastSeen=Date.now();
-  s.lastChoice=chosen;
+  const stats=loadMasterStats(), now=Date.now(), id=item.questionId;
+  const s={...masterDefaultStat(),...(stats[id]||{})};
+  const sessionId=S.masterSessionId||createMasterSessionId();
+  s.lastSeen=now;s.lastChoice=chosen;
+  s.history=[...(s.history||[]),{sessionId,correct:isCorrect,at:now}].slice(-20);
   if(isCorrect){
-    s.correct++; s.streak++; s.level=Math.min(MASTER_INTERVALS.length-1,(s.level||0)+1);
-    s.due=Date.now()+MASTER_INTERVALS[s.level]*86400000;
+    s.correct++;s.streak++;s.firstTryCorrect=(s.firstTryCorrect||0)+1;
+    s.correctSessions=[...new Set([...(s.correctSessions||[]),sessionId])];
+    s.level=Math.min(MASTER_INTERVALS.length-1,(s.level||0)+1);
+    s.due=now+MASTER_INTERVALS[s.level]*86400000;
   }else{
-    s.wrong++; s.streak=0; s.level=0;
-    s.due=Date.now()+86400000;
+    s.wrong++;s.streak=0;s.level=0;s.due=now+86400000;s.mastered=false;s.active=true;
   }
-  stats[item.id]=s; saveMasterStats(stats);
+  stats[id]=s;saveMasterStats(stats);recomputeMasterSkills(stats);
 }
 function getMasterMistakes(){
   const stats=loadMasterStats();
-  return MASTER_REVIEW_BANK
-    .filter(q=>(stats[q.id]?.wrong||0)>0)
-    .sort((a,b)=>masterPriority(b,stats)-masterPriority(a,stats));
+  return MASTER_REVIEW_BANK.filter(q=>(stats[q.questionId]?.wrong||0)>0).sort((a,b)=>masterPriority(b,stats)-masterPriority(a,stats));
 }
 function startMasterMistakes(){
   const mistakes=getMasterMistakes();
-  if(!mistakes.length){
-    alert('还没有错题。先完成一次 Master Review，答错的题会自动出现在这里。');
-    return;
-  }
+  if(!mistakes.length){alert('还没有错题。先完成一次 Master Review，答错的题会自动出现在这里。');return;}
   window.speechSynthesis&&window.speechSynthesis.cancel();
-  S.mode='master-mistakes'; S.idx=0; S.correct=0; S.wrong=0; S.answered={}; S.srUpdates={};
-  S.cards=weightedMasterSample(mistakes,Math.min(20,mistakes.length)); S.submitted=false;
-  navigateToMode('master-mistakes');
+  S.mode='master-mistakes';S.idx=0;S.correct=0;S.wrong=0;S.answered={};S.srUpdates={};S.masterSessionId=createMasterSessionId();
+  S.cards=weightedMasterSample(mistakes,Math.min(24,mistakes.length));S.submitted=false;navigateToMode('master-mistakes');
 }
 function topicMastery(){
-  const stats=loadMasterStats(), groups={};
-  MASTER_REVIEW_BANK.forEach(q=>{
-    const s=getMasterStat(q,stats);
-    if(!groups[q.topic]) groups[q.topic]={earned:0,max:0,seen:0,wrong:0};
-    groups[q.topic].max+=5;
-    groups[q.topic].earned+=Math.min(5,s.streak||0);
-    if(s.lastSeen) groups[q.topic].seen++;
-    groups[q.topic].wrong+=s.wrong||0;
+  const stats=loadMasterStats(), skills=recomputeMasterSkills(stats), groups={};
+  Object.values(skills).forEach(skill=>{
+    const questions=MASTER_REVIEW_BANK.filter(q=>q.skillId===skill.skillId);
+    groups[`${skill.topic} · ${skill.skillId}`]={earned:skill.mastered?5:Math.min(4,questions.filter(q=>getMasterStat(q,stats).mastered).length*2),max:5,seen:skill.coverageCount,wrong:questions.reduce((n,q)=>n+(getMasterStat(q,stats).wrong||0),0),mastered:skill.mastered};
   });
   return groups;
 }
 function showMasterProgress(){
-  const groups=topicMastery();
-  const el=document.getElementById('master-progress-list');
+  const groups=topicMastery(),el=document.getElementById('master-progress-list');
   el.innerHTML=Object.entries(groups).map(([topic,g])=>{
-    const pct=g.max?Math.round(g.earned/g.max*100):0;
-    const stars=Math.max(0,Math.min(5,Math.round(pct/20)));
-    return `<div class="progress-topic">
-      <div class="progress-topic-head"><span>${topic}</span><span>${'★'.repeat(stars)}${'☆'.repeat(5-stars)} · ${pct}%</span></div>
-      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
-      <div class="lc-hint" style="margin-top:5px;">Seen ${g.seen} question${g.seen===1?'':'s'} · ${g.wrong} total mistake${g.wrong===1?'':'s'}</div>
-    </div>`;
-  }).join('');
-  show('s-master-progress');
+    const pct=g.max?Math.round(g.earned/g.max*100):0,stars=Math.max(0,Math.min(5,Math.round(pct/20)));
+    return `<div class="progress-topic"><div class="progress-topic-head"><span>${topic}</span><span>${'★'.repeat(stars)}${'☆'.repeat(5-stars)} · ${g.mastered?'Mastered':pct+'%'}</span></div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div><div class="lc-hint" style="margin-top:5px;">Seen ${g.seen} representative question${g.seen===1?'':'s'} · ${g.wrong} mistake${g.wrong===1?'':'s'}</div></div>`;
+  }).join('');show('s-master-progress');
 }
 function masterWhyHtml(item,chosen){
-  const stats=loadMasterStats(), s=getMasterStat(item,stats);
-  const wrongNow=chosen!==item.answer;
-  const label=wrongNow?'⚠️ 易错点复盘':'🧠 知识点复习';
-  const count=s.wrong||0;
-  return `<strong>${label}：${item.topic}</strong><br>
-    ${item.en}<br>
-    ${wrongNow?`你选了 <strong>${chosen}</strong>，正确答案是 <strong>${item.answer}</strong>。<br>
-    💡 如果一个句子缺少明确时间背景，某些表达可能需要结合语境判断。`
-    :`继续保持！这道题已连续答对 ${s.streak||1} 次。`}
-    ${count?`<br>这道题累计答错 <strong>${count}</strong> 次，系统会提高它之后的出现概率。`:''}`;
+  const s=getMasterStat(item),wrongNow=chosen!==item.answer;
+  const logic=item.why||item.en||'根据语境判断时态、结构和固定搭配。';
+  const caution=item.mistake?`<br><br><strong>💡 判断提醒：</strong><br>${item.mistake}`:'';
+  const alt=item.alt?`<br><br><strong>⚠️ 容易混淆：</strong><br>${item.alt}`:'';
+  return `<strong>${wrongNow?'⚠️ 易错点复盘':'🧠 知识点复习'}：${item.topic}</strong><br>${logic}${caution}${alt}<br><br><span style="color:var(--muted)">本题连续正确 ${s.streak||0} 次；累计错误 ${s.wrong||0} 次。</span>`;
 }
 
 
+function lessonQuiz(questionId,skillId,lesson,topic,verb,sentence,answer,choices,cn,why,mistake,alt=''){
+  return {kind:'fill',questionId,skillId,lesson,topic,difficulty:2,verb,sentence,answer,choices,cn,en:cn,why,mistake,alt};
+}
+
 const L36_VOCAB=[
-{es:'tenía',en:'had / used to have'},
-{es:'quería',en:'wanted / used to want'},
-{es:'estaba',en:'was (state/location)'},
-{es:'sentía',en:'felt'},
-{es:'con',en:'with'},
-{es:'por',en:'because of / by / through'},
-{es:'regresarme',en:'to return (myself)'},
-{es:'regresar',en:'to return'},
+{es:'estar terminado/a',en:'to be finished; result state'},
+{es:'tramitar una visa',en:'to process a visa'},
+{es:'ocuparse de',en:'to take care of / deal with'},
+{es:'hasta hace cuatro meses',en:'until four months ago'},
+{es:'durante siete años',en:'for seven years (completed duration)'},
+{es:'sin embargo',en:'however'},
+{es:'así que',en:'so / therefore'},
+{es:'algunas ciudades',en:'some / several cities'},
+{es:'dentro de dos semanas',en:'two weeks from now'},
+{es:'justamente',en:'exactly / just at that moment'},
+{es:'regresarse',en:'to return / leave (common pronominal use in Mexico)'}
 ];
 const FILL_L36=[
-{kind:'fill',verb:'IMPERFECTO · estados pasados',sentence:'Cuando era niño, ___ mucho miedo.',answer:'tenía',choices:['tenía','tuve','tendré','tendría'],
-en:'When I was a child, I was very afraid.',
-cn:'小时候，我非常害怕。',
-why:'tenía = imperfecto. Describe a continuing state or feeling in the past.',
-mistake:'不要看到过去就自动用 pretérito。这里没有一个具体发生的瞬间，而是在描述过去的状态。',
-alt:'tuve = 我曾经害怕过（一次具体经历）。tenía = 当时处于害怕状态。',
-},
-{kind:'fill',verb:'PRETÉRITO · eventos concretos',sentence:'Ayer ___ al mercado y compré un anillo.',answer:'fui',choices:['fui','iba','era','estaba'],
-en:'Yesterday I went to the market and bought a ring.',
-cn:'昨天我去了市场，买了一个戒指。',
-why:'fui = specific completed event. Ayer + action = pretérito.',
-mistake:'Ayer（昨天）通常指已经结束的具体事件。',
-alt:'iba = 我当时正在去/以前常去，强调过程或习惯，不适合这里。',
-},
+lessonQuiz('L36-PAST-STATE-01','L36-PAST-STATE-EVENT',36,'Past state vs completed event','PAST STATE','Cuando era niña, ___ mucho miedo.', 'tenía',['tenía','tuve','tendré','tendría'],'小时候，我当时很害怕。','tenía 用 imperfecto 描写过去持续的状态。','过去时间并不自动等于简单过去时；先判断是在交代状态还是事件。','tuve 表示一次有边界的经历；tenía 表示当时处于这种状态。'),
+lessonQuiz('L36-PAST-EVENT-02','L36-PAST-STATE-EVENT',36,'Past state vs completed event','PAST EVENT','Cuando me desperté, ___ un dolor horrible de cabeza.', 'sentí',['sentí','sentía','sentiré','sentiría'],'醒来的那一刻，我突然感到剧烈头痛。','me desperté 提供具体时刻，sentí 是在那一刻发生的感觉。','不要因为 sentir 常表示感觉就一律用 imperfecto。','sentía 强调一段时间持续感到疼；sentí 强调突然感觉到。'),
+lessonQuiz('L36-RESULT-STATE-03','L36-RESULT-PASSIVE',36,'Result state vs passive voice','RESULT STATE','Ahora el proceso ___ terminado.', 'está',['está','es','fue','terminó'],'现在这个过程处于已经完成的状态。','estar + participio 描写动作完成后的结果状态，terminado 像形容词。','这不是在强调谁完成了过程。','terminó = 过程结束了这一事件；fue terminado por… = 由……完成的动作被动。'),
+lessonQuiz('L36-ACTION-PASSIVE-04','L36-RESULT-PASSIVE',36,'Result state vs passive voice','ACTION PASSIVE','El proceso ___ terminado por el equipo.', 'fue',['fue','estuvo','terminó','estaba'],'这个过程由团队完成了。','ser + participio + por 构成动作被动，强调执行者 el equipo。','日常表达也常直接说 El equipo terminó el proceso。','está terminado 只看现在的完成状态，不强调执行者。'),
+lessonQuiz('L36-PRONOUN-05','L36-PRONOUN-POSITION',36,'Pronoun position','INFINITIVE + PRONOUN','Me gustaría ___ en el futuro.', 'regresarme',['regresarme','me regresar','regreso me','me regresando'],'我以后想回去。','不定式和代词必须连写：regresar + me → regresarme。','*me regresar 不对，因为 me 不能单独放在不定式前。','Me gustaría regresar 更中性；Me gustaría regresarme 在墨西哥口语中也正确。'),
+lessonQuiz('L36-PRONOUN-06','L36-PRONOUN-POSITION',36,'Pronoun position','CONJUGATED VERB + INFINITIVE','Quiero ___.', 'regresarme',['regresarme','me regresar','regresar me','me regreso'],'我想回去。','有变位动词 quiero 时，可说 Quiero regresarme，也可把代词提前说 Me quiero regresar。','Me regreso 本身是“我回去/我要走了”，不能直接替代“我想回去”。','Me quiero regresar 与 Quiero regresarme 都正确。'),
+lessonQuiz('L36-DIRECTION-A-07','L36-A-USAGE',36,'Movement a vs personal a','DIRECTION A','Viajaré ___ Hong Kong dentro de dos semanas.', 'a',['a','de','por','con'],'两周后我会去香港旅行。','移动动词 viajar 指向目的地时使用 a。','这里的 a 表示方向，不是人称 a。','viajar por Hong Kong 更强调在香港各处游览。'),
+lessonQuiz('L36-PERSONAL-A-08','L36-A-USAGE',36,'Movement a vs personal a','PERSONAL A','Ayer llamé ___ mi amiga.', 'a',['a','en','de','por'],'昨天我给朋友打了电话。','具体的人作直接宾语时使用人称 a：llamar a alguien。','这里的 a 不表示“去往朋友”。','llamar a un lugar 也用 a，但原因仍是 llamar 的宾语搭配。'),
+lessonQuiz('L36-GENDER-MA-09','L36-NOUN-GENDER',36,'Noun gender patterns','-MA NOUN','Hubo ___ problema con mi visa.', 'un',['un','una','unos','unas'],'我的签证出了一个问题。','el problema 是希腊来源的 -ma 阳性名词。','不要只看到词尾 -a 就判断为阴性。','同组常见词：el tema, el sistema, el programa。'),
+lessonQuiz('L36-GENDER-DAD-10','L36-NOUN-GENDER',36,'Noun gender patterns','-DAD NOUN','Shanghái es ___ ciudad enorme.', 'una',['una','un','unos','unas'],'上海是一座巨大的城市。','-dad 结尾的抽象名词通常为阴性：la ciudad。','形容词 enorme 阴阳同形，冠词仍要跟 ciudad。','同组常见词：la felicidad, la vanidad。')
 ];
 const CONV_L36=[
-{ctx:'Past feelings',q:'¿Cómo estabas ayer?',q_en:'How were you yesterday?',ans:'Estaba cansado, pero estaba feliz.',ans_en:'I was tired, but I was happy.',note:'estaba describes a past state.'},
+{ctx:'State or event',q:'¿Cuál es la diferencia entre “tenía” y “tuve”?',q_en:'What is the difference between tenía and tuve?',ans:'“Tenía” describe un estado de fondo; “tuve” presenta una experiencia o un período con límites.',ans_en:'Tenía describes a background state; tuve presents an experience or a bounded period.',note:'<strong>判断：</strong>tenía 看“当时是什么状态”；tuve 看“那段有边界的时间里发生了什么”。'},
+{ctx:'Result state',q:'¿El proceso está terminado o terminó ayer?',q_en:'Is the process finished, or did it end yesterday?',ans:'Ahora está terminado; el proceso terminó ayer.',ans_en:'It is finished now; the process ended yesterday.',note:'<strong>对比：</strong>está terminado 是现在的结果状态；terminó 是昨天发生并完成的事件。'},
+{ctx:'Pronoun position',q:'¿Puedes decir “me regresar”?',q_en:'Can you say me regresar?',ans:'No. Digo “regresarme”, “me quiero regresar” o “quiero regresarme”.',ans_en:'No. I say regresarme, me quiero regresar, or quiero regresarme.',note:'不定式后附代词，或在有变位动词时把代词放到变位动词前。'},
+{ctx:'Visa story',q:'¿Por qué tuviste que tramitar la visa en México?',q_en:'Why did you have to process the visa in Mexico?',ans:'Hubo un problema con mi visa, así que tuve que tramitarla en México.',ans_en:'There was a problem with my visa, so I had to process it in Mexico.',note:'<strong>表达升级：</strong>hacer mi visa 能听懂；tramitarla 更自然，así que 把原因和结果连接起来。'},
+{ctx:'Travel background',q:'¿Viajaste o viajabas a varias ciudades mientras estabas en México?',q_en:'Did you travel, or were you traveling, to several cities while you were in Mexico?',ans:'Viajé a algunas ciudades. Si hablo de una costumbre de esa época, digo “viajaba”.',ans_en:'I traveled to some cities. If I mean a habit during that period, I say viajaba.',note:'完成了几次旅行用 viajé；强调那段时间经常或正在旅行用 viajaba。'}
+];
+
+const L37_VOCAB=[
+{es:'un sinfín de',en:'an endless number of / countless'},
+{es:'al aire libre',en:'outdoors'},
+{es:'disfrutar de la naturaleza',en:'to enjoy nature'},
+{es:'volver loco/a a alguien',en:'to drive someone wild / fascinate someone'},
+{es:'las alturas',en:'heights'},
+{es:'la locura',en:'madness / craze'},
+{es:'el alpinismo',en:'mountaineering'},
+{es:'el vuelo',en:'flight'},
+{es:'olvidarse de',en:'to forget about'},
+{es:'la flora y la fauna',en:'flora and fauna'},
+{es:'los platillos',en:'dishes / prepared foods'},
+{es:'el borrego',en:'lamb / sheep'}
+];
+const FILL_L37=[
+lessonQuiz('L37-SI-REAL-01','L37-SI-REAL',37,'Real conditions','SI + PRESENT → FUTURE','Si tengo tiempo, ___ al gimnasio.', 'iré',['iré','iría','iba','fui'],'如果我有时间，我会去健身房。','真实或可能条件使用 si + 现在时，结果可用简单将来时。','si 从句不要写 *si tendré。','Si tuviera tiempo, iría 表示与现实距离更远的假设。'),
+lessonQuiz('L37-SI-REAL-02','L37-SI-REAL',37,'Real conditions','SI + PRESENT → FUTURE','Si buscas naturaleza, ___ muchos bosques.', 'encontrarás',['encontrarás','encontrarías','encontraste','encontrabas'],'如果你寻找自然风光，你会发现许多森林。','buscas 是现在时，表达真实可能条件；结果用 encontrarás。','不要把 si 后面的现在时误改为将来时。','Si buscaras..., encontrarías... 是假设结构。'),
+lessonQuiz('L37-SI-HYP-03','L37-SI-HYPOTHETICAL',37,'Hypothetical conditions','SI + IMPERFECT SUBJUNCTIVE','Si tuviera más tiempo, ___ francés.', 'estudiaría',['estudiaría','estudiaré','estudiaba','estudié'],'如果我有更多时间，我就会学法语。','假设条件成套使用 si + 过去未完成虚拟式 → 条件式。','不要只把结果改成条件式而保留基础结构当主规则。','Si tengo tiempo, estudiaré = 如果真有时间，我会学。'),
+lessonQuiz('L37-SI-HYP-04','L37-SI-HYPOTHETICAL',37,'Hypothetical conditions','ERROR FINDER','❌ Si tendría dinero, compraría una casa.', 'tendría → tuviera',['tendría → tuviera','compraría → compraré','dinero → dineros','No hay ningún error'],'要是我有钱，我就会买房。','si 从句用 tuviera，主句用 compraría。','本课的 si 从句既不用简单将来时，也不用条件式。','真实可能条件可以说 Si tengo dinero, compraré una casa。'),
+lessonQuiz('L37-FUTURE-05','L37-FUTURE-IRREGULAR',37,'Irregular future stems','IRREGULAR FUTURE','Mañana ___ terminar el trámite.', 'podré',['podré','poderé','podría','pude'],'明天我将能够办完手续。','poder 的未来词干是 podr-，再加统一词尾 -é。','不规则未来时只换词干，词尾仍与规则动词相同。','podría 是条件式“我将能/本可以（在某条件下）”。'),
+lessonQuiz('L37-FUTURE-06','L37-FUTURE-IRREGULAR',37,'Irregular future stems','HABER · FUTURE','En Tapalpa ___ muchas actividades al aire libre.', 'habrá',['habrá','haberá','habría','hubo'],'塔帕尔帕将会有很多户外活动。','hay 的未来表达常用无人称 habrá。','不要造 *haberá。','habría = 在某条件下将会有；hubo = 过去曾有。'),
+lessonQuiz('L37-TRAVEL-07','L37-TRAVEL-AGREEMENT',37,'Travel promotion language','ADJECTIVE AGREEMENT','Si la fiesta te fascina, te vuelve ___.', 'loca',['loca','loco','locos','locas'],'如果派对让你着迷，它会让你疯狂。','对 Cara 说 loca；形容词跟被影响的人一致。','不要让 loco/a 机械跟 fiesta 的阴阳性一致。','对男性听者说 loco，对多人按群体性数变化。'),
+lessonQuiz('L37-TRAVEL-08','L37-TRAVEL-AGREEMENT',37,'Travel promotion language','HAY VS SOLO HAY','En Tapalpa ___ cabañas lujosas. (There are luxury cabins.)', 'hay',['hay','solo hay','están','tienen'],'塔帕尔帕有豪华小屋。','只表达“有”用 hay；solo hay 会变成“只有豪华小屋”。','solo 会改变信息范围，不是可随意添加的强调词。','若确实想说“只有豪华小屋”，solo hay 正确。')
+];
+const CONV_L37=[
+{ctx:'Real condition',q:'¿Qué harás si tienes tiempo mañana?',q_en:'What will you do if you have time tomorrow?',ans:'Si tengo tiempo, iré al gimnasio.',ans_en:'If I have time, I will go to the gym.',note:'真实可能条件：<strong>si + presente → futuro</strong>。'},
+{ctx:'Hypothetical condition',q:'¿Qué harías si tuvieras más tiempo?',q_en:'What would you do if you had more time?',ans:'Si tuviera más tiempo, estudiaría francés.',ans_en:'If I had more time, I would study French.',note:'假设条件两边成套变化：<strong>tuviera → estudiaría</strong>。'},
+{ctx:'Future forms',q:'¿Cómo formarás el futuro de “poder” y “tener”?',q_en:'How will you form the future of poder and tener?',ans:'Diré “podré” y “tendré”.',ans_en:'I will say podré and tendré.',note:'未来词干 podr-、tendr- 加相同词尾。'},
+{ctx:'Travel promotion',q:'¿Qué encontrará una persona que visite Tapalpa?',q_en:'What will someone who visits Tapalpa find?',ans:'Encontrará bosques, naturaleza y muchas actividades al aire libre.',ans_en:'They will find forests, nature, and many outdoor activities.',note:'用未来时练习旅游广告中的预测和承诺。'},
+{ctx:'Meaning check',q:'¿Qué diferencia hay entre “hay” y “solo hay”?',q_en:'What is the difference between hay and solo hay?',ans:'“Hay” significa que algo existe; “solo hay” significa que no hay otras opciones.',ans_en:'Hay means something exists; solo hay means there are no other options.',note:'solo 不是无意义的强调，它会把句子变成“只有……”。'}
+];
+
+const L38_VOCAB=[
+{es:'el científico / la científica',en:'scientist'},
+{es:'la gasolina',en:'gasoline'},
+{es:'la energía solar',en:'solar energy'},
+{es:'el aire limpio',en:'clean air'},
+{es:'el trabajo doméstico',en:'housework'},
+{es:'el campo de la medicina',en:'the field of medicine'},
+{es:'los avances',en:'advances / progress'},
+{es:'curar enfermedades',en:'to cure diseases'},
+{es:'la salud',en:'health'},
+{es:'el espacio exterior',en:'outer space'},
+{es:'sino que',en:'but rather / instead'},
+{es:'por lo tanto',en:'therefore'},
+{es:'con muchas dificultades',en:'with many difficulties'},
+{es:'una experiencia inolvidable',en:'an unforgettable experience'}
+];
+const FILL_L38=[
+lessonQuiz('L38-FUTURE-01','L38-FUTURE-CONDITIONAL',38,'Future vs conditional','FUTURE PLAN','Mañana ___ al museo.', 'iré',['iré','iría','iba','fui'],'明天我会去博物馆。','iré 是简单将来时，用于未来计划、预测或承诺。','“超过50%”只是课堂记忆法，不是精确概率规则。','iría 通常需要假设条件，例如 Si tuviera tiempo, iría。'),
+lessonQuiz('L38-COND-02','L38-FUTURE-CONDITIONAL',38,'Future vs conditional','CONDITIONAL','Si tuviera vacaciones, ___ a Japón.', 'iría',['iría','iré','iba','fui'],'如果我有假期，我就会去日本。','tuviera 提供假设条件，结果用条件式 iría。','不要因为句子谈未来就自动用 iré。','Si tengo vacaciones, iré 表达更现实、可能发生的条件。'),
+lessonQuiz('L38-AGREEMENT-03','L38-AGREEMENT',38,'Number and gender agreement','GENTE · AGREEMENT','En 2050 habrá ___ gente.', 'mucha menos',['mucha menos','mucho menos','muchas menos','muchos menos'],'2050年人口会少很多。','gente 是阴性单数，所以用 mucha menos。','gente 意思上是很多人，语法上仍是单数。','personas 是阴性复数：muchas menos personas。'),
+lessonQuiz('L38-AGREEMENT-04','L38-AGREEMENT',38,'Number and gender agreement','TIPOS · AGREEMENT','Encontrarás muchos tipos de comida ___.', 'diferentes',['diferentes','diferente','diferentas','diferenta'],'你会发现许多不同种类的食物。','这里 diferentes 修饰复数 tipos。','若写 mucha comida diferente，diferente 才是单数。','comida mexicana, argentina y japonesa 中形容词与省略的 comida 一致。'),
+lessonQuiz('L38-SI-HYP-05','L38-HYPOTHETICAL-SI',38,'Hypothetical future','SI PUDIERA','Si ___ vivir hasta los cien años, no me gustaría vivir tanto.', 'pudiera',['pudiera','puedo','podré','podría'],'如果我能活到一百岁，我不会想活那么久。','高度假设用 si pudiera，主句用条件式 me gustaría。','tuviera cien años 是“当我已经100岁”，不等于“活到100岁”。','真实可能条件可说 Si puedo..., no querré...，语气不同。'),
+lessonQuiz('L38-SI-REAL-06','L38-HYPOTHETICAL-SI',38,'Hypothetical future','REAL CONDITION','Si tienes dinero, ___ conseguirlo todo fácilmente.', 'podrás',['podrás','podrías','pudiste','podías'],'如果你有钱，你将能够轻易得到一切。','tienes 是真实可能条件，结果用未来时 podrás。','si 从句不用 *tendrás。','Si tuvieras dinero, podrías... 是假设结构。'),
+lessonQuiz('L38-WRITING-07','L38-FUTURE-WRITING',38,'Future writing','PROFESSION WITHOUT ARTICLE','Trabajaré como ___.', 'fotógrafa',['fotógrafa','una fotógrafa','la fotógrafa','fotógrafo'],'我会当摄影师。','职业放在 como 后通常不加冠词；说话者 Cara 用阴性 fotógrafa。','不要从英文 a photographer 直译出 una。','若有修饰可说 una fotógrafa reconocida，但 como fotógrafa 最自然。'),
+lessonQuiz('L38-WRITING-08','L38-FUTURE-WRITING',38,'Future writing','NATURAL EXPRESSION','Si no tienes dinero, vivirás ___.', 'con muchas dificultades',['con muchas dificultades','muy difícil','mucho difícil','dificultades muy'],'如果你没有钱，生活会很困难。','difícil 是形容词，不能直接这样修饰 vivir；用 con muchas dificultades。','*vivir difícil 是英语式直译。','也可说 Te resultará muy difícil vivir。')
+];
+const CONV_L38=[
+{ctx:'Future prediction',q:'¿Cómo será el mundo en 2050?',q_en:'What will the world be like in 2050?',ans:'Habrá más robots, el aire estará más limpio y muchas personas podrán viajar al espacio.',ans_en:'There will be more robots, the air will be cleaner, and many people will be able to travel to space.',note:'保留课文中的核心未来词形：habrá、estará、podrán。'},
+{ctx:'CDMX promotion',q:'¿Qué encontrará una persona que visite la CDMX?',q_en:'What will someone who visits Mexico City find?',ans:'Encontrará comida diversa, museos interesantes y actividades todos los días.',ans_en:'They will find diverse food, interesting museums, and activities every day.',note:'活动通常用 <strong>encontrar</strong>；conocer 更常用于认识人、地方或逐渐了解事物。'},
+{ctx:'Future vs conditional',q:'¿Cuándo dices “iré” y cuándo dices “iría”?',q_en:'When do you say iré and when do you say iría?',ans:'Digo “iré” para un futuro; digo “iría” cuando el resultado depende de una hipótesis.',ans_en:'I say iré for a future; I say iría when the result depends on a hypothesis.',note:'不是数学概率，而是将来陈述与假设结果的差别。'},
+{ctx:'Your future',q:'¿Cómo será tu vida en diez años?',q_en:'What will your life be like in ten years?',ans:'Viviré con mi esposa y mis gatos, trabajaré como fotógrafa y viajaré mucho.',ans_en:'I will live with my wife and cats, work as a photographer, and travel a lot.',note:'职业在 como 后通常不加冠词：como fotógrafa。'},
+{ctx:'A difficult hypothesis',q:'¿Te gustaría vivir hasta los cien años?',q_en:'Would you like to live to one hundred?',ans:'Si pudiera vivir hasta los cien años, no sé si me gustaría vivir tanto.',ans_en:'If I could live to one hundred, I do not know whether I would like to live that long.',note:'用 <strong>si pudiera</strong> 明确这是高度假设。'}
+];
+
+const L39_VOCAB=[
+{es:'el cansancio',en:'tiredness / fatigue'},
+{es:'las doce uvas',en:'the twelve grapes'},
+{es:'los deseos',en:'wishes'},
+{es:'los propósitos',en:'goals / resolutions'},
+{es:'bajar de peso',en:'to lose weight'},
+{es:'la panza',en:'belly (colloquial)'},
+{es:'el olor a cigarro',en:'cigarette smell'},
+{es:'el regalo principal',en:'main gift'},
+{es:'hacer bromas',en:'to make jokes'},
+{es:'tener miedo a las alturas',en:'to be afraid of heights'},
+{es:'la luna de miel',en:'honeymoon'},
+{es:'música en vivo',en:'live music'},
+{es:'hacer paracaidismo',en:'to go skydiving'},
+{es:'prometer que',en:'to promise that'}
+];
+const FILL_L39=[
+lessonQuiz('L39-STATE-01','L39-SER-ESTAR-TENER',39,'Ser, estar and tener','ESTAR + ADJECTIVE','Después del viaje, ___ cansada.', 'estaré',['estaré','tendré','seré','estaría'],'旅行之后，我会很累。','cansada 是形容词，表示所处状态，用 estar。','tener 后不能直接接形容词 cansada。','也可说 Tendré cansancio，用名词 cansancio。'),
+lessonQuiz('L39-STATE-02','L39-SER-ESTAR-TENER',39,'Ser, estar and tener','TENER + NOUN','Trabajaré mucho y ___ cansancio.', 'tendré',['tendré','estaré','seré','tendría'],'我会工作很多，因此会有疲劳感。','cansancio 是名词，用 tener。','estar cansancio 不成立；要说 estar cansada。','Seré feliz 看总体人生特征；estaré feliz 看那时所处状态，两者都可能。'),
+lessonQuiz('L39-RELATIVE-03','L39-FUTURE-RELATIVE',39,'Future and relative clauses','UNSPECIFIED FUTURE OBJECT','Compraré cámaras que me ___.', 'gusten',['gusten','gustan','gustarán','gustaban'],'我会买一些我喜欢的相机。','未来尚未确定是哪些相机，关系从句用虚拟式 gusten。','不要因为主句是未来时就把从句机械变成 gustarán。','已知的相机可说 Compraré las cámaras que me gustan。'),
+lessonQuiz('L39-RELATIVE-04','L39-FUTURE-RELATIVE',39,'Future and relative clauses','KNOWN OBJECT','Compraré las cámaras que me ___.', 'gustan',['gustan','gusten','gustarán','gustaron'],'我会买那些我喜欢的相机。','定冠词 las 指向已知相机，因此用陈述式 gustan。','是否用虚拟式取决于对象是否确定，不只取决于未来时间。','cámaras que me gusten = 尚未确定、符合条件的相机。'),
+lessonQuiz('L39-VERB-PREP-05','L39-VERB-PREPOSITIONS',39,'Verb structures','DEJAR DE','Dejaré ___ tomar cerveza.', 'de',['de','a','en','por'],'我会停止喝啤酒。','dejar de + infinitivo 表示停止做某事。','介词是固定结构的一部分。','dejar + 名词可表示留下某物，意义不同。'),
+lessonQuiz('L39-VERB-PREP-06','L39-VERB-PREPOSITIONS',39,'Verb structures','APRENDER A','Aprenderé ___ nadar.', 'a',['a','de','en','por'],'我会学游泳。','aprender a + infinitivo 表示学会做某事。','不要省略 a。','aprender español 后面直接接名词，不需要 a。'),
+lessonQuiz('L39-PROMISE-07','L39-FUTURE-PROMISE',39,'Promises and plans','PROMETER QUE + FUTURE','Te prometo que ___ mis estudios para mayo.', 'terminaré',['terminaré','terminaría','terminé','terminaba'],'我向你保证，我会在五月前完成学业。','prometer que 后用将来时陈述承诺的行动。','para mayo 表示最迟到五月这一期限。','Nos casamos el 18 de septiembre 也可用现在时表达已安排的未来日程。'),
+lessonQuiz('L39-SKYDIVING-08','L39-FUTURE-PROMISE',39,'Promises and plans','NATURAL EXPRESSION','En Cancún ___.', 'haré paracaidismo',['haré paracaidismo','me subiré en paracaídas','subiré paracaídas','haría paracaidismo ayer'],'在坎昆我会去跳伞。','hacer paracaidismo / saltar en paracaídas 是标准表达。','*me subiré en paracaídas 不宜作为“去跳伞”的标准表达。','也可以说 me lanzaré en paracaídas。')
+];
+const CONV_L39=[
+{ctx:'Life in ten years',q:'¿Cómo será tu vida dentro de diez años?',q_en:'What will your life be like in ten years?',ans:'Viviré con mi esposa y mis gatos, y trabajaré como fotógrafa exitosa.',ans_en:'I will live with my wife and cats, and work as a successful photographer.',note:'未来生活用简单将来时；职业前通常不加冠词。'},
+{ctx:'Happiness',q:'¿Dirías “seré feliz” o “estaré feliz”?',q_en:'Would you say seré feliz or estaré feliz?',ans:'Las dos son posibles: “seré feliz” habla de mi vida en general y “estaré feliz” de mi estado en ese momento.',ans_en:'Both are possible: seré feliz speaks about my life overall and estaré feliz about my state then.',note:'不是简单的永久/临时，而是总体特征与所处状态的视角。'},
+{ctx:'New Year goals',q:'¿Cuáles son tus propósitos de Año Nuevo?',q_en:'What are your New Year resolutions?',ans:'Haré ejercicio, hablaré español con más fluidez y buscaré un trabajo nuevo.',ans_en:'I will exercise, speak Spanish more fluently, and look for a new job.',note:'用未来时表达计划和承诺。'},
+{ctx:'A promise',q:'¿Qué le prometió Sergio a Maru?',q_en:'What did Sergio promise Maru?',ans:'Le prometió que terminaría sus estudios y buscaría un trabajo.',ans_en:'He promised that he would finish his studies and look for a job.',note:'转述过去承诺时可用条件式表示“从过去看未来”；原话是 terminaré。'},
+{ctx:'Honeymoon',q:'¿Qué te gustaría hacer durante una luna de miel?',q_en:'What would you like to do during a honeymoon?',ans:'Me gustaría viajar, escuchar música en vivo y hacer paracaidismo.',ans_en:'I would like to travel, listen to live music, and go skydiving.',note:'Me gustaría + infinitivo；跳伞用 hacer paracaidismo。'}
+];
+
+const L40_VOCAB=[
+{es:'ahora mismo',en:'right now'},
+{es:'la agenda',en:'planner / agenda'},
+{es:'una cita con el dentista',en:'a dentist appointment'},
+{es:'enviar cartas',en:'to send letters'},
+{es:'un día de campo',en:'a picnic / day outing'},
+{es:'quedarse dormido/a',en:'to fall asleep'},
+{es:'una semana activa',en:'a busy / active week'},
+{es:'¡Vaya!',en:'wow! / well!'}
+];
+const FILL_L40=[
+lessonQuiz('L40-PAST-01','L40-PAST-TENSES',40,'Core tense review','BACKGROUND + EVENT','Mientras ___ al trabajo, vi a una amiga.', 'caminaba',['caminaba','caminé','caminaré','he caminado'],'我走去上班的时候，看见了一位朋友。','caminaba 是持续背景，vi 是插入并完成的事件。','mientras 不会自动决定一切，但这里明显是一段进行中的背景。','Estaba caminando 也可以更明确地强调“正在走”。'),
+lessonQuiz('L40-PAST-02','L40-PAST-TENSES',40,'Core tense review','PRESENT PERFECT','Este año ___ muchas experiencias nuevas.', 'he tenido',['he tenido','tuve','tenía','tendré'],'今年到目前为止，我有过许多新经历。','este año 仍与现在相连时，使用现在完成时自然。','若说话者把这个时间段当作已结束，地区和语境可能允许简单过去时。','在许多拉美语境中，明确结束的时间更常用 tuve。'),
+lessonQuiz('L40-FUTURE-03','L40-FUTURE-CHOICE',40,'Two future expressions','PLAN / INTENTION','Dentro de cinco años ___ estudiar una maestría.', 'voy a',['voy a','estudiaré a','iba a','he'],'五年后我打算攻读硕士。','ir a + infinitivo 表示已有意图，即使计划很远也可以使用。','不要把 ir a 机械等同于“很近的未来”。','Estudiaré una maestría 也可作未来陈述，但视角不同。'),
+lessonQuiz('L40-FUTURE-04','L40-FUTURE-CHOICE',40,'Two future expressions','PROMISE','Te ___ esta noche, te lo prometo.', 'llamaré',['llamaré','voy llamar','llamaba','llamaría'],'我今晚会给你打电话，我保证。','简单将来时可表达承诺，即使事情就在今晚。','未来表达的选择不只由时间远近决定。','Voy a llamarte 也自然，更突出已有计划。'),
+lessonQuiz('L40-SCHEDULE-05','L40-PRESENT-SCHEDULE',40,'Present for schedules','PRESENT SCHEDULE','El lunes ___ una cita con el dentista.', 'tengo',['tengo','tendré siempre','tenía','tuve'],'星期一我约了牙医。','现在时可表达已经排定的近期日程。','不是所有未来日程都必须使用将来时。','El lunes tendré una cita 也正确，更像未来陈述。'),
+lessonQuiz('L40-SCHEDULE-06','L40-PRESENT-SCHEDULE',40,'Present for schedules','TIME EXPRESSION','___ lunes a viernes tengo clase de español.', 'De',['De','En','A','Por'],'我从星期一到星期五有西语课。','时间跨度使用 de…a…。','具体某一天用 el lunes，不用 en lunes。','de lunes a viernes = 每周一到周五。'),
+lessonQuiz('L40-STEM-07','L40-STEM-CHANGE',40,'Present stem changes','NOSOTROS','Nosotros ___ jugar después de clase.', 'queremos',['queremos','quieremos','quieren','queríamos'],'我们下课后想玩。','现在时靴形变化不包括 nosotros：queremos。','不要把 e→ie 套到所有人称。','yo quiero, tú quieres, ellos quieren。'),
+lessonQuiz('L40-STEM-08','L40-STEM-CHANGE',40,'Present stem changes','SEGUIR · YO','Yo ___ estudiando español.', 'sigo',['sigo','siego','seguo','seguimos'],'我继续学习西语。','seguir 的 yo 是 sigo，既有 e→i，又有拼写调整。','不要造 *seguo 或 *siego。','nosotros seguimos 保持原词干。')
+];
+const CONV_L40=[
+{ctx:'Right now',q:'¿Qué estás haciendo ahora mismo?',q_en:'What are you doing right now?',ans:'Ahora mismo estoy estudiando español.',ans_en:'Right now I am studying Spanish.',note:'现在进行时：estar + gerundio。'},
+{ctx:'Past scene',q:'¿Qué pasó mientras caminabas?',q_en:'What happened while you were walking?',ans:'Mientras caminaba, vi a una amiga.',ans_en:'While I was walking, I saw a friend.',note:'背景 caminaba；完成事件 vi。'},
+{ctx:'Future choice',q:'¿Cuál es la diferencia entre “voy a estudiar” y “estudiaré”?',q_en:'What is the difference between voy a estudiar and estudiaré?',ans:'“Voy a estudiar” destaca una intención o un plan; “estudiaré” puede ser una promesa, predicción o declaración futura.',ans_en:'Voy a estudiar highlights an intention or plan; estudiaré can be a promise, prediction, or future statement.',note:'不要只用“近 vs 远”判断。'},
+{ctx:'Weekly schedule',q:'¿Qué tienes en tu agenda esta semana?',q_en:'What do you have in your planner this week?',ans:'El lunes tengo una cita y el viernes tengo una fiesta de cumpleaños.',ans_en:'On Monday I have an appointment, and on Friday I have a birthday party.',note:'现在时自然表达已安排的近期日程。'},
+{ctx:'Past experience',q:'¿Has visitado Japón alguna vez?',q_en:'Have you ever visited Japan?',ans:'Sí, he visitado Japón.',ans_en:'Yes, I have visited Japan.',note:'人生经验可用现在完成时；若问明确结束的一次旅行，拉美口语常用 ¿Visitaste Japón?。'}
+];
+
+const L41_VOCAB=[
+{es:'el cuñado / la cuñada',en:'brother-in-law / sister-in-law'},
+{es:'el suegro / la suegra',en:'father-in-law / mother-in-law'},
+{es:'el yerno',en:'son-in-law'},
+{es:'la nuera',en:'daughter-in-law'},
+{es:'el padrastro',en:'stepfather'},
+{es:'el sobrino / la sobrina',en:'nephew / niece'},
+{es:'el nieto / la nieta',en:'grandson / granddaughter'},
+{es:'el menor',en:'the younger / youngest one'},
+{es:'el mayor',en:'the older / oldest one'},
+{es:'cada uno / cada una',en:'each one'},
+{es:'más de',en:'more than'},
+{es:'ser de',en:'to belong to / be from'}
+];
+const FILL_L41=[
+lessonQuiz('L41-FAMILY-01','L41-FAMILY-POSSESSION',41,'Family and possession','FAMILY RELATIONSHIP','Elena es la esposa ___ Ricardo.', 'de',['de','a','por','con'],'埃琳娜是里卡多的妻子。','de + 人名表示所属关系。','不要把英语 possessive 结构直接套进西语。','Ricardo es el esposo de Elena。'),
+lessonQuiz('L41-FAMILY-02','L41-FAMILY-POSSESSION',41,'Family and possession','FAMILY VOCABULARY','El padre de mi esposa es mi ___.', 'suegro',['suegro','yerno','cuñado','sobrino'],'我妻子的父亲是我的岳父。','配偶的父亲是 suegro。','家庭词的选择取决于关系链。','配偶的兄弟是 cuñado；女儿的丈夫是 yerno。'),
+lessonQuiz('L41-AGE-03','L41-AGE-COMPARISON',41,'Age comparisons','AGE COMPARISON','Mi prima tiene veinte años y yo tengo treinta; ella es ___ que yo.', 'menor',['menor','más pequeña siempre','mayor','la menor'],'我表妹二十岁，我三十岁；她比我年轻。','明确比较年龄时用 menor que。','más pequeña 也可能被理解为体型更小。','若比较体型，可以说 más pequeña que。'),
+lessonQuiz('L41-AGE-04','L41-AGE-COMPARISON',41,'Age comparisons','SUPERLATIVE','Mi sobrino es ___ de todos.', 'el menor',['el menor','menor que','más de','mi menor'],'我的外甥/侄子是所有人中最小的。','作表语表达最高级时使用定冠词：es el menor。','物主词结构 mi sobrino menor 不需要再加 *mi el。','也可说 el más joven de todos。'),
+lessonQuiz('L41-DEMO-05','L41-DEMONSTRATIVES',41,'Demonstratives','NEAR SPEAKER','___ foto de aquí es de mi familia.', 'Esta',['Esta','Ese','Estos','Esas'],'这里这张照片是我家的。','靠近说话人的阴性单数 foto 使用 esta。','指示词要与名词性数一致。','ese/esa 通常指距离更远的对象。'),
+lessonQuiz('L41-DEMO-06','L41-DEMONSTRATIVES',41,'Demonstratives','FARTHER AWAY','¿Quiénes son ___ personas de allí?', 'esas',['esas','estos','esta','ese'],'那边那些人是谁？','较远的阴性复数 personas 使用 esas。','不要只按中文“那个”选择，仍要看性数。','靠近说话人时用 estas personas。'),
+lessonQuiz('L41-CADA-07','L41-CADA-UNO',41,'Cada uno and plural groups','CADA UNO','Mis tíos tienen un hijo ___.', 'cada uno',['cada uno','cada persona','cada unos','cada personas'],'我的舅舅/叔叔们各有一个儿子。','cada uno 已包含“每一个人/各自”的意思。','不要再加 cada persona。','若所指全是女性，可用 cada una。'),
+lessonQuiz('L41-PLURAL-08','L41-CADA-UNO',41,'Cada uno and plural groups','MIXED PLURAL','Tengo un hermano y una hermana; mis ___ están casados.', 'hermanos',['hermanos','hermanas','hermano','hermana'],'我有一个兄弟和一个姐妹；我的兄弟姐妹都结婚了。','传统语法中混合性别群体可用阳性复数 hermanos。','hermanos 既可能只指兄弟，也可能泛指兄弟姐妹，要看上下文。','全为女性时使用 hermanas。')
+];
+const CONV_L41=[
+{ctx:'Family relationship',q:'¿Quién es el padre de tu esposa?',q_en:'Who is your wife’s father?',ans:'El padre de mi esposa es mi suegro.',ans_en:'My wife’s father is my father-in-law.',note:'用 de 表示所属，用 suegro 表示配偶的父亲。'},
+{ctx:'Your family',q:'¿Tienes hermanos?',q_en:'Do you have siblings?',ans:'No, no tengo hermanos, pero tengo varios primos.',ans_en:'No, I do not have siblings, but I have several cousins.',note:'hermanos 可以在上下文中统称兄弟姐妹。'},
+{ctx:'Age comparison',q:'¿Quién es el menor de tus primos?',q_en:'Who is the youngest of your cousins?',ans:'Mi primo de quince años es el menor.',ans_en:'My fifteen-year-old cousin is the youngest.',note:'谈年龄最清楚用 menor / mayor。'},
+{ctx:'Demonstratives',q:'¿Quiénes son estas personas?',q_en:'Who are these people?',ans:'Estas personas son mis tíos.',ans_en:'These people are my aunts and uncles.',note:'estas 与阴性复数 personas 一致。'},
+{ctx:'Each one',q:'¿Cuántos hijos tienen tus tíos?',q_en:'How many children do your aunts and uncles have?',ans:'Los otros tienen un hijo cada uno.',ans_en:'The others have one child each.',note:'cada uno 已经表示“各自”，不再加 persona。'}
+];
+
+const L42_VOCAB=[
+{es:'empático/a',en:'empathetic'},
+{es:'maduro/a',en:'mature'},
+{es:'amable',en:'kind / friendly'},
+{es:'hospitalario/a',en:'hospitable'},
+{es:'ordenado/a',en:'organized / tidy'},
+{es:'olvidadizo/a',en:'forgetful'},
+{es:'introvertido/a',en:'introverted'},
+{es:'la piel',en:'skin'},
+{es:'el cabello castaño',en:'brown hair'},
+{es:'el cabello lacio',en:'straight hair'},
+{es:'las gemelas',en:'female twins'},
+{es:'auxiliar de vuelo',en:'flight attendant'},
+{es:'de ella / de él',en:'hers / his; unambiguous possession'},
+{es:'el hermano menor',en:'younger brother'}
+];
+const FILL_L42=[
+lessonQuiz('L42-SER-01','L42-SER-ESTAR',42,'Ser vs estar','IDENTITY / TRAIT','Brenda ___ extrovertida y cálida.', 'es',['es','está','tiene','hay'],'布伦达性格外向而热情。','ser 表示说话者认为的人物特征。','不要用“永久/临时”机械判断；学生身份不永久也用 ser。','Está cálida 通常表示她身体或触感温暖，语义不同。'),
+lessonQuiz('L42-ESTAR-02','L42-SER-ESTAR',42,'Ser vs estar','CURRENT STATE','Hoy Diana ___ cansada.', 'está',['está','es','tiene','hay'],'戴安娜今天很累。','estar 表示当前状态。','cansada 是形容词；不能说 tiene cansada。','Tiene cansancio 使用名词 cansancio。'),
+lessonQuiz('L42-POSS-03','L42-POSSESSIVES',42,'Possessive adjectives and pronouns','POSSESSIVE ADJECTIVE','___ gatos son negros.', 'Mis',['Mis','Míos','Mi','Mías'],'我的猫是黑色的。','名词前使用物主形容词 mis。','míos 是物主代词，不能直接这样放在名词前。','Los gatos son míos = 这些猫是我的。'),
+lessonQuiz('L42-POSS-04','L42-POSSESSIVES',42,'Possessive adjectives and pronouns','POSSESSIVE PRONOUN','Esa gata es ___.', 'mía',['mía','mi','mis','mío'],'那只母猫是我的。','物主代词要与被替代的 gata 性数一致：mía。','物主代词跟物品，不跟拥有者的性别。','Ese gato es mío；esas gatas son mías。'),
+lessonQuiz('L42-AGREE-05','L42-AGREEMENT',42,'Adjective agreement','ADJECTIVE AGREEMENT','Mis hermanas son altas y ___.', 'delgadas',['delgadas','delgado','delgada','delgados'],'我的姐妹们又高又瘦。','形容词与阴性复数 hermanas 一致。','两个并列形容词都要完成性数配合。','inteligentes 等 -e 结尾形容词阴阳同形，但复数仍加 -s。'),
+lessonQuiz('L42-AGREE-06','L42-AGREEMENT',42,'Adjective agreement','BODY DESCRIPTION','Mi nariz es ___.', 'pequeña',['pequeña','pequeño','pequeños','pequeñas'],'我的鼻子很小。','nariz 是阴性单数，形容词用 pequeña。','不要按身体属于谁来决定形容词形式。','grande 阴阳同形：Mi nariz es grande。'),
+lessonQuiz('L42-ARTICLE-07','L42-ARTICLE-IDENTITY',42,'Identity and articles','PROFESSION WITHOUT ARTICLE','Diana es ___.', 'auxiliar de vuelo',['auxiliar de vuelo','una auxiliar de vuelo siempre','la auxiliar de vuelo','auxiliares'],'戴安娜是一名空乘。','ser 后单纯说职业/身份通常不加冠词。','英语中的 a/an 不必直译。','有修饰时可说 Es una auxiliar de vuelo excelente。'),
+lessonQuiz('L42-ARTICLE-08','L42-ARTICLE-IDENTITY',42,'Identity and articles','CLEAR POSSESSION','Ese gato es ___. (hers, unambiguous)', 'de ella',['de ella','suyo necesariamente','su','ella'],'那只猫是她的。','su/suyo 指代可能模糊时，用 de ella 明确拥有者。','suyo 可能表示他的、她的、您的或他们的。','上下文清楚时 Ese gato es suyo 也正确。')
+];
+const CONV_L42=[
+{ctx:'Personality',q:'¿Cómo eres?',q_en:'What are you like?',ans:'Soy responsable, amable y un poco introvertida.',ans_en:'I am responsible, kind, and a little introverted.',note:'¿Cómo eres? 问性格或特征；回答用 ser。'},
+{ctx:'Current state',q:'¿Cómo estás hoy?',q_en:'How are you today?',ans:'Estoy bien, pero un poco cansada.',ans_en:'I am well, but a little tired.',note:'¿Cómo estás? 问当前状态。'},
+{ctx:'Possession',q:'¿De quién es esa gata?',q_en:'Whose cat is that?',ans:'Esa gata es mía.',ans_en:'That female cat is mine.',note:'mía 与 gata 的阴性单数一致。'},
+{ctx:'Appearance',q:'¿Cómo son Brenda y Diana?',q_en:'What do Brenda and Diana look like?',ans:'Son altas y delgadas. Tienen el cabello castaño, largo y lacio.',ans_en:'They are tall and slim. They have long, straight brown hair.',note:'人物特征用 ser；身体特征也常用 tener + 名词。'},
+{ctx:'Clear owner',q:'¿Cómo aclaras quién es el dueño si “suyo” es ambiguo?',q_en:'How do you clarify the owner if suyo is ambiguous?',ans:'Digo “de él”, “de ella”, “de usted” o “de ellos”.',ans_en:'I say de él, de ella, de usted, or de ellos.',note:'直接使用 de + 人称可以消除 su/suyo 的歧义。'}
+];
+
+const L43_VOCAB=[
+{es:'interno/a',en:'internal; intern / resident depending on context'},
+{es:'Eso es todo.',en:'That is all.'},
+{es:'aproximadamente',en:'approximately'},
+{es:'aproximadamente una semana',en:'approximately one week'},
+{es:'comprar en línea',en:'to buy online'},
+{es:'comprar por Internet',en:'to buy on the Internet'},
+{es:'útil / útiles',en:'useful (singular / plural)'},
+{es:'¿Te sirvieron?',en:'Were they useful to you?'},
+{es:'Me ayudó.',en:'It helped me.'},
+{es:'Me ayudaron.',en:'They helped me.'}
+];
+const FILL_L43=[
+lessonQuiz('L43-FEEDBACK-01','L43-PAST-FEEDBACK',43,'Past feedback','PLURAL SUBJECT','¿Las flashcards ___ útiles?', 'fueron',['fueron','fue','eran una','será'],'这些单词卡有用吗？','问一次已经结束的使用体验，复数主语用 fueron útiles。','fue 是单数；形容词 útiles 也是复数。','若问到现在是否一直有用，可说 ¿Han sido útiles?。'),
+lessonQuiz('L43-FEEDBACK-02','L43-PAST-FEEDBACK',43,'Past feedback','SUBJECT AGREEMENT','Las flashcards me ___.', 'ayudaron',['ayudaron','ayudó','ayudé','ayudaba yo'],'这些单词卡帮助了我。','主语 Las flashcards 是复数，所以动词用 ayudaron；me 仍表示“我”。','不要因为宾语 me 是单数就使用 ayudó。','La actividad me ayudó 使用单数 ayudó。'),
+lessonQuiz('L43-CONTEXT-03','L43-CONTEXT-FRAGMENTS',43,'Completing fragments','DURATION','El curso duró ___.', 'aproximadamente una semana',['aproximadamente una semana','aproximadamente de una semana','en aproximadamente','una aproximadamente semana'],'这门课程持续了大约一周。','aproximadamente + 数量表示近似；配合 duró 才成为完整句。','原片段本身只是时间量，不应假装是一整句。','Hace aproximadamente una semana = 大约一周前，意义不同。'),
+lessonQuiz('L43-CONTEXT-04','L43-CONTEXT-FRAGMENTS',43,'Completing fragments','UNKNOWN CONTEXT','Sin contexto, “interno/a” ___.', 'puede tener varios significados',['puede tener varios significados','solo significa médico','solo significa interno físico','es un verbo'],'没有上下文时，interno/a 可能有多种含义。','它可指“内部的”，也可依地区和语境指实习或住院人员。','资料不足时不要强行锁定一个意思。','完整语境决定最终翻译。'),
+lessonQuiz('L43-CONNECTOR-05','L43-CONNECTORS',43,'Connectors from English prompts','RESULT CONNECTOR','Hubo un problema, ___ tuve que esperar.', 'así que',['así que','aunque','mientras','de'],'出了问题，所以我不得不等待。','英文提示 so 表示结果/因果时，常用 así que。','英文提示词不是西语，必须根据完整句选择连接词。','entonces 也可表达“于是/那么”，侧重点略不同。'),
+lessonQuiz('L43-CONNECTOR-06','L43-CONNECTORS',43,'Connectors from English prompts','SEQUENCE / SUMMARY','Primero compré las cosas; ___ regresé a casa.', 'entonces',['entonces','interno','útil','aproximadamente de'],'我先买了东西，然后回了家。','顺序或推进叙述时可用 entonces。','不要把所有英文 so 都固定翻成同一个西语词。','若突出因果，也可能使用 así que，需看上下文。'),
+lessonQuiz('L43-TIME-07','L43-TIME-ONLINE',43,'Time and online shopping','DAY OF WEEK','Compré las cosas ___ sábado.', 'el',['el','en el','a el','de'],'我星期六买了那些东西。','表示在某个星期几，常直接用定冠词 el。','不要说 *en sábado。','los sábados 表示每个星期六。'),
+lessonQuiz('L43-ONLINE-08','L43-TIME-ONLINE',43,'Time and online shopping','ONLINE','Compré algunas cosas ___.', 'en línea',['en línea','a línea','de línea','por la línea'],'我在网上买了一些东西。','comprar en línea 是常见表达。','不要逐字翻译 online。','comprar por Internet 也正确。')
+];
+const CONV_L43=[
+{ctx:'Study feedback',q:'¿Las flashcards fueron útiles?',q_en:'Were the flashcards useful?',ans:'Sí, fueron útiles y me ayudaron mucho.',ans_en:'Yes, they were useful and helped me a lot.',note:'复数主语同时控制 fueron 和 ayudaron。'},
+{ctx:'Current usefulness',q:'¿Las flashcards han sido útiles hasta ahora?',q_en:'Have the flashcards been useful so far?',ans:'Sí, me han ayudado a recordar el vocabulario.',ans_en:'Yes, they have helped me remember the vocabulary.',note:'hasta ahora 与现在相连，可用现在完成时。'},
+{ctx:'Approximate time',q:'¿Cuánto duró?',q_en:'How long did it last?',ans:'Duró aproximadamente una semana.',ans_en:'It lasted approximately one week.',note:'把原始时间片段补成可使用的完整句。'},
+{ctx:'Online shopping',q:'¿Qué compraste el sábado?',q_en:'What did you buy on Saturday?',ans:'Compré algunas cosas en línea.',ans_en:'I bought some things online.',note:'el sábado 表具体某个星期六；en línea 表网购。'},
+{ctx:'Insufficient context',q:'¿Qué significa “interno”?',q_en:'What does interno mean?',ans:'Sin contexto, puede significar “interno” o referirse a un interno médico.',ans_en:'Without context, it can mean internal or refer to a medical intern.',note:'本课资料不足，保留多义而不虚构原句。'}
+];
+
+const L44_VOCAB=[
+{es:'en punto',en:'on the dot / exactly'},
+{es:'y cuarto',en:'quarter past'},
+{es:'y media',en:'half past'},
+{es:'un cuarto para',en:'a quarter to (common in Latin America)'},
+{es:'a menudo',en:'often'},
+{es:'dos veces a la semana',en:'twice a week'},
+{es:'tres veces al día',en:'three times a day'},
+{es:'a mediodía',en:'at noon'},
+{es:'a medianoche',en:'at midnight'},
+{es:'ir al trabajo en bicicleta',en:'to go to work by bicycle'},
+{es:'los fines de semana',en:'on weekends'},
+{es:'ir al dentista',en:'to go to the dentist'}
+];
+const FILL_L44=[
+lessonQuiz('L44-TIME-01','L44-TELLING-TIME',44,'Telling time','ONE O’CLOCK','___ la una en punto.', 'Es',['Es','Son','Está','Hay'],'现在正好一点。','一点使用单数 Es la una。','其他钟点通常用复数 Son las…。','活动时间说 a la una。'),
+lessonQuiz('L44-TIME-02','L44-TELLING-TIME',44,'Telling time','QUARTER TO','Son ___ para las nueve. (8:45)', 'un cuarto',['un cuarto','y cuarto','media','quince y'],'现在差一刻九点。','拉美常用 un cuarto para las nueve 表示8:45。','y cuarto 表示“过一刻”，方向相反。','西班牙常说 las nueve menos cuarto。'),
+lessonQuiz('L44-FREQ-03','L44-FREQUENCY',44,'Frequency expressions','FREQUENCY','Hago ejercicio dos veces ___ semana.', 'a la',['a la','en la','por la','de la'],'我每周锻炼两次。','dos veces a la semana 是固定频率表达。','不要把英文 per 直接译为 por。','tres veces al día = 每天三次。'),
+lessonQuiz('L44-FREQ-04','L44-FREQUENCY',44,'Frequency expressions','WORD ORDER','___ ve películas los fines de semana.', 'A veces',['A veces','Vez a','Una veces','Cada vez de'],'她周末有时看电影。','频率词可放句首突出频率。','a veces 也可放动词后或句尾，位置有弹性。','Ve películas a veces 也正确。'),
+lessonQuiz('L44-TENSE-05','L44-ROUTINE-TENSE',44,'Routine tense consistency','HABITUAL PRESENT','Todos los días ella ___ yoga.', 'hace',['hace','hizo','hará','hacía ayer una vez'],'她每天做瑜伽。','todos los días 表习惯，使用现在时 hace。','不要为了和段落中的一次过去事件统一而全部改成过去时。','若说过去的习惯，可用 hacía。'),
+lessonQuiz('L44-TENSE-06','L44-ROUTINE-TENSE',44,'Routine tense consistency','ONE COMPLETED EVENT','Ayer ella ___ pastel con sus amigos.', 'comió',['comió','come','comía siempre','comerá'],'昨天她和朋友们吃了蛋糕。','ayer 指向一次已完成事件，使用 comió。','若段落仍讲一般习惯，应写 come pastel，不应混入 comió。','comía 表示过去习惯或背景。'),
+lessonQuiz('L44-NATURAL-07','L44-NATURAL-ROUTINE',44,'Natural routine language','BIKE TO WORK','Ella siempre ___ en bicicleta.', 'va al trabajo',['va al trabajo','trabaja','hace trabajo','está trabajo'],'她总是骑自行车去上班。','ir al trabajo en bicicleta 才是“骑车去上班”。','trabajar en bicicleta 字面像“骑着车工作”。','andar en bicicleta = 骑自行车。'),
+lessonQuiz('L44-NATURAL-08','L44-NATURAL-ROUTINE',44,'Natural routine language','WEEKEND HABIT','___ a veces ve películas.', 'Los fines de semana',['Los fines de semana','El fin de semana siempre cada','En sábado','A la semana final'],'她周末有时看电影。','复数 los fines de semana 表示每个周末的习惯。','este fin de semana 指这个周末；el fin de semana 依语境可指某一个。','频率表达要与想表达的一次或习惯对应。')
+];
+const CONV_L44=[
+{ctx:'Exact time',q:'¿Qué hora es?',q_en:'What time is it?',ans:'Son las siete y cuarto.',ans_en:'It is quarter past seven.',note:'一点用 Es la una；其他钟点用 Son las…。'},
+{ctx:'Activity time',q:'¿A qué hora haces yoga?',q_en:'What time do you do yoga?',ans:'Hago yoga a las ocho de la noche.',ans_en:'I do yoga at eight in the evening.',note:'说活动发生的钟点用 a la / a las。'},
+{ctx:'Frequency',q:'¿Con qué frecuencia haces ejercicio?',q_en:'How often do you exercise?',ans:'Hago ejercicio dos veces a la semana.',ans_en:'I exercise twice a week.',note:'频率：次数 + a la semana / al día。'},
+{ctx:'Bike commute',q:'¿Cómo vas al trabajo?',q_en:'How do you go to work?',ans:'Voy al trabajo en bicicleta.',ans_en:'I go to work by bicycle.',note:'不要说 trabajar en bicicleta 来表达通勤。'},
+{ctx:'Habit or event',q:'¿Comes pastel todos los días o comiste pastel ayer?',q_en:'Do you eat cake every day, or did you eat cake yesterday?',ans:'No lo como todos los días; comí pastel ayer.',ans_en:'I do not eat it every day; I ate cake yesterday.',note:'现在习惯 come/como；一次完成事件 comió/comí。'}
+];
+
+const L45_VOCAB=[
+{es:'templado/a',en:'temperate / mild'},
+{es:'desértico/a',en:'desert-like / arid'},
+{es:'nevado/a',en:'snowy'},
+{es:'tropical',en:'tropical'},
+{es:'la nieve',en:'snow'},
+{es:'la lluvia',en:'rain'},
+{es:'el viento',en:'wind'},
+{es:'el continente asiático',en:'the Asian continent'},
+{es:'el continente americano',en:'the American continent'},
+{es:'al este de',en:'to the east of / in the eastern part of'},
+{es:'en el centro del país',en:'in the center of the country'},
+{es:'los edificios altos',en:'tall buildings'},
+{es:'la diversidad cultural',en:'cultural diversity'},
+{es:'las pirámides de Guiza',en:'the Pyramids of Giza'}
+];
+const FILL_L45=[
+lessonQuiz('L45-CORE-01','L45-SER-ESTAR-TENER-HAY',45,'Ser, estar, tener and hay','SER · CHARACTERISTIC','México ___ un país grande.', 'es',['es','está','tiene','hay'],'墨西哥是一个大国。','ser 表示身份或特征。','位置使用 estar，存在使用 hay。','México tiene diferentes climas 表示墨西哥具备多种气候。'),
+lessonQuiz('L45-CORE-02','L45-SER-ESTAR-TENER-HAY',45,'Ser, estar, tener and hay','ESTAR · LOCATION','La CDMX ___ en el centro del país.', 'está',['está','es','tiene','hay'],'墨西哥城位于这个国家的中部。','地点位置使用 estar，即使位置很稳定。','不要用“永久/临时”判断 ser/estar。','La CDMX es una ciudad enorme 用 ser 表身份/特征。'),
+lessonQuiz('L45-CORE-03','L45-SER-ESTAR-TENER-HAY',45,'Ser, estar, tener and hay','TENER · FEATURE','Shanghái ___ un clima templado.', 'tiene',['tiene','hay','está','es'],'上海气候温和。','主体拥有或具备某种事物，用 tener。','clima 前需要冠词 un。','En Shanghái hay un clima templado 语法可理解，但视角是存在而非城市具备。'),
+lessonQuiz('L45-CORE-04','L45-SER-ESTAR-TENER-HAY',45,'Ser, estar, tener and hay','HAY · EXISTENCE','En Shanghái ___ muchos edificios altos.', 'hay',['hay','tiene','están un','es'],'上海有许多高楼。','某处存在某物用 hay，单复数都不变。','不要说 *hayan muchos edificios 来表达普通现在存在。','Los edificios están en Shanghái 强调这些楼的位置。'),
+lessonQuiz('L45-WEATHER-05','L45-WEATHER-FEELING',45,'Weather vs personal feeling','WEATHER','En verano ___ mucho calor.', 'hace',['hace','tengo','hay yo','estoy'],'夏天天气很热。','描述天气用 hace calor。','tener calor 表示个人觉得热。','Hay calor 某些语境能听到，但基础表达优先 hace calor。'),
+lessonQuiz('L45-FEELING-06','L45-WEATHER-FEELING',45,'Weather vs personal feeling','PERSONAL FEELING','Hoy yo ___ mucho calor.', 'tengo',['tengo','hace','hay','soy'],'我今天觉得很热。','个人感受用 tener calor。','不要把天气表达 hace calor 直接加 yo。','Estoy acalorada 也可表示我热得难受。'),
+lessonQuiz('L45-FACT-07','L45-GEOGRAPHY-FACTS',45,'Geography facts','CITY VS CAPITAL','La capital de Brasil es ___.', 'Brasilia',['Brasilia','Río de Janeiro','São Paulo','Kioto'],'巴西的首都是巴西利亚。','里约热内卢是课堂城市，但不是现任首都。','国家、课堂城市和首都必须分开记录。','日本首都是东京，不是京都。'),
+lessonQuiz('L45-FACT-08','L45-GEOGRAPHY-FACTS',45,'Geography facts','CONTINENT FACT','Noruega está en ___.', 'Europa',['Europa','África','Asia','Sudamérica'],'挪威位于欧洲。','挪威是欧洲国家。','África 是洲，不是国家，也不属于欧洲。','Egipto 位于非洲。'),
+lessonQuiz('L45-CLARITY-09','L45-CLARITY',45,'Clear place descriptions','CLEAR SUBJECT','La CDMX está en México. ___ está muy lejos de China.', 'México',['México','Está','Hay','La distancia'],'墨西哥城位于墨西哥；墨西哥离中国很远。','重复 México 可避免 está 的主语不清。','长句中不能假设读者一定知道代词或省略主语指谁。','若明确谈 CDMX，也可重复 La CDMX。'),
+lessonQuiz('L45-CLARITY-10','L45-CLARITY',45,'Clear place descriptions','NATURAL PRESENT','Ahora ___ en Shanghái.', 'vivo',['vivo','estoy viviendo hoy','hay viviendo','soy vivir'],'我现在住在上海。','稳定的当前居住状态用 Ahora vivo en Shanghái 最自然。','*Estoy viviendo en Shanghái hoy 把“居住”和“今天”搭得突兀。','只表示今天人在上海：Hoy estoy en Shanghái。')
+];
+const CONV_L45=[
+{ctx:'Four core predicates',q:'¿Cuándo usas “ser”, “estar”, “tener” y “hay”?',q_en:'When do you use ser, estar, tener, and hay?',ans:'Uso “ser” para identidad o características, “estar” para ubicación o estado, “tener” para posesión y “hay” para existencia.',ans_en:'I use ser for identity or traits, estar for location or state, tener for possession, and hay for existence.',note:'四分法是本课最核心的判断框架。'},
+{ctx:'Weather',q:'¿Qué tiempo hace en Shanghái en verano?',q_en:'What is the weather like in Shanghai in summer?',ans:'Hace mucho calor y llueve con frecuencia.',ans_en:'It is very hot and it rains frequently.',note:'天气用 hace calor；个人感受用 tengo calor。'},
+{ctx:'Place description',q:'¿Cómo describirías Shanghái?',q_en:'How would you describe Shanghai?',ans:'Shanghái está al este de China. Tiene un clima templado y hay muchos edificios altos.',ans_en:'Shanghai is in eastern China. It has a temperate climate, and there are many tall buildings.',note:'一段话内分别练习 estar、tener、hay。'},
+{ctx:'Capital check',q:'¿Río de Janeiro es la capital de Brasil?',q_en:'Is Rio de Janeiro the capital of Brazil?',ans:'No. Río de Janeiro es una ciudad de Brasil; la capital es Brasilia.',ans_en:'No. Rio de Janeiro is a city in Brazil; the capital is Brasília.',note:'区分课堂城市与现任首都。'},
+{ctx:'Clear subject',q:'¿Qué está muy lejos de China: México o la CDMX?',q_en:'What is very far from China: Mexico or Mexico City?',ans:'México está muy lejos de China. Repito el sujeto para evitar confusión.',ans_en:'Mexico is very far from China. I repeat the subject to avoid confusion.',note:'信息密集的句子里，重复名词比含糊省略更清楚。'}
+];
+
+const L46_VOCAB=[
+{es:'rogar',en:'to beg / plead; yo ruego'},
+{es:'medir',en:'to measure; yo mido'},
+{es:'quizá',en:'perhaps / maybe'},
+{es:'qué tan grande',en:'how big'},
+{es:'qué tan difícil',en:'how difficult'},
+{es:'qué tan lejos',en:'how far'},
+{es:'la habitación',en:'room'},
+{es:'la guitarra',en:'guitar'},
+{es:'la guerra',en:'war'},
+{es:'el pingüino',en:'penguin'},
+{es:'frutos rojos',en:'berries / red fruits'},
+{es:'ser parte de',en:'to be part of'}
+];
+const FILL_L46=[
+lessonQuiz('L46-STEM-01','L46-STEM-CHANGE',46,'Present stem changes','E → IE','Yo ___ que hace mucho calor.', 'pienso',['pienso','penso','pensamos','pensé'],'我觉得天气很热。','pensar 在现在时 yo 发生 e→ie：pienso。','不是所有含 e 的动词都变化；必须把词干变化作为词汇一起记。','nosotros pensamos 保持原词干。'),
+lessonQuiz('L46-STEM-02','L46-STEM-CHANGE',46,'Present stem changes','O → UE','Ella ___ ocho horas.', 'duerme',['duerme','dorme','dormimos','durmió'],'她睡八个小时。','dormir 在 él/ella 现在时发生 o→ue：duerme。','本课规则只针对现在时入门，不能推广到所有时态。','nosotros dormimos 不发生靴形变化。'),
+lessonQuiz('L46-STEM-03','L46-STEM-CHANGE',46,'Present stem changes','E → I','Yo ___ una ensalada.', 'pido',['pido','pedo','pedimos','pedí'],'我点一份沙拉。','pedir 的现在时 yo 发生 e→i：pido。','不要误用 e→ie。','nosotros pedimos 保持原词干。'),
+lessonQuiz('L46-STEM-04','L46-STEM-CHANGE',46,'Present stem changes','U → UE','Nosotros queremos ___ fútbol.', 'jugar',['jugar','juegar','gugar','jugamos'],'我们想踢足球。','不定式保持 jugar；变位时 yo juego。','规范拼写始终是 jugar，gugar 只是课堂错误对照。','Nosotros jugamos 中 u 不变化。'),
+lessonQuiz('L46-NOS-05','L46-NOSOTROS-YO',46,'Nosotros and irregular yo','NOSOTROS','Nosotros ___ qué tan grande es la habitación.', 'medimos',['medimos','midimos','miden','medemos'],'我们测量这个房间有多大。','现在时 nosotros 保持原词干：medimos。','不要把 e→i 套到 nosotros。','yo mido, tú mides, ellos miden。'),
+lessonQuiz('L46-YO-06','L46-NOSOTROS-YO',46,'Nosotros and irregular yo','TENER · YO','Yo ___ dos gatos.', 'tengo',['tengo','tieno','tienes','tenemos'],'我有两只猫。','tener 的 yo 是独立不规则 tengo。','不要根据 e→ie 造 *tieno。','tú tienes, él tiene, ellos tienen；nosotros tenemos。'),
+lessonQuiz('L46-SPELL-07','L46-SPELLING',46,'G, gu and j spelling','SEGUIR · YO','Yo ___ estudiando.', 'sigo',['sigo','siguo','siego','seguo'],'我继续学习。','在 o 前保留硬 g 不需要 u，所以 seguir 的 yo 是 sigo。','这不仅是 e→i，还包含拼写调整。','conseguir → consigo。'),
+lessonQuiz('L46-SPELL-08','L46-SPELLING',46,'G, gu and j spelling','PRONOUNCED U','¿En cuál palabra se pronuncia la “u”?', 'pingüino',['pingüino','guerra','guitarra','seguir'],'在哪个词里字母 u 要发音？答案是 pingüino。','ü 表示 u 在 güe/güi 中要发音。','guerra、guitarra、seguir 的 u 通常不发音。','g + e/i 通常发类似西语 j 的 /x/ 音。'),
+lessonQuiz('L46-QUE-TAN-09','L46-QUE-TAN',46,'Qué tan + adjective','EMBEDDED QUESTION','Medimos ___ es la habitación.', 'qué tan grande',['qué tan grande','que grande tan','qué grande de','tan qué grande'],'我们测量这个房间有多大。','qué tan + 形容词表示“有多……”，嵌入问句仍保留 qué 的重音。','原课堂片段需要补全谓语才是完整句。','也可说 Medimos el tamaño de la habitación，结构不同。'),
+lessonQuiz('L46-QUE-TAN-10','L46-QUE-TAN',46,'Qué tan + adjective','DISTANCE','No sé ___ está el museo.', 'qué tan lejos',['qué tan lejos','que lejos tan','cuánto lejos','tan lejos qué'],'我不知道博物馆有多远。','qué tan lejos 表示“有多远”。','不要漏掉 qué 的重音。','¿A qué distancia está…? 也是更正式的表达。')
+];
+const CONV_L46=[
+{ctx:'Stem change',q:'¿Qué personas cambian la raíz en el presente?',q_en:'Which persons change the stem in the present tense?',ans:'Cambian yo, tú, él, ella, usted, ellos y ustedes; nosotros normalmente no cambia la raíz.',ans_en:'Yo, tú, él, ella, usted, ellos, and ustedes change it; nosotros normally does not change the stem.',note:'图表中变化位置像靴子，所以叫 boot verbs。'},
+{ctx:'Tener',q:'¿Por qué decimos “tengo” y no “tieno”?',q_en:'Why do we say tengo and not tieno?',ans:'Porque la forma de “yo” es irregular: tengo.',ans_en:'Because the yo form is irregular: tengo.',note:'tener 同时有 yo-go 与其他人称 e→ie 两类不规则。'},
+{ctx:'Seguir spelling',q:'¿Por qué “seguir” cambia a “sigo”?',q_en:'Why does seguir change to sigo?',ans:'Cambia e a i y se elimina la u porque delante de o no es necesaria para conservar el sonido fuerte de g.',ans_en:'It changes e to i and drops u because before o the u is not needed to keep the hard g sound.',note:'sigo/consigo 结合词干变化与拼写调整。'},
+{ctx:'Qué tan',q:'¿Cómo preguntas por el tamaño de una habitación?',q_en:'How do you ask about the size of a room?',ans:'Pregunto: “¿Qué tan grande es la habitación?”',ans_en:'I ask: How big is the room?',note:'qué tan + 形容词；qué 保留重音。'},
+{ctx:'Night waking',q:'¿Cómo dices que a veces te despiertas durante la noche?',q_en:'How do you say that you sometimes wake during the night?',ans:'A veces me despierto durante la noche.',ans_en:'Sometimes I wake up during the night.',note:'比 Me despierto un poco en la noche 更清楚自然。'}
+];
+
+const L47_VOCAB=[
+{es:'inmediatamente después',en:'immediately afterward'},
+{es:'por su parte',en:'for his/her part'},
+{es:'ambos / ambas',en:'both'},
+{es:'el domicilio',en:'home address / residence'},
+{es:'comida a domicilio',en:'food delivery'},
+{es:'la reunión',en:'meeting'},
+{es:'en cambio',en:'in contrast / on the other hand'},
+{es:'la tesis',en:'thesis'},
+{es:'al terminar',en:'upon finishing'},
+{es:'profundamente',en:'deeply'},
+{es:'dormir profundamente',en:'to sleep deeply'},
+{es:'aprender a tocar la batería',en:'to learn to play the drums'},
+{es:'la clase no dura mucho',en:'the class does not last long'},
+{es:'dar un paseo por el parque',en:'to take a walk through the park'}
+];
+const FILL_L47=[
+lessonQuiz('L47-REFLEXIVE-01','L47-REFLEXIVE-PRONOMINAL',47,'Reflexive and pronominal verbs','DORMIRSE','Normalmente me ___ a las once.', 'duermo',['duermo','dormo','duerme','dormimos'],'我通常十一点睡着。','dormirse 强调入睡：me duermo。','dormir 更一般地表示睡觉；se 不能随意丢掉而假设意义不变。','Duermo ocho horas = 我睡八小时。'),
+lessonQuiz('L47-REFLEXIVE-02','L47-REFLEXIVE-PRONOMINAL',47,'Reflexive and pronominal verbs','SALIRSE','Ella ___ de la reunión temprano.', 'se salió',['se salió','salió se','se salir','salía se'],'她很早就离开了会议。','salirse 是代词式动词，se 会改变语气或意义。','并非所有带 se 的动词都要机械译成“自己……自己”。','Ella salió de la reunión 也正确，更中性。'),
+lessonQuiz('L47-CHAIN-03','L47-VERB-CHAINS',47,'Verb chains and prepositions','EMPEZAR A','Hace poco empecé ___ estudiar batería.', 'a',['a','de','en','por'],'不久前我开始学习架子鼓。','empezar a + infinitivo 表示开始做。','介词 a 是结构的一部分。','aprender a tocar la batería 也使用 a。'),
+lessonQuiz('L47-CHAIN-04','L47-VERB-CHAINS',47,'Verb chains and prepositions','SEGUIR + GERUND','Pienso seguir ___ español.', 'estudiando',['estudiando','estudiado','estudiar a','estudio'],'我打算继续学习西语。','seguir + gerundio 表示继续做某事。','seguir 后不能用过去分词表达持续动作。','Quiero seguir estudiando 也正确。'),
+lessonQuiz('L47-GERUND-05','L47-GERUND-PARTICIPLE',47,'Gerund vs participle','PRESENT PERFECT','Este año he ___ mucho.', 'estudiado',['estudiado','estudiando','estudiar','estudio'],'今年我已经学了很多。','haber + participio 构成完成时：he estudiado。','-ado/-ido 不能单独等同于“已经”。','La puerta está cerrada 中 participio 还可作形容词。'),
+lessonQuiz('L47-GERUND-06','L47-GERUND-PARTICIPLE',47,'Gerund vs participle','PROGRESSIVE','Ahora estoy ___.', 'estudiando',['estudiando','estudiado','estudié','estudiar'],'我现在正在学习。','estar + gerundio 表示正在进行。','gerundio 不能单独充当完整谓语。','Sigo estudiando = 我继续学习。'),
+lessonQuiz('L47-PRONOUN-07','L47-PRONOUN-POSITION',47,'Pronoun position in verb chains','PRONOUN BEFORE CONJUGATED VERB','___ quiero seguir estudiando.', 'Lo',['Lo','Le','Se lo a','El'],'我想继续学习它。','宾语代词可放在变位动词 quiero 前。','lo 指前面已经提到的阳性事物或主题。','Quiero seguir estudiándolo 也正确。'),
+lessonQuiz('L47-PRONOUN-08','L47-PRONOUN-POSITION',47,'Pronoun position in verb chains','PRONOUN ATTACHED TO GERUND','Quiero seguir ___.', 'estudiándolo',['estudiándolo','lo estudiando','estudiandolo','estudiado lo'],'我想继续学习它。','代词附在 gerundio 后并加重音：estudiándolo。','重音符号用于保持原来的重音位置。','Lo quiero seguir estudiando 是另一种正确位置。'),
+lessonQuiz('L47-YO-09','L47-YO-IRREGULAR',47,'Irregular yo forms','-ZCO PATTERN','Yo ___ a la profesora.', 'conozco',['conozco','conoco','conoce','conocemos'],'我认识这位老师。','许多元音 + cer/cir 动词的 yo 使用 -zco。','这不是覆盖所有 -cer/-cir 动词的无例外规则。','hacer → hago，decir → digo，vencer → venzo。'),
+lessonQuiz('L47-YO-10','L47-YO-IRREGULAR',47,'Irregular yo forms','TRAER · YO','Yo ___ comida a la reunión.', 'traigo',['traigo','traeo','trae','traemos'],'我带食物来参加会议。','traer 的 yo 是 traigo。','-traigo 主要出现在 yo，不要套到所有人称。','atraigo、distraigo、contraigo 属于同族。'),
+lessonQuiz('L47-TIME-11','L47-TIME-QUESTIONS',47,'Time questions','EXACT CLOCK TIME','¿___ Carlos se despierta?', 'A qué hora',['A qué hora','Cuándo hora','Qué hora a','Dónde'],'卡洛斯几点醒来？','¿A qué hora…? 问精确钟点。','问题开头的 A 不能省略。','¿Cuándo…? 可问更宽泛的时间、日期或时段。'),
+lessonQuiz('L47-TIME-12','L47-TIME-QUESTIONS',47,'Time questions','GENERAL TIME','¿___ empiezan a trabajar?', 'Cuándo',['Cuándo','A qué hora exactamente siempre','Dónde hora','Qué tan'],'他们什么时候开始工作？','¿Cuándo…? 可问时间范围或何时。','若需要具体钟点，改用 ¿A qué hora…?。','两种问题并列有教学价值，答案精确度不同。')
+];
+const CONV_L47=[
+{ctx:'Daily routine',q:'¿A qué hora te despiertas y qué haces después?',q_en:'What time do you wake up, and what do you do afterward?',ans:'Me despierto a las ocho cuarenta y cinco, me lavo y salgo a hacer ejercicio.',ans_en:'I wake up at 8:45, wash, and go out to exercise.',note:'反身代词不能丢；salir a + infinitivo 表示出去做某事。'},
+{ctx:'Learning drums',q:'¿Cuándo empezaste a estudiar batería?',q_en:'When did you start studying drums?',ans:'Hace poco empecé a estudiar batería.',ans_en:'I started studying drums recently.',note:'“最近开始了”用 Hace poco empecé；若强调最近持续学习，可说 Últimamente estoy aprendiendo。'},
+{ctx:'Continue studying',q:'¿Qué piensas seguir estudiando?',q_en:'What do you plan to keep studying?',ans:'Pienso seguir estudiando español.',ans_en:'I plan to keep studying Spanish.',note:'pensar + infinitivo；seguir + gerundio。'},
+{ctx:'Pronoun position',q:'¿Cómo colocas “lo” con “seguir estudiando”?',q_en:'How do you place lo with seguir estudiando?',ans:'Puedo decir “Lo quiero seguir estudiando” o “Quiero seguir estudiándolo”.',ans_en:'I can say Lo quiero seguir estudiando or Quiero seguir estudiándolo.',note:'两个位置都正确；gerundio 后附代词时加重音。'},
+{ctx:'Participle vs gerund',q:'¿Qué diferencia hay entre “he estudiado” y “estoy estudiando”?',q_en:'What is the difference between he estudiado and estoy estudiando?',ans:'“He estudiado” conecta una acción pasada con el presente; “estoy estudiando” describe una acción en progreso.',ans_en:'He estudiado connects a past action with the present; estoy estudiando describes an action in progress.',note:'-ado/-ido 是 participio；-ando/-iendo 是 gerundio。'},
+{ctx:'Class duration',q:'¿La clase no dura mucho o no cuenta mucho?',q_en:'Does the class not last long, or does it not matter much?',ans:'Si hablo de la duración, digo “La clase no dura mucho”. Si hablo de la importancia, digo “No cuenta mucho”.',ans_en:'If I mean duration, I say La clase no dura mucho. If I mean importance, I say No cuenta mucho.',note:'原材料语境不足，两种意思不能擅自合并。'}
 ];
 
 const L35_VOCAB=[
@@ -4898,18 +5575,72 @@ const CONV_L34=[
 {ctx:'Will vs going to',q:'¿Qué diferencia hay entre “trabajaré” y “voy a trabajar”?',q_en:'What is the difference between trabajaré and voy a trabajar?',ans:'Las dos hablan del futuro. “Voy a trabajar” es muy común para un plan y “trabajaré” también puede expresar una predicción o una decisión futura.',ans_en:'Both talk about the future. Voy a trabajar is very common for a plan, and trabajaré can also express a prediction or future decision.',note:'Both are normal; the periphrastic form is especially common in everyday speech.'}
 ];
 
+// One registry drives every shared lesson feature: launch, navigation, resume,
+// vocabulary aggregation and integrity checks. Adding a lesson in one place
+// prevents the partial-wiring bug that affected Lessons 37 and 38.
+const LESSON_REGISTRY={
+  1:{vocab:VOCAB,fill:FILL_EXERCISES,conv:CONVERSATIONS,title:'Foundations'},
+  2:{vocab:VOCAB_L2,fill:FILL_L2,conv:CONV_L2,title:'AR / ER / IR'},
+  3:{vocab:VOCAB_L3,fill:FILL_L3,conv:CONV_L3,title:'Hacer & Daily Routine'},
+  4:{vocab:VOCAB_L4,title:'Lesson 4'}, 5:{vocab:VOCAB_L5,title:'Lesson 5'}, 6:{vocab:VOCAB_L6,title:'Lesson 6'},
+  7:{vocab:VOCAB_L7,title:'Lesson 7'}, 8:{vocab:VOCAB_L8,title:'Lesson 8'}, 9:{vocab:VOCAB_L9,title:'Lesson 9'},
+  10:{vocab:VOCAB_L10,title:'Lesson 10'},11:{vocab:VOCAB_L11,title:'Lesson 11'},12:{vocab:VOCAB_L12,title:'Lesson 12'},
+  13:{vocab:VOCAB_L13,conv:CONV_L13,title:'Irregular Preterite'},14:{vocab:VOCAB_L14,conv:CONV_L14,title:'Lesson 14'},
+  15:{vocab:VOCAB_L15,conv:CONV_L15,title:'Lesson 15'},16:{vocab:VOCAB_L16,conv:CONV_L16,title:'Biography'},
+  17:{vocab:VOCAB_L17,conv:CONV_L17,title:'Present Perfect'},18:{vocab:VOCAB_L18,conv:CONV_L18,title:'Experiences & Activities'},
+  19:{vocab:VOCAB_L19,conv:CONV_L19,title:'Colors & Experiences'},20:{vocab:VOCAB_L20,conv:CONV_L20,title:'Me gustaría & Conditional'},
+  21:{vocab:VOCAB_L21,conv:CONV_L21,title:'Advice & Hypotheticals'},
+  22:{vocab:VOCAB_L22,fill:FILL_L22,conv:CONV_L22,title:'Conditional Advice'},
+  23:{vocab:VOCAB_L23,fill:FILL_L23,conv:CONV_L23,title:'Imperfect & Object Pronouns'},
+  24:{vocab:VOCAB_L24,fill:FILL_L24,conv:CONV_L24,title:'Seguir + Gerund'},
+  25:{vocab:L25_VOCAB,fill:FILL_L25,conv:CONV_L25,title:'Past & Conditional'},
+  26:{vocab:L26_VOCAB,fill:FILL_L26,conv:CONV_L26,title:'Preterite vs Imperfect'},
+  27:{vocab:L27_VOCAB,fill:FILL_L27,conv:CONV_L27,title:'Childhood Memories'},
+  28:{vocab:L28_VOCAB,fill:FILL_L28,conv:CONV_L28,title:'Photo vs Video'},
+  29:{vocab:L29_VOCAB,fill:FILL_L29,conv:CONV_L29,title:'Three Past Tenses'},
+  30:{vocab:L30_VOCAB,fill:FILL_L30,conv:CONV_L30,title:'Imperfect in Real Life'},
+  31:{vocab:L31_VOCAB,fill:FILL_L31,conv:CONV_L31,title:'Storytelling'},
+  32:{vocab:L32_VOCAB,fill:FILL_L32,conv:CONV_L32,title:'Object Pronouns'},
+  33:{vocab:L33_VOCAB,fill:FILL_L33,conv:CONV_L33,title:'Pronoun Position'},
+  34:{vocab:L34_VOCAB,fill:FILL_L34,conv:CONV_L34,title:'Future Forms'},
+  35:{vocab:L35_VOCAB,fill:FILL_L35,conv:CONV_L35,title:'Mixed Tenses & Predictions'},
+  36:{vocab:L36_VOCAB,fill:FILL_L36,conv:CONV_L36,title:'Past Tenses & Two Uses of A'},
+  37:{vocab:L37_VOCAB,fill:FILL_L37,conv:CONV_L37,title:'Real Conditions & Simple Future'},
+  38:{vocab:L38_VOCAB,fill:FILL_L38,conv:CONV_L38,title:'Future Predictions & Persuasive Writing'},
+  39:{vocab:L39_VOCAB,fill:FILL_L39,conv:CONV_L39,title:'Future Life, Goals & Promises'},
+  40:{vocab:L40_VOCAB,fill:FILL_L40,conv:CONV_L40,title:'Core Tense Review'},
+  41:{vocab:L41_VOCAB,fill:FILL_L41,conv:CONV_L41,title:'Family, Demonstratives & Comparisons'},
+  42:{vocab:L42_VOCAB,fill:FILL_L42,conv:CONV_L42,title:'Appearance, Personality & Possession'},
+  43:{vocab:L43_VOCAB,fill:FILL_L43,conv:CONV_L43,title:'Classroom Fragments & Feedback'},
+  44:{vocab:L44_VOCAB,fill:FILL_L44,conv:CONV_L44,title:'Time, Frequency & Daily Routines'},
+  45:{vocab:L45_VOCAB,fill:FILL_L45,conv:CONV_L45,title:'Places, Weather & Core Predicates'},
+  46:{vocab:L46_VOCAB,fill:FILL_L46,conv:CONV_L46,title:'Stem Changes & Spelling'},
+  47:{vocab:L47_VOCAB,fill:FILL_L47,conv:CONV_L47,title:'Reflexive Routines & Verb Chains'}
+};
+const MAX_LESSON=Math.max(...Object.keys(LESSON_REGISTRY).map(Number));
+
+// Every new course quiz item is also eligible for Master Review. Stable IDs
+// let wording and translation improve without resetting existing progress.
+const MASTER_REVIEW_ADDITIONS=[
+  ...FILL_L36,...FILL_L37,...FILL_L38,...FILL_L39,...FILL_L40,...FILL_L41,
+  ...FILL_L42,...FILL_L43,...FILL_L44,...FILL_L45,...FILL_L46,...FILL_L47
+];
+MASTER_REVIEW_BANK.push(...MASTER_REVIEW_ADDITIONS);
+normalizeMasterBank();
+
 // ══════════════ SESSION SAVE/RESTORE ══════════════
 
 // Per-mode session keys: each lesson/mode has its own slot so studying L1
 // never overwrites L12's saved position.
 function sessionKey(mode){ return `session_espanol_${mode||'_'}`; }
-function getId(c){return c.es||c.sentence||c.q;}
+function getId(c){return c.questionId||c.id||c.es||c.sentence||c.q;}
 function saveSession(){
   if(!S.mode||!S.cards.length||S.idx>=S.cards.length)return;
   localStorage.setItem(sessionKey(S.mode),JSON.stringify({
     mode:S.mode, cardIds:S.cards.map(getId),
     idx:S.idx, correct:S.correct, wrong:S.wrong,
-    answered:S.answered
+    answered:S.answered,
+    masterSessionId:S.masterSessionId||''
   }));
 }
 function clearSession(mode){ localStorage.removeItem(sessionKey(mode||S.mode)); }
@@ -4922,6 +5653,7 @@ const S={
   revealed:false, submitted:false,
   answered:{},   // {cardIdx: quality} — first-time answers only
   srUpdates:{},
+  masterSessionId:'', masterCycleId:'',
   _pendingMode:null, _savedSession:null
 };
 
@@ -4946,13 +5678,13 @@ function goHome(){
 
 // ══════════════ MODE LAUNCHERS ══════════════
 
-function navigateToMode(mode){
+function navigateToModeLegacy(mode){
   if(mode==='es-en'||mode==='en-es'||mode==='es-en-review'||mode==='en-es-review'||mode==='myw-es-en'||mode==='myw-en-es'||mode==='es-en-l2'||mode==='en-es-l2'||mode==='es-en-l3'||mode==='en-es-l3'||mode==='es-en-l4'||mode==='en-es-l4'||mode==='es-en-l5'||mode==='en-es-l5'||mode==='es-en-l6'||mode==='en-es-l6'||mode==='es-en-l7'||mode==='en-es-l7'||mode==='es-en-l8'||mode==='en-es-l8'||mode==='es-en-l9'||mode==='en-es-l9'||mode==='es-en-l10'||mode==='en-es-l10'||mode==='es-en-l11'||mode==='en-es-l11'||mode==='es-en-l12'||mode==='en-es-l12'||mode==='es-en-l13'||mode==='en-es-l13'||mode==='es-en-l14'||mode==='en-es-l14'||mode==='es-en-l15'||mode==='en-es-l15'||mode==='es-en-l16'||mode==='en-es-l16'||mode==='es-en-l17'||mode==='en-es-l17'||mode==='es-en-l18'||mode==='en-es-l18'||mode==='es-en-l19'||mode==='en-es-l19'||mode==='es-en-l20'||mode==='en-es-l20'||mode==='es-en-l21'||mode==='en-es-l21'||mode==='es-en-l22'||mode==='en-es-l22'||mode==='es-en-l23'||mode==='en-es-l23'||mode==='es-en-l24'||mode==='en-es-l24'||mode==='es-en-l25'||mode==='en-es-l25'||mode==='es-en-l26'||mode==='en-es-l26'||mode==='es-en-l27'||mode==='en-es-l27'||mode==='es-en-l28'||mode==='en-es-l28'||mode==='es-en-l29'||mode==='en-es-l29'||mode==='es-en-l30'||mode==='en-es-l30'||mode==='es-en-l31'||mode==='en-es-l31'||mode==='es-en-l32'||mode==='en-es-l32'||mode==='es-en-l33'||mode==='en-es-l33'||mode==='es-en-l34'||mode==='en-es-l34'||mode==='es-en-l35'||mode==='en-es-l35'||mode==='es-en-l36'||mode==='en-es-l36'){
     const titles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸','es-en-l2':'L2: Spanish → English','en-es-l2':'L2: English → Spanish','es-en-l3':'L3: Spanish → English','en-es-l3':'L3: English → Spanish','es-en-l4':'L4: Spanish → English','en-es-l4':'L4: English → Spanish','es-en-l5':'L5: Spanish → English','en-es-l5':'L5: English → Spanish','es-en-l6':'L6: Spanish → English','en-es-l6':'L6: English → Spanish','es-en-l7':'L7: Spanish → English','en-es-l7':'L7: English → Spanish','es-en-l8':'L8: Spanish → English','en-es-l8':'L8: English → Spanish','es-en-l9':'L9: Spanish → English','en-es-l9':'L9: English → Spanish','es-en-l10':'L10: Spanish → English','en-es-l10':'L10: English → Spanish','es-en-l11':'L11: Spanish → English','en-es-l11':'L11: English → Spanish','es-en-l12':'L12: Spanish → English','en-es-l12':'L12: English → Spanish','es-en-l13':'L13: Spanish → English','en-es-l13':'L13: English → Spanish','es-en-l14':'L14: Spanish → English','en-es-l14':'L14: English → Spanish','es-en-l15':'L15: Spanish → English','en-es-l15':'L15: English → Spanish','es-en-l16':'L16: Spanish → English','en-es-l16':'L16: English → Spanish','es-en-l17':'L17: Spanish → English','en-es-l17':'L17: English → Spanish','es-en-l18':'L18: Spanish → English','en-es-l18':'L18: English → Spanish','es-en-l19':'L19: Spanish → English','en-es-l19':'L19: English → Spanish','es-en-l20':'L20: Spanish → English','en-es-l20':'L20: English → Spanish','es-en-l21':'L21: Spanish → English','en-es-l21':'L21: English → Spanish','es-en-l22':'L22: Spanish → English','en-es-l22':'L22: English → Spanish','es-en-l23':'L23: Spanish → English','en-es-l23':'L23: English → Spanish','es-en-l24':'L24: Spanish → English','en-es-l24':'L24: English → Spanish','es-en-l25':'L25: Spanish → English','en-es-l25':'L25: English → Spanish','es-en-l26':'L26: Spanish → English','en-es-l26':'L26: English → Spanish','es-en-l27':'L27: Spanish → English','en-es-l27':'L27: English → Spanish','es-en-l28':'L28: Spanish → English','en-es-l28':'L28: English → Spanish','es-en-l29':'L29: Spanish → English','en-es-l29':'L29: English → Spanish','es-en-l30':'L30: Spanish → English','en-es-l30':'L30: English → Spanish','es-en-l31':'L31: Spanish → English','en-es-l31':'L31: English → Spanish','es-en-l32':'L32: Spanish → English','en-es-l32':'L32: English → Spanish','es-en-l33':'L33: Spanish → English','en-es-l33':'L33: English → Spanish','es-en-l34':'L34: Spanish → English','en-es-l34':'L34: English → Spanish','es-en-l35':'L35: Spanish → English','en-es-l35':'L35: English → Spanish','es-en-l36':'L36: Spanish → English','en-es-l36':'L36: English → Spanish'};
     document.getElementById('flash-title').textContent=titles[mode]||'Flashcards';
     show('s-flash'); renderFlash();
   } else if(mode==='master-review'||mode==='master-mistakes'||mode==='fill'||mode==='fill-l2'||mode==='fill-l3'||mode==='fill-l22'||mode==='fill-l23'||mode==='fill-l24'||mode==='fill-l25'||mode==='fill-l26'||mode==='fill-l27'||mode==='fill-l28'||mode==='fill-l29'||mode==='fill-l30'||mode==='fill-l31'||mode==='fill-l32'||mode==='fill-l33'||mode==='fill-l34'||mode==='fill-l35'||mode==='fill-l36'){
-    document.getElementById('fill-hdr-sub').textContent=mode==='master-review'?'⭐ Smart Review · 20 weighted questions':mode==='master-mistakes'?'❌ Mistakes only · smart priority':mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':mode==='fill-l22'?'Lesson 22 · Conditional advice':mode==='fill-l23'?'Lesson 23 · Imperfect & object pronouns':mode==='fill-l24'?'Lesson 24 · Seguir + gerundio':mode==='fill-l25'?'Lesson 25 · Past & conditional':mode==='fill-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='fill-l27'?'Lesson 27 · Childhood memories':mode==='fill-l28'?'Lesson 28 · Photo vs video':mode==='fill-l29'?'Lesson 29 · Three past tenses':mode==='fill-l30'?'Lesson 30 · Imperfect in real life':mode==='fill-l31'?'Lesson 31 · Storytelling':mode==='fill-l32'?'Lesson 32 · Object pronouns':mode==='fill-l33'?'Lesson 33 · Pronoun position':mode==='fill-l34'?'Lesson 34 · Future tense':mode==='fill-l35'?'Lesson 35 · Rules, errors & mixed tenses':mode==='fill-l36'?'Lesson 36 · Imperfecto vs Pretérito':'Verb Conjugation';
+    document.getElementById('fill-hdr-sub').textContent=mode==='master-review'?'⭐ Smart Review · dynamic skill cycle':mode==='master-mistakes'?'❌ Mistakes only · smart priority':mode==='fill-l2'?'Lesson 2 · AR / ER / IR':mode==='fill-l3'?'Lesson 3 · HACER & routine':mode==='fill-l22'?'Lesson 22 · Conditional advice':mode==='fill-l23'?'Lesson 23 · Imperfect & object pronouns':mode==='fill-l24'?'Lesson 24 · Seguir + gerundio':mode==='fill-l25'?'Lesson 25 · Past & conditional':mode==='fill-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='fill-l27'?'Lesson 27 · Childhood memories':mode==='fill-l28'?'Lesson 28 · Photo vs video':mode==='fill-l29'?'Lesson 29 · Three past tenses':mode==='fill-l30'?'Lesson 30 · Imperfect in real life':mode==='fill-l31'?'Lesson 31 · Storytelling':mode==='fill-l32'?'Lesson 32 · Object pronouns':mode==='fill-l33'?'Lesson 33 · Pronoun position':mode==='fill-l34'?'Lesson 34 · Future tense':mode==='fill-l35'?'Lesson 35 · Rules, errors & mixed tenses':mode==='fill-l36'?'Lesson 36 · Imperfecto vs Pretérito':'Verb Conjugation';
     show('s-fill');renderFill();
   } else if(mode==='conv'||mode==='conv-l2'||mode==='conv-l3'||mode==='conv-l13'||mode==='conv-l14'||mode==='conv-l15'||mode==='conv-l16'||mode==='conv-l17'||mode==='conv-l18'||mode==='conv-l19'||mode==='conv-l20'||mode==='conv-l21'||mode==='conv-l22'||mode==='conv-l23'||mode==='conv-l24'||mode==='conv-l25'||mode==='conv-l26'||mode==='conv-l27'||mode==='conv-l28'||mode==='conv-l29'||mode==='conv-l30'||mode==='conv-l31'||mode==='conv-l32'||mode==='conv-l33'||mode==='conv-l34'||mode==='conv-l35'||mode==='conv-l36'){
     document.getElementById('conv-hdr-sub').textContent=mode==='conv-l2'?'Lesson 2 · Daily routine':mode==='conv-l3'?'Lesson 3 · Meals & routine':mode==='conv-l13'?'Lesson 13 · Irregular preterite':mode==='conv-l16'?'Lesson 16 · Biography':mode==='conv-l17'?'Lesson 17 · Present Perfect':mode==='conv-l18'?'Lesson 18 · Experiences & Activities':mode==='conv-l19'?'Lesson 19 · Colors & ¿Alguna vez?':mode==='conv-l20'?'Lesson 20 · Me gustaría & Would (-ía)':mode==='conv-l21'?'Lesson 21 · Advice & ¿Qué harías?':mode==='conv-l22'?'Lesson 22 · If I were you':mode==='conv-l23'?'Lesson 23 · Lost dog dilemma':mode==='conv-l24'?'Lesson 24 · Culinary secret':mode==='conv-l25'?'Lesson 25 · Mateo’s dilemma':mode==='conv-l26'?'Lesson 26 · Pretérito vs imperfecto':mode==='conv-l27'?'Lesson 27 · Childhood memories':mode==='conv-l28'?'Lesson 28 · Simple vs imperfect':mode==='conv-l29'?'Lesson 29 · Three pasts & small talk':mode==='conv-l30'?'Lesson 30 · Habits & past plans':mode==='conv-l31'?'Lesson 31 · Storytelling':mode==='conv-l32'?'Lesson 32 · Direct & indirect objects':mode==='conv-l33'?'Lesson 33 · Advanced pronouns':mode==='conv-l34'?'Lesson 34 · Future plans':mode==='conv-l35'?'Lesson 35 · Mixed tenses & predictions':mode==='conv-l36'?'Lesson 36 · Imperfecto vs Pretérito':'Listen · speak · compare';
@@ -4975,7 +5707,7 @@ function startMode(mode){
   _startFresh(mode);
 }
 
-function resumeSession(){
+function resumeSessionLegacy(){
   document.getElementById('resume-modal').classList.remove('show');
   const saved=S._savedSession, mode=saved.mode;
   let pool;
@@ -5077,7 +5809,7 @@ function startFresh(){
   _startFresh(S._pendingMode);
 }
 
-function _startFresh(mode){
+function startFreshLegacy(mode){
   S.idx=0; S.correct=0; S.wrong=0; S.answered={}; S.srUpdates={};
   if(mode==='es-en'||mode==='en-es'){
     S.mode=mode; S.cards=shuffle(VOCAB); S.revealed=false;
@@ -5164,7 +5896,7 @@ function _startFresh(mode){
   } else if(mode==='es-en-l36'||mode==='en-es-l36'){
     S.mode=mode; S.cards=shuffle(L36_VOCAB); S.revealed=false;
   } else if(mode==='master-review'){
-    S.mode='master-review'; S.cards=weightedMasterSample(MASTER_REVIEW_BANK,20); S.submitted=false;
+    S.mode='master-review'; S.cards=weightedMasterSample(MASTER_REVIEW_BANK,MASTER_PART_SIZE); S.submitted=false;
   } else if(mode==='fill'){
     S.mode='fill'; S.cards=shuffle(FILL_EXERCISES); S.submitted=false;
   } else if(mode==='fill-l2'){
@@ -5255,6 +5987,84 @@ function _startFresh(mode){
     S.mode='conv-l35'; S.cards=shuffle(CONV_L35);
   } else if(mode==='conv-l36'){
     S.mode='conv-l36'; S.cards=shuffle(CONV_L36);
+  }
+  navigateToMode(S.mode);
+}
+
+function lessonModeInfo(mode){
+  const match=String(mode||'').match(/^(es-en|en-es|fill|conv)-l(\d+)$/);
+  if(!match)return null;
+  return {kind:match[1],lesson:Number(match[2]),entry:LESSON_REGISTRY[Number(match[2])]};
+}
+function getModePool(mode){
+  if(mode==='es-en'||mode==='en-es')return VOCAB;
+  if(mode==='myw-es-en'||mode==='myw-en-es')return loadMyWords();
+  if(mode==='es-en-review')return getDueCards('es_en');
+  if(mode==='en-es-review')return getDueCards('en_es');
+  if(mode==='fill')return FILL_EXERCISES;
+  if(mode==='conv')return CONVERSATIONS;
+  if(mode==='master-review')return MASTER_REVIEW_BANK;
+  if(mode==='master-mistakes')return getMasterMistakes();
+  const info=lessonModeInfo(mode);
+  if(!info?.entry)return null;
+  if(info.kind==='es-en'||info.kind==='en-es')return info.entry.vocab||null;
+  if(info.kind==='fill')return info.entry.fill||null;
+  if(info.kind==='conv')return info.entry.conv||null;
+  return null;
+}
+
+function navigateToMode(mode){
+  const info=lessonModeInfo(mode);
+  const isFlash=['es-en','en-es','es-en-review','en-es-review','myw-es-en','myw-en-es'].includes(mode)||info&&['es-en','en-es'].includes(info.kind);
+  if(isFlash){
+    const directTitles={'es-en':'Spanish → English','en-es':'English → Spanish','es-en-review':'📅 SP→EN Review','en-es-review':'📅 EN→SP Review','myw-es-en':'My Words 🇪🇸→🇺🇸','myw-en-es':'My Words 🇺🇸→🇪🇸'};
+    document.getElementById('flash-title').textContent=directTitles[mode]||(info.kind==='es-en'?`L${info.lesson}: Spanish → English`:`L${info.lesson}: English → Spanish`);
+    show('s-flash');renderFlash();return;
+  }
+  if(mode==='master-review'||mode==='master-mistakes'||mode==='fill'||info?.kind==='fill'){
+    const cycle=mode==='master-review'?loadMasterCycle():null;
+    document.getElementById('fill-hdr-sub').textContent=mode==='master-review'?`⭐ Smart Review · Part ${cycle?.part||1} · ${S.cards.length} questions`:mode==='master-mistakes'?'❌ Mistakes only · smart priority':mode==='fill'?'Verb Conjugation':`Lesson ${info.lesson} · ${info.entry.title}`;
+    show('s-fill');renderFill();return;
+  }
+  if(mode==='conv'||info?.kind==='conv'){
+    document.getElementById('conv-hdr-sub').textContent=mode==='conv'?'Listen · speak · compare':`Lesson ${info.lesson} · ${info.entry.title}`;
+    show('s-conv');renderConv();return;
+  }
+  S.mode=null;S.cards=[];
+  alert('This practice mode is not available yet.');
+  refreshHome();show('s-home');
+}
+
+function resumeSession(){
+  document.getElementById('resume-modal').classList.remove('show');
+  const saved=S._savedSession,mode=saved?.mode;
+  if(!saved||!mode){refreshHome();show('s-home');return;}
+  const pool=getModePool(mode);
+  if(!pool?.length){clearSession(mode);_startFresh(mode);return;}
+  S.cards=saved.cardIds.map(id=>pool.find(c=>getId(c)===id)).filter(Boolean);
+  if(!S.cards.length){clearSession(mode);_startFresh(mode);return;}
+  S.mode=mode;S.idx=Math.min(saved.idx,S.cards.length-1);S.correct=saved.correct||0;S.wrong=saved.wrong||0;
+  S.answered=saved.answered||{};S.revealed=false;S.submitted=false;S.srUpdates={};
+  S.masterSessionId=saved.masterSessionId||(mode.startsWith('master-')?createMasterSessionId():'');
+  navigateToMode(mode);
+}
+
+function _startFresh(mode){
+  S.idx=0;S.correct=0;S.wrong=0;S.answered={};S.srUpdates={};S.revealed=false;S.submitted=false;S.masterSessionId='';
+  if(mode==='review-es-en'||mode==='review-en-es'){
+    const effective=mode==='review-es-en'?'es-en-review':'en-es-review';
+    const pool=getModePool(effective);
+    if(!pool?.length){refreshHome();show('s-home');return;}
+    S.mode=effective;S.cards=shuffle(pool);
+  }else if(mode==='master-review'){
+    const part=getNextMasterPart();
+    if(!part.cards.length){alert('All current grammar skills are mastered. New or reactivated skills will appear here.');refreshHome();show('s-home');return;}
+    S.mode='master-review';S.cards=part.cards;S.masterSessionId=createMasterSessionId();S.masterCycleId=part.cycle.cycleId;
+  }else{
+    const pool=getModePool(mode);
+    if(!pool?.length){S.mode=null;S.cards=[];alert('This practice mode has no lesson data.');refreshHome();show('s-home');return;}
+    S.mode=mode;S.cards=shuffle(pool);
+    if(mode.startsWith('master-'))S.masterSessionId=createMasterSessionId();
   }
   navigateToMode(S.mode);
 }
@@ -5355,8 +6165,8 @@ function renderFlash(){
   // Dynamic button hints based on current SR state
   { const srData=loadSR();
     const srCard=getSRCard(srKey(item.es,dir),srData);
-    document.querySelector('.vbtn.great .vbtn-hint').textContent=fmtInterval(previewInterval(srCard,5));
-    document.querySelector('.vbtn.ok .vbtn-hint').textContent=fmtInterval(previewInterval(srCard,3));
+    document.querySelector('.vbtn.great .vbtn-hint').textContent=srCard.mastered?'stays mastered':(srCard.fullRecallStreak||0)>=1?'master after this':'confirm tomorrow';
+    document.querySelector('.vbtn.ok .vbtn-hint').textContent='tomorrow';
   }
 
   // Prev button
@@ -5633,13 +6443,15 @@ function prevConv(){
 
 function showScore(){
   updateStreak();
+  const isConversation=S.mode==='conv'||/^conv-l\d+$/.test(S.mode);
+  const masterRemaining=S.mode==='master-review'?completeMasterPart():0;
   const total=S.correct+S.wrong;
   const pct=total>0?Math.round(S.correct/total*100):100;
   let emoji,title,sub;
-  if(S.mode==='conv'){emoji='🎉';title='Dialogue complete!';sub=`You finished all ${S.cards.length} conversations!`;}
+  if(isConversation){emoji='🎉';title='Dialogue complete!';sub=`You finished all ${S.cards.length} conversations!`;}
   else if(S.mode==='master-review'||S.mode==='master-mistakes'){
     emoji=pct>=80?'🧠':'🌱'; title=pct>=80?'Smart review complete!':'Good diagnostic round!';
-    sub=`${pct}% correct. Mistakes were saved and will return sooner.`;
+    sub=S.mode==='master-review'?(masterRemaining?`${pct}% correct. This part is complete; ${masterRemaining} questions remain in the current cycle.`:`${pct}% correct. The full cycle is complete; mastered skills will leave the next regular cycle.`):`${pct}% correct. Mistakes were saved and will return sooner.`;
   }
   else if(pct===100){emoji='🏆';title='Perfect!';sub='You remembered every word!';}
   else if(pct>=80){emoji='⭐';title='Great job!';sub=`You got ${pct}% correct!`;}
@@ -5648,9 +6460,11 @@ function showScore(){
   document.getElementById('score-emoji').textContent=emoji;
   document.getElementById('score-title').textContent=title;
   document.getElementById('score-sub').textContent=sub;
-  document.getElementById('score-c').textContent=S.mode==='conv'?S.cards.length:S.correct;
-  document.getElementById('score-w').textContent=S.mode==='conv'?'—':S.wrong;
+  document.getElementById('score-c').textContent=isConversation?S.cards.length:S.correct;
+  document.getElementById('score-w').textContent=isConversation?'—':S.wrong;
   document.getElementById('sr-info').style.display=Object.keys(S.srUpdates).length>0?'block':'none';
+  const retry=document.querySelector('#s-score .secondary-btn');
+  if(retry)retry.textContent=S.mode==='master-review'?(masterRemaining?'Continue Next Part →':'Start New Cycle ↺'):'↺ Try Again';
   show('s-score');
 }
 
@@ -5695,11 +6509,16 @@ function cleanupApprovedRemovedWords(){
 
 function exportProgress() {
   const payload = {
-    sr:      loadSR(),
-    streak:  localStorage.getItem(STREAK_KEY) || '0',
-    last:    localStorage.getItem(LAST_KEY)   || '',
-    myWords: loadMyWords(),
-    exported: new Date().toISOString()
+    schemaVersion: PROGRESS_SCHEMA_VERSION,
+    appVersion:    APP_VERSION,
+    sr:            loadSR(),
+    masterStats:   loadMasterStats(),
+    masterSkillStats: loadMasterSkillStats(),
+    masterCycle:   loadMasterCycle(),
+    streak:        localStorage.getItem(STREAK_KEY) || '0',
+    last:          localStorage.getItem(LAST_KEY)   || '',
+    myWords:       loadMyWords(),
+    exported:      new Date().toISOString()
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
   const url  = URL.createObjectURL(blob);
@@ -5719,10 +6538,25 @@ function importProgress(inputEl) {
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      if (data.sr)      saveSR(data.sr);
-      if (data.streak)  localStorage.setItem(STREAK_KEY, data.streak);
-      if (data.last)    localStorage.setItem(LAST_KEY,   data.last);
-      if (data.myWords) saveMyWords(data.myWords);
+      if (data.sr && typeof data.sr === 'object') {
+        saveSR(data.sr);
+        localStorage.removeItem('sr_mastery_migrated_v3');
+        migrateSRMastery();
+      }
+      // Old backups do not contain masterStats. In that case, preserve the
+      // Master Review history already stored on this device instead of clearing it.
+      if (data.masterStats && typeof data.masterStats === 'object' && !Array.isArray(data.masterStats)) {
+        saveMasterStats(data.masterStats);
+      }
+      if (data.masterSkillStats && typeof data.masterSkillStats === 'object' && !Array.isArray(data.masterSkillStats)) {
+        saveMasterSkillStats(data.masterSkillStats);
+      }
+      if (data.masterCycle && typeof data.masterCycle === 'object' && !Array.isArray(data.masterCycle)) {
+        saveMasterCycle(data.masterCycle);
+      }
+      if (data.streak !== undefined && data.streak !== null) localStorage.setItem(STREAK_KEY, String(data.streak));
+      if (data.last !== undefined && data.last !== null)     localStorage.setItem(LAST_KEY,   String(data.last));
+      if (Array.isArray(data.myWords)) saveMyWords(data.myWords);
       // Re-seed built-in words after import — clear flags first so seeds actually run
       localStorage.removeItem('myw_seeded_v1');
       localStorage.removeItem('myw_seeded_v2');
@@ -5731,8 +6565,10 @@ function importProgress(inputEl) {
       // IMPORTANT: old backups may contain words Cara already approved for deletion.
       // Clean AFTER import and AFTER seeding so deleted words cannot come back.
       cleanupApprovedRemovedWords();
+      normalizeMasterBank();
+      recomputeMasterSkills(loadMasterStats());
       refreshHome();
-      alert('🌸 Progress restored! Your memory curve is back.');
+      alert('🌸 Progress restored! Vocabulary mastery, Master Review questions, skills and cycle memory are back.');
     } catch(err) {
       alert('Oops — couldn\'t read this file. Make sure it\'s a file exported from Mi Español.');
     }
@@ -5857,6 +6693,7 @@ function pruneLowPriorityWordsV3() {
 }
 
 migrateSRKeys();
+migrateSRMastery();
 buildNotes();
 seedMyWords();
 seedMyWordsV2();
@@ -5864,9 +6701,94 @@ pruneLowPriorityWordsV3();
 dedupeMyWords();
 refreshHome();
 
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+let pendingPwaWorker = null;
+let reloadAfterPwaUpdate = false;
+let pwaReloaded = false;
+
+function showPwaUpdate(worker){
+  if(!worker)return;
+  pendingPwaWorker=worker;
+  document.getElementById('pwa-update-banner')?.classList.add('show');
 }
+
+function hidePwaUpdate(){
+  document.getElementById('pwa-update-banner')?.classList.remove('show');
+}
+
+function applyPwaUpdate(){
+  if(!pendingPwaWorker)return;
+  saveSession();
+  reloadAfterPwaUpdate=true;
+  const button=document.getElementById('pwa-update-button');
+  if(button){button.disabled=true;button.textContent='Updating…';}
+  pendingPwaWorker.postMessage({type:'SKIP_WAITING'});
+}
+
+function watchPwaRegistration(registration){
+  if(registration.waiting&&navigator.serviceWorker.controller){
+    showPwaUpdate(registration.waiting);
+  }
+  registration.addEventListener('updatefound',()=>{
+    const worker=registration.installing;
+    if(!worker)return;
+    worker.addEventListener('statechange',()=>{
+      if(worker.state==='installed'&&navigator.serviceWorker.controller){
+        showPwaUpdate(worker);
+      }
+    });
+  });
+}
+
+async function registerPwa(){
+  if(!('serviceWorker' in navigator))return;
+  try{
+    const registration=await navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'});
+    watchPwaRegistration(registration);
+    registration.update().catch(()=>{});
+    const checkForUpdate=()=>{
+      if(document.visibilityState==='visible')registration.update().catch(()=>{});
+    };
+    window.addEventListener('online',checkForUpdate);
+    document.addEventListener('visibilitychange',checkForUpdate);
+  }catch(error){
+    // Online study still works if Service Worker registration is unavailable.
+  }
+}
+
+async function initStoragePersistence(){
+  const status=document.getElementById('storage-status');
+  if(!status)return;
+  try{
+    if(!navigator.storage?.persisted){
+      status.textContent='Local storage only · Export before deleting the app';
+      return;
+    }
+    let persistent=await navigator.storage.persisted();
+    if(!persistent&&navigator.storage.persist){
+      persistent=await navigator.storage.persist();
+    }
+    localStorage.setItem('mi_espanol_storage_persistent',persistent?'granted':'not-granted');
+    status.textContent=persistent
+      ? 'Device storage protection granted · Keep JSON backups too'
+      : 'Local storage only · Export before deleting the app';
+  }catch(error){
+    status.textContent='Storage status unavailable · Export before deleting the app';
+  }
+}
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(reloadAfterPwaUpdate&&!pwaReloaded){
+      pwaReloaded=true;
+      window.location.reload();
+    }
+  });
+}
+
+window.addEventListener('load',()=>{
+  registerPwa();
+  initStoragePersistence();
+});
 
 function renderNewLessonNotes(){
   const render=(id,arr)=>{
@@ -5874,23 +6796,14 @@ function renderNewLessonNotes(){
     if(!el)return;
     el.innerHTML=arr.map(v=>`<div class="vocab-item"><div class="vocab-text"><div class="vocab-es">${v.article?v.article+' ':''}${v.es}</div><div class="vocab-en">${v.en}</div></div></div>`).join('');
   };
-  render('notes-vocab-l25',L25_VOCAB);
-  render('notes-vocab-l26',L26_VOCAB);
-  render('notes-vocab-l27',L27_VOCAB);
-  render('notes-vocab-l28',L28_VOCAB);
-  render('notes-vocab-l29',L29_VOCAB);
-  render('notes-vocab-l30',L30_VOCAB);
-  render('notes-vocab-l31',L31_VOCAB);
-  render('notes-vocab-l32',L32_VOCAB);
-  render('notes-vocab-l33',L33_VOCAB);
-  render('notes-vocab-l34',L34_VOCAB);
-  render('notes-vocab-l35',L35_VOCAB);
+  Object.entries(LESSON_REGISTRY).forEach(([lesson,entry])=>render(`notes-vocab-l${lesson}`,entry.vocab||[]));
 }
-renderNewLessonNotes();
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',renderNewLessonNotes);
+else renderNewLessonNotes();
 
 </script>
 
-<div class="scr" id="s-notes-l36">
+<div class="scr" id="s-notes-l36-legacy">
 <div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 36 Notes</div><div class="hdr-sub">Imperfecto vs Pretérito + Common Rules</div></div></div>
 <div style="padding:18px;">
 
@@ -5991,11 +6904,145 @@ Llamo a mi amigo.
 
 </div>
 </div>
-<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v43.0<br>Updated: 2026-08-03<br>Changes: Lesson 37/38 card layout alignment · Mixed Practice updated through Lesson 38 · future/conditional review integration</div><div class="scr" id="s-notes-l37"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 37 Notes</div><div class="hdr-sub">Future & Conditional</div></div></div><div style="padding:18px"><div class="note-section"><h3>Si clauses</h3><div class="grammar-rule">Si tengo tiempo, iré al gimnasio. = If I have time, I will go.<br><br>Si tuviera tiempo, iría al gimnasio. = If I had time, I would go.</div></div><div class="note-section"><h3>Future irregular stems</h3><div class="grammar-rule">hacer → haré<br>poder → podré<br>tener → tendré<br>decir → diré<br>saber → sabré<br>querer → querré<br>poner → pondré<br>venir → vendré</div></div></div></div>
+<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Legacy notes retained for migration QA</div><div class="scr" id="s-notes-l37-legacy"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 37 Notes</div><div class="hdr-sub">Future & Conditional</div></div></div><div style="padding:18px"><div class="note-section"><h3>Si clauses</h3><div class="grammar-rule">Si tengo tiempo, iré al gimnasio. = If I have time, I will go.<br><br>Si tuviera tiempo, iría al gimnasio. = If I had time, I would go.</div></div><div class="note-section"><h3>Future irregular stems</h3><div class="grammar-rule">hacer → haré<br>poder → podré<br>tener → tendré<br>decir → diré<br>saber → sabré<br>querer → querré<br>poner → pondré<br>venir → vendré</div></div></div></div>
 <div class="scr" id="s-quiz-l37"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 37 Quiz</div></div></div><div style="padding:18px"><div class="grammar-rule">1. Si tengo dinero, ___ una casa.<br>A compraré ✅ B compraría<br><br>2. If I had more time: Si tuviera más tiempo, ___.<br>iría ✅</div></div></div>
 <div class="scr" id="s-dialogue-l37"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 37 Dialogue</div></div></div><div style="padding:18px"><div class="grammar-rule">¿Qué harás mañana?<br>Si tengo tiempo, iré al gimnasio.</div></div></div>
-<div class="scr" id="s-notes-l38"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 38 Notes</div><div class="hdr-sub">Future Predictions</div></div></div><div style="padding:18px"><div class="note-section"><h3>2050 Predictions</h3><div class="grammar-rule">Habrá más robots.<br>Los coches volarán.<br>Los doctores curarán enfermedades.<br>Muchas personas viajarán al espacio.</div></div><div class="note-section"><h3>Future Writing</h3><div class="grammar-rule">En diez años, mi vida será...<br>Viviré en...<br>Trabajaré como...<br>Viajaré a...</div></div></div></div>
+<div class="scr" id="s-notes-l38-legacy"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 38 Notes</div><div class="hdr-sub">Future Predictions</div></div></div><div style="padding:18px"><div class="note-section"><h3>2050 Predictions</h3><div class="grammar-rule">Habrá más robots.<br>Los coches volarán.<br>Los doctores curarán enfermedades.<br>Muchas personas viajarán al espacio.</div></div><div class="note-section"><h3>Future Writing</h3><div class="grammar-rule">En diez años, mi vida será...<br>Viviré en...<br>Trabajaré como...<br>Viajaré a...</div></div></div></div>
 <div class="scr" id="s-quiz-l38"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 38 Quiz</div></div></div><div style="padding:18px"><div class="grammar-rule">1. There will be robots → Habrá robots ✅<br><br>2. ❌ muchos gentes → ✅ mucha gente<br><br>3. ❌ poderás → ✅ podrás</div></div></div>
 <div class="scr" id="s-dialogue-l38"><div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 38 Dialogue</div></div></div><div style="padding:18px"><div class="grammar-rule">¿Cómo será tu vida en 10 años?<br>En diez años, viviré en...</div></div></div>
+<!-- ══════════════ REBUILT CLASS NOTES · LESSONS 36–41 ══════════════ -->
+<div class="scr" id="s-notes-l36">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 36 Notes</div><div class="hdr-sub">Past Tenses, Result States &amp; Two Uses of A</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. State or Completed Event?</h3><div class="grammar-rule"><strong>Imperfecto</strong> 交代过去某一参照时刻的状态、感觉、想法、需要、能力或背景；<strong>pretérito indefinido</strong> 讲有明确边界、发生并完成的事件。先问：是在回答“当时是什么样”，还是“发生并结束了什么”？<br><br><strong>常作背景的高频动词：</strong>estar, querer, tener, pensar, creer, necesitar, saber, sentir, poder。课堂“约95%”只是经验法，不是固定比例，最终仍由语境决定。<br><br>Ayer <strong>estaba</strong> cansada. = 昨天当时我很累。<br>Ayer fui al supermercado porque <strong>quería</strong> comprar frutas. = 去超市是完成事件；想买水果是背景动机。<br>Cuando me desperté, <strong>sentí</strong> un dolor horrible. = 醒来的具体瞬间突然感到头痛。<br>Tenía mucha tarea y sueño, y <strong>me dormí</strong>. = 前两项是状态；睡着是发生的动作。</div></div>
+<div class="note-section"><h3>2. Result State, Event &amp; Passive Voice</h3><div class="grammar-rule"><strong>Hoy el proceso está terminado.</strong> = 现在处于完成后的结果状态；estar + participio，terminado 像形容词。<br><strong>Ayer no estaba terminado.</strong> = 昨天那个参照时刻还没完成，不表示永远没完成。<br><strong>El proceso terminó ayer.</strong> = 过程昨天结束了，重点是事件。<br><strong>El proceso fue terminado por el equipo.</strong> = 过程由团队完成，ser + participio + por 是动作被动。日常也常直接说 El equipo terminó el proceso。</div></div>
+<div class="note-section"><h3>3. Pronouns, Gender &amp; A</h3><div class="grammar-rule"><strong>Me regreso.</strong> 可以：regreso 已变位，me 放在前面。<br><strong>*Me regresar</strong> 不可以：不定式前不能把 me 单独分开。<br><strong>Regresarme / Me quiero regresar / Quiero regresarme</strong> 都可以。<br><strong>Me gustaría regresarme</strong> 语法正确，墨西哥口语常见；中性表达 Me gustaría regresar 更简洁。regresarse、salirse、dormirse 常是代词式动词，不必机械译成“自己……自己”。<br><br><strong>-ma 常见阳性：</strong>el problema, el tema, el sistema, el programa。<br><strong>-dad 通常阴性：</strong>la ciudad, la felicidad, la vanidad。<br><br><strong>Movement + a:</strong> viajar/ir/mudarse a México。<br><strong>Personal a:</strong> ver/saludar/invitar/llamar a alguien；这里的 a 不表示方向。</div></div>
+<div class="note-section"><h3>4. Writing Corrections: Original → Better → Why</h3>
+<div class="grammar-rule"><strong>Estuve en EUA hace 4 meses y he vivido por 7 años.</strong><br>→ Hasta hace cuatro meses vivía/estaba en Estados Unidos; viví allí durante siete años.<br><span style="color:var(--muted)">原句时间线打架。hasta hace… 说明四个月前结束居住；viví… durante… 表示已经结束的七年。</span></div>
+<div class="grammar-rule"><strong>Pero hubo un problema con mi visa.</strong><br>→ Sin embargo, hubo un problema con mi visa.<br><span style="color:var(--muted)">pero 没错；Sin embargo 更适合书面段落，并突出转折。</span></div>
+<div class="grammar-rule"><strong>Tuve que hacer mi visa en México.</strong><br>→ Así que tuve que tramitarla en México.<br><span style="color:var(--muted)">hacer mi visa 能懂但不自然；tramitar = 办理手续，la 代替 visa，así que 明确“出问题 → 必须办理”的因果。</span></div>
+<div class="grammar-rule"><strong>Mientras estaba en México, también viajaba a unas ciudades.</strong><br>→ Mientras estaba en México, también viajé a algunas ciudades.<br><span style="color:var(--muted)">实际去过几座城市用 viajé；若强调那段时间经常或持续旅行，可以保留 viajaba。algunas 比 unas 更清楚。</span></div>
+<div class="grammar-rule"><strong>Me gustaría regresarme en el futuro.</strong><br>→ Me gustaría regresar/regresarme en el futuro.<br><span style="color:var(--muted)">两种都可；regresar 更中性，regresarse 在墨西哥口语常见，不是硬错误。</span></div>
+<div class="grammar-rule"><strong>Ahora estoy trabajando en mi visa y viviendo con mi amiga.</strong><br>→ Ahora estoy tramitando/ocupándome de mi visa y vivo con mi amiga/una amiga.<br><span style="color:var(--muted)">tramitar 强调办理；ocuparse de 强调处理。稳定现状用 vivo 更自然。mi amiga 指特定朋友，una amiga 指我的一位朋友，两者都可能。</span></div>
+<div class="grammar-rule"><strong>Viajaré… en 2 semanas.</strong><br>→ Viajaré… dentro de dos semanas / en dos semanas.<br><span style="color:var(--muted)">两种都对；dentro de 更明确表示从现在起两周后。</span></div>
+</div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l36"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l37">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 37 Notes</div><div class="hdr-sub">Real Conditions, Simple Future &amp; Travel Promotion</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Two Complete Si Patterns</h3><div class="grammar-rule"><strong>Real / possible:</strong> si + presente → presente/futuro/mandato。<br>Si tengo tiempo, iré al gimnasio. = 如果我有时间，我会去健身房。<br><br><strong>Hypothetical:</strong> si + imperfecto de subjuntivo → condicional。<br>Si tuviera tiempo, iría al gimnasio. = 要是我有时间，我就会去。<br><br>不要写 <strong>*si tendré / *si tendría</strong>。课堂的 Si tengo tiempo, iría… 在特殊口语语境可能出现，但不作为 A1–A2 主规则；优先记成 tengo → iré 和 tuviera → iría 两套。</div></div>
+<div class="note-section"><h3>2. Simple Future Forms</h3><div class="grammar-rule">完整不定式 + <strong>é, ás, á, emos, án</strong>（完整识别表还有 vosotros 的 éis）：hablaré, comerás, vivirá, viajaremos, trabajarán。<br><br><strong>12 irregular stems:</strong><br>caber→cabré · decir→diré · haber→habrá · hacer→haré · poder→podré · poner→pondré · querer→querré · saber→sabré · salir→saldré · tener→tendré · valer→valdré · venir→vendré。只换词干，词尾不变。</div></div>
+<div class="note-section"><h3>3. Travel Promotion Template</h3><div class="grammar-rule">Si te gusta…, encontrarás…<br>Si buscas…, encontrarás…<br>Si te vuelve loco/a…, podrás… y conocerás…<br>¡Ven a…! ¡Será una experiencia…!<br><br><strong>Tapalpa:</strong> Hay cabañas lujosas. En este pueblo puedes comer rico, hacer deporte, comprar artesanías y estar en contacto con la naturaleza.<br><br><strong>Nuance:</strong> solo hay cabañas lujosas = 只有豪华小屋；若只想说“有”，删掉 solo。comer rico 是墨西哥口语，中性表达 comer bien / comer comida rica。对 Cara 说 Si te vuelve <strong>loca</strong> la fiesta，loco/a 跟被影响的人一致。</div></div>
+<div class="note-section"><h3>4. Classroom Connections</h3><div class="grammar-rule">Una película nueva; Odisea; no lo leí; <strong>fue escrito por un escritor inglés</strong>。最后一句是 ser + participio + por 的动作被动，可与 Lesson 36 的 está terminado（结果状态）对比。<br><br>Estoy pensando en estudiar francés. / Será en unos años.<br>apenas · justo · justamente · etcétera · trabajé en mi visa · pechuga de pollo · sopa de verduras。<br><br><strong>Previously learned, reused here:</strong> ya que = since / because；hospedarse = to stay / lodge。它们保留在本课语境中，但不重复加入单词复习池。</div></div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l37"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l38">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 38 Notes</div><div class="hdr-sub">Future Predictions, CDMX Promotion &amp; the World in 2050</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Iré, Iría &amp; Present Probability</h3><div class="grammar-rule"><strong>iré</strong> 是简单将来时：未来计划、预测或承诺。Mañana iré al museo。<br><strong>iría</strong> 是条件式：结果依赖假设，也可更委婉。Si tuviera tiempo, iría。<br>课堂“+50% / -50%”只能当记忆法，不是数学概率。简单将来时还可推测现在：¿Dónde estará? = 他现在大概在哪里？</div></div>
+<div class="note-section"><h3>2. CDMX Travel Ad</h3><div class="grammar-rule">Si te gusta la Ciudad de México, encontrarás una ciudad colorida y diversa. Si te gusta la comida, encontrarás muchos tipos de comida diferentes, por ejemplo, comida tradicional mexicana, argentina y japonesa. Si buscas museos, encontrarás muchos museos interesantes en la CDMX. Si te vuelve loca la fiesta, encontrarás actividades todos los días y podrás divertirte en muchos lugares. ¡Ven a la CDMX! ¡Será una experiencia inolvidable!<br><br><strong>Why:</strong> diferentes 修饰复数 tipos；对 Cara 用 loca；活动通常用 encontrar，conocer 更常用于认识人、地方或逐渐了解事物。</div></div>
+<div class="note-section"><h3>3. Reading: El Mundo en 2050</h3><div class="grammar-rule">Los científicos creen que en el año 2050, el mundo será muy diferente. En las ciudades, los coches no usarán gasolina, sino que volarán o usarán energía solar. Por lo tanto, el aire estará mucho más limpio. Nuestras casas serán 100% inteligentes. Nosotros no limpiaremos ni cocinaremos mucho, porque los robots harán el trabajo doméstico y prepararán comidas deliciosas para nosotros en segundos. En el campo de la medicina habrá grandes avances. Los doctores curarán enfermedades muy rápido y las personas vivirán más de 100 años con muy buena salud. Además, muchas familias podrán viajar al espacio exterior como turistas. ¡El futuro será una gran aventura!<br><br><strong>Future forms:</strong> será, usarán, volarán, estará, serán, limpiaremos, cocinaremos, harán, prepararán, habrá, curarán, vivirán, viajarán, podrán。<br><strong>Connectors:</strong> sino que = 不是……而是；por lo tanto = 因此；ni = 也不；además = 此外。</div></div>
+<div class="note-section"><h3>4. Student Writing: Corrections &amp; Nuance</h3><div class="grammar-rule"><strong>Revised version:</strong><br>En el año 2050 habrá mucha menos gente, pero muchos más robots, porque la vida será muy aburrida. Podrás conseguirlo todo fácilmente si tienes dinero; pero, si no lo tienes, vivirás con muchas dificultades. Sería un mundo muy injusto. Si pudiera vivir hasta los cien años, no me gustaría vivir tanto.<br><br>gente 是阴性单数 → mucha menos gente。<em>porque vivir será muy aburrido</em> 语法可以；改成 la vida será muy aburrida 只是更自然，不应标成硬错误。*vivir difícil 不自然，用 vivir con dificultades。高度假设用 si pudiera vivir hasta…；tuviera cien años 是“已经100岁”。</div></div>
+<div class="note-section"><h3>5. Future Writing Frame</h3><div class="grammar-rule">En diez años, mi vida será… Para empezar…<br>Viviré en… · Trabajaré como… · Viajaré a… · Compraré… · Tendré… · Estaré…<br>职业前通常不加冠词：<strong>trabajaré como fotógrafa</strong>。</div></div>
+<div class="note-section"><h3>6. Core Vocabulary</h3><div id="notes-vocab-l38"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l39">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 39 Notes</div><div class="hdr-sub">Future Life, New Year Goals &amp; Promises</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Life in Ten Years</h3><div class="grammar-rule">Viviré en Estados Unidos con mi esposa y mis gatos. Trabajaré como fotógrafa exitosa. Viajaré por todo el mundo para hacer fotografías. Compraré muchas cámaras que me gusten. Estaré cansada, pero también estaré/seré muy feliz.<br><br><strong>estar cansada</strong>：cansada 是形容词，表示疲惫状态。<strong>tener cansancio</strong>：cansancio 是名词。<strong>Seré feliz</strong> 看那段人生的总体特征；<strong>estaré feliz</strong> 看当时所处状态，两者都可。未来尚未确定哪些相机 → cámaras que me <strong>gusten</strong>；已知相机 → las cámaras que me gustan。viajar por todo el mundo 表遍及各地；具体目的地用 viajar a。</div></div>
+<div class="note-section"><h3>2. New Year Tradition &amp; Goals</h3><div class="grammar-rule">跨年午夜的12次钟声通常一声吃一颗葡萄，对应12个月或愿望；“12秒内”可当课堂速记，不必当固定精确时长。<br><br>Viajaré por países nuevos. · Haré ejercicio todas las semanas. · Aprenderé a nadar. · Podré hablar español fluidamente. · Buscaré un trabajo nuevo.<br><br>doce uvas · enero, febrero, marzo, abril… · el cumpleaños de mi esposa · los platos · los deseos · los propósitos。</div></div>
+<div class="note-section"><h3>3. Marriage &amp; Promise Listening</h3><div class="grammar-rule"><strong>30th anniversary:</strong> Treinta años de casados. ¡Cómo pasa el tiempo! Bajaré diez kilos. Dejaré de tomar cerveza para bajar mi panza. Dejaré de fumar para recuperar salud. Como regalo principal compraré un coche nuevo. Mejor una casa más grande, ¿no? ¡Cómo te gusta hacer bromas!<br><br><strong>Wedding and honeymoon:</strong> Maru y Sergio se van a casar el próximo año. Nos casamos el 18 de septiembre. Te prometo que terminaré mis estudios para mayo y después buscaré un trabajo nuevo. Aprenderé a nadar y así podremos ir a Cancún de luna de miel.<br><br><strong>Structures:</strong> dejar de + infinitivo；aprender a + infinitivo；prometer que + futuro；irse de luna de miel。Nos casamos… 可用现在时表达已安排日程。跳伞标准表达：haré paracaidismo / saltaré en paracaídas / me lanzaré en paracaídas。恐高：tener miedo a las alturas / Si te dan miedo las alturas…。</div></div>
+<div class="note-section"><h3>4. Core Vocabulary</h3><div id="notes-vocab-l39"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l40">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 40 Notes</div><div class="hdr-sub">Present, Progressive, Past &amp; Two Future Views</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. One Timeline, Seven Views</h3><div class="grammar-rule"><strong>Present:</strong>习惯、事实、日程 — Todos los días me despierto…<br><strong>Present progressive:</strong>此刻正在 — Estoy estudiando…<br><strong>Pretérito indefinido:</strong>完成事件 — cené, viajó, dormí, fueron。<br><strong>Pretérito perfecto compuesto:</strong>与现在相关 — he cenado, hemos tenido, ¿has visitado…?<br><strong>Imperfecto:</strong>背景、状态、习惯 — me encantaba, era, caminaba。<br><strong>ir a + infinitivo:</strong>已有意图、迹象或安排。<br><strong>Simple future:</strong>预测、承诺、正式陈述或当下决定。<br><br>Mientras caminaba / estaba caminando, <strong>vi</strong>… = 行走是背景，看到是事件。Cara 应说 me estaba quedando <strong>dormida</strong>。</div></div>
+<div class="note-section"><h3>2. Two Future Expressions</h3><div class="grammar-rule">“ir a 很近，simple future 很远”只是入门速记，不是真正规则。<br><strong>Voy a estudiar una maestría dentro de cinco años.</strong> 虽然远，仍是已有计划。<br><strong>Te llamaré esta noche.</strong> 虽然近，仍可用简单将来时表达承诺。<br>现在时也可表达已安排日程：El lunes tengo una cita。</div></div>
+<div class="note-section"><h3>3. Present Forms &amp; Stem Changes</h3><div class="grammar-rule"><strong>Regular:</strong> hablo/hablas/habla/hablamos/hablan；como…；vivo…<br><strong>e→ie:</strong> quiero, pienso, siento, miento, prefiero, empiezo, comienzo。<br><strong>e→i:</strong> pido, sigo, mido；decir→digo 还有 yo-go。<br><strong>o/u→ue:</strong> duermo, puedo, vuelo, sueño, cuento。<br>nosotros 通常保持原词干。</div></div>
+<div class="note-section"><h3>4. Reading: Carmen’s Week</h3><div class="grammar-rule">—¡Hola, Carmen! ¿Qué escribes en tu agenda?<br>—Mis actividades para esta semana.<br>—¡Vaya! Tienes muchas actividades, ¿verdad?<br>—De lunes a viernes tengo mi curso de español en la mañana. El lunes en la tarde tengo una cita con el dentista. El martes y jueves en la noche, mi amigo Samuel y yo hacemos ejercicios en el gimnasio. El miércoles tengo que enviar unas cartas. El viernes tengo una fiesta de cumpleaños. El sábado voy al cine y el domingo tengo un día de campo.<br>—¡Sí que tienes una semana muy activa!<br><br><strong>Time:</strong> de lunes a viernes；el lunes；en la mañana/tarde/noche。hacer ejercicio = 锻炼；hacer ejercicios = 做具体动作/练习，两者都可。¿Has visitado…? 可问人生经验；明确结束时间在拉美口语常用 ¿Visitaste…?。</div></div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l40"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l41">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 41 Notes</div><div class="hdr-sub">Family Relationships, Demonstratives &amp; Comparisons</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Family Relationships &amp; Possession</h3><div class="grammar-rule">padre/madre/padres · hermano/hermana/hermanos · hijo/hija/hijos · esposo/esposa/esposos · abuelo/abuela · nieto/nieta · tío/tía · sobrino/sobrina · cuñado/cuñada · suegro/suegra · yerno/nuera · primo/prima · padrastro。<br><br><strong>ser + noun + de:</strong> Elena es la esposa de Ricardo. Ricardo es el abuelo de Roberto. de + 人名/名词直接表达所属。传统语法中，混合性别群体可用阳性复数 hermanos, padres, esposos。</div></div>
+<div class="note-section"><h3>2. Demonstratives &amp; Comparisons</h3><div class="grammar-rule"><strong>este/esta/estos/estas</strong>：靠近说话人。<strong>ese/esa/esos/esas</strong>：较远；都与名词性数一致。<br><strong>más + adjective + que:</strong> Leonardo es más grande que Damián。<br><strong>el/la + más + adjective:</strong> Mi sobrino es el más pequeño。<br><strong>más de + number:</strong> tiene más de cuatro años。<br><br>谈年龄最清楚用 <strong>menor/mayor</strong>；grande/pequeño 也可能指体型。Mi sobrino más pequeño 可以自然表示“最小的外甥/侄子”，因为 mi 已经是限定词，不写 *mi el sobrino。作表语时：Mi sobrino es el menor / el más pequeño。</div></div>
+<div class="note-section"><h3>3. Family Writing</h3><div class="grammar-rule"><strong>Revised version:</strong><br>Yo no tengo hermanos. Mi papá tiene un hermano, y él tiene un hijo. Mi primo tiene quince años y es el menor de mis primos. Mi mamá tiene tres hermanos. Uno de ellos tiene dos hijas y los otros tienen un hijo cada uno.<br><br>cada uno 已表示“各自一个”，不再加 cada persona；若所指全是女性，用 cada una。若只提到一个 primo，es el más pequeño 的比较对象不清，应补 de mis primos / de los primos。</div></div>
+<div class="note-section"><h3>4. Classroom Connections</h3><div class="grammar-rule">platicar/hablar · social · entender · pedir · servir · poder · volver。<br>vestirse → me visto（反身且 e→i）。<br>Estaba buscando un anillo para mi esposa. No lo encontré. = 寻找是背景；没找到是完成结果。</div></div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l41"></div></div>
+</div></div>
+
+<!-- ══════════════ REBUILT CLASS NOTES · LESSONS 42–47 ══════════════ -->
+<div class="scr" id="s-notes-l42">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 42 Notes</div><div class="hdr-sub">Appearance, Personality &amp; Possessive Expressions</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Appearance &amp; Personality</h3><div class="grammar-rule">alto/a · bajo/a · gordo/a · delgado/a · guapo/a · bonito/a · hermoso/a · inteligente · honesto/a · responsable · empático/a · maduro/a · amable · tímido/a · extrovertido/a · introvertido/a · hospitalario/a · cálido/a · ordenado/a · olvidadizo/a · bueno/a · malo/a · feo/a · pequeño/a · grande。<br><br>身体：cuerpo, cabello, nariz, boca, ojos, orejas, piel。形容词与名词性数一致：mi nariz pequeña；tu gata blanca；tus gatos negros。-e 或辅音结尾常阴阳同形，但复数仍变化：amable→amables, responsable→responsables。</div></div>
+<div class="note-section"><h3>2. Possessive Adjectives &amp; Pronouns</h3><div class="grammar-rule"><strong>Before a noun:</strong> mi/mis, tu/tus, su/sus, nuestro/a/os/as — mi gato, nuestras gatas。<br><strong>Replacing the noun:</strong> mío/a/os/as, tuyo/a/os/as, suyo/a/os/as, nuestro/a/os/as — Ese gato es mío; esa gata es mía。代词与被替代的物品一致，不跟拥有者性别一致。<br><br>su/sus 与 suyo/a/os/as 都可能指他、她、您或他们。上下文不清时，直接说 de él, de ella, de usted, de ellos。</div></div>
+<div class="note-section"><h3>3. Ser &amp; Estar: Trait or State</h3><div class="grammar-rule"><strong>¿Cómo eres?</strong> 问你是什么样的人/有什么特征：Soy responsable。<br><strong>¿Cómo estás?</strong> 问现在状态：Estoy cansada。<br>ser 用于身份、分类和说话者认为的特征，即使身份并非永久：Soy estudiante。estar 用于状态、结果和位置，即使位置很稳定：Madrid está en España；la puerta está cerrada。不要用“永久/临时”机械判断。</div></div>
+<div class="note-section"><h3>4. Reading: Brenda, Diana &amp; Carlos</h3><div class="grammar-rule">Mis hermanas se llaman Brenda y Diana. Ellas son gemelas. Brenda es una famosa modelo y Diana es aeromoza. Ellas son altas y delgadas. Sus ojos son cafés y tienen la piel blanca. Tienen el cabello castaño, largo y lacio. Su nacionalidad es mexicana. Brenda trabaja en una compañía internacional de ropa y Diana trabaja en Aviación de México. Yo me llamo Carlos y soy su hermano menor. No trabajo; soy estudiante. Mi cabello es negro y mis ojos son cafés. Soy como mi papá. Brenda y Diana son como mi mamá. Brenda y Diana son mis mejores amigas.<br><br>aeromoza 是地区用词；中性现代说法 auxiliar de vuelo，也会见到 azafata。ojos cafés 在墨西哥常见，也会见到 ojos café。职业/身份在 ser 后通常不加冠词；有修饰时可出现冠词：Es una estudiante excelente。</div></div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l42"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l43">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 43 Notes</div><div class="hdr-sub">Classroom Fragments, Complete Context &amp; Feedback</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Source Limit</h3><div class="grammar-rule">本课原始资料只有一份简短 TXT，没有成体系的语法板书、词汇表或完整课文。因此这里只保留可确认片段，并补足“如何放进完整句”的语境；不虚构不存在的主题或例文。</div></div>
+<div class="note-section"><h3>2. All Confirmed Fragments</h3><div class="grammar-rule">interno/a = 内部的；也可能依语境指住院/实习人员，原片段无法锁定。<br>Eso es todo. = 就这些。<br>so = 英文提示，不是西语；因果结果常译 así que，顺序/总结可用 entonces。<br>¿Dónde? = 在哪里？<br>aproximadamente una semana = 大约一周。<br>el sábado = 在星期六，星期前通常不用 en。<br>Betty la fea = 《丑女贝蒂》。<br>Compré cosas en línea. = 我在网上买了东西。<br>útil / útiles = 有用的。<br>¿Las flashcards fueron útiles? = 这些单词卡有用吗？<br>Me ayudó / Me ayudaron = 它帮助了我 / 它们帮助了我。</div></div>
+<div class="note-section"><h3>3. Complete Context</h3><div class="grammar-rule"><strong>Duró aproximadamente una semana.</strong> = 持续约一周。<br><strong>Hace aproximadamente una semana.</strong> = 大约一周前。原片段本身只是时间量，需要按意思选择完整句。<br><br><strong>¿Las flashcards fueron útiles?</strong> 问一次已结束体验；<strong>¿Han sido útiles?</strong> 问到现在是否有用；口语也可说 ¿Te sirvieron?<br><br>La actividad me <strong>ayudó</strong>；Las flashcards me <strong>ayudaron</strong>。主语决定动词单复数，me 始终表示“我”。</div></div>
+<div class="note-section"><h3>4. Core Vocabulary</h3><div id="notes-vocab-l43"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l44">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 44 Notes</div><div class="hdr-sub">Telling Time, Frequency &amp; Daily Routines</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Telling Time</h3><div class="grammar-rule">¿Qué hora es? · <strong>Es la una.</strong> · <strong>Son las siete.</strong><br>活动时间：a la una / a las siete。<br>7:15 = siete y cuarto / siete y quince。<br>8:30 = ocho y media / ocho y treinta。<br>8:45 = ocho y cuarenta y cinco / un cuarto para las nueve（拉美常见）；西班牙常说 las nueve menos cuarto。<br>7:52 精确：siete y cincuenta y dos；diez para las ocho 是约略。7:54 的 cinco para las ocho 也属约略。<br><br>板书：10:10 diez y diez · 11:05 once y cinco · 12:50 doce y cincuenta / diez para la una · 9:25 nueve y veinticinco · 5:00 cinco en punto · 6:00 seis en punto。</div></div>
+<div class="note-section"><h3>2. Frequency &amp; Sequence</h3><div class="grammar-rule">una vez / dos veces · pocas/muchas veces · a veces · de vez en cuando · frecuentemente / a menudo · todos los días / cada día · dos veces a la semana · tres veces al día · casi siempre · nunca / jamás。<br>en la mañana/tarde/noche · a mediodía · a medianoche。<br>primero · luego · después · más tarde。<br><br>频率词位置有弹性：Ella siempre va…；A veces ve películas；Ve películas a veces。句首或动词前更突出频率。</div></div>
+<div class="note-section"><h3>3. Days &amp; Classroom Colors</h3><div class="grammar-rule">lunes—rosa · martes—azul · miércoles—naranja/anaranjado · jueves—verde · viernes—amarillo · sábado—azul claro/azul cielo · domingo—café。<br>这些只是课堂配色/词汇练习，不是星期固定对应的文化含义。<br>de lunes a viernes = 时间跨度；el sábado = 具体日；a las doce / a la una = 钟点。</div></div>
+<div class="note-section"><h3>4. Routine Paragraph: Corrections</h3><div class="grammar-rule"><strong>Revised:</strong><br>De lunes a viernes ella siempre va al trabajo en bicicleta. Le gusta andar en bicicleta porque le gusta hacer ejercicio. Hace yoga todas las noches. Los fines de semana a veces ve películas. Después va al parque para hacer un picnic. Comió pastel a las doce en punto con sus amigos. De vez en cuando va al dentista.<br><br>trabajar en bicicleta 像“骑车工作”，骑车上班用 ir al trabajo en bicicleta。Hace yoga todos los días en la noche 不算硬错，todas las noches 更简洁。若指每个周末用 los fines de semana；这个周末用 este fin de semana。段落多为习惯现在时，comió 只有在讲某一次事件时保留；若仍是习惯，改 come。visita al dentista 可行，表示去看牙医更常用 va al dentista。</div></div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l44"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l45">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 45 Notes</div><div class="hdr-sub">Countries, Cities, Weather &amp; Four Core Predicates</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Countries, Classroom Cities &amp; Capitals</h3><div class="grammar-rule">Japón — Kioto — capital: Tokio · templado y primaveral。<br>Egipto — El Cairo — capital: El Cairo · cálido y desértico。<br>Noruega — Oslo — capital: Oslo · frío y nevado。<br>Brasil — Río de Janeiro — capital: Brasilia · tropical y cálido。<br><br>Kioto 和 Río de Janeiro 都不是现任首都，不能把“课堂城市”误写成“国家与首都”。</div></div>
+<div class="note-section"><h3>2. Ser, Estar, Tener &amp; Hay</h3><div class="grammar-rule"><strong>ser — ¿Cómo es?</strong> 身份/特征：México es un país grande。<br><strong>estar — ¿Dónde está?</strong> 位置/状态：La CDMX está en el centro del país。<br><strong>tener — ¿Qué tiene?</strong> 主体拥有/具备：México tiene diferentes climas。<br><strong>hay — ¿Qué hay?</strong> 某处存在：Hay muchos museos；单复数都用 hay。<br><br>天气：Hace calor/frío。个人感受：Tengo calor/frío。季节：invierno, primavera, verano, otoño。nieve, lluvia, viento；templado, cálido, nevado, tropical, desértico。</div></div>
+<div class="note-section"><h3>3. Geography Corrections</h3><div class="grammar-rule">África 是洲，不是国家，也不属于欧洲；Noruega 位于欧洲，Egipto 位于非洲。<br>“Egipto es una de las siete maravillas…” 不准确；应指具体景点：<strong>Las pirámides de Guiza son una de las maravillas del mundo antiguo.</strong><br>方位：al este de · en el centro del país · el norte / el sur · continente americano / asiático。</div></div>
+<div class="note-section"><h3>4. Place Descriptions</h3><div class="grammar-rule"><strong>Ciudad de México:</strong><br>Vivo en la Ciudad de México. La CDMX está en el centro del país y México está en el continente americano. México está muy lejos de China. México es un país grande y tiene diferentes climas. En el norte hace mucho calor en verano y mucho frío en invierno. En el sur hace calor todo el año y en la CDMX llueve en verano. México tiene una gran diversidad cultural, y hay muchos museos y actividades turísticas.<br><br><strong>Shanghái:</strong><br>Ahora vivo en Shanghái. Shanghái está al este de China y China está en el continente asiático. Para mí, es una de las ciudades más modernas del país. Hay muchos edificios altos y mucha gente. Además, hay muchos negocios y actividades. Shanghái tiene un clima templado. Hace frío en invierno y calor en verano. Hoy tengo mucho calor. Quiero volver a México.<br><br>Mexico tiene mucha cultura 能懂；diversidad/riqueza cultural 更具体。最现代是强断言，加 Para mí 或 una de las…。Hay… así que tiene… 主语不清，改 Además, hay…。现在住上海用 Ahora vivo；只表示今天人在上海用 Hoy estoy en Shanghái。</div></div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l45"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l46">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 46 Notes</div><div class="hdr-sub">Present Stem Changes, Nosotros &amp; G/GU/J Spelling</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Three Stem-Change Groups</h3><div class="grammar-rule"><strong>e→ie:</strong> despertarse, querer, pensar, comenzar, mentir→miento；tener→tienes，但 yo tengo。<br><strong>o/u→ue:</strong> dormir, contar, rogar, jugar, poder, soñar。<br><strong>e→i:</strong> pedir, medir, seguir, conseguir。<br><strong>No change:</strong> esperar, caminar。不能看见 e/o/u 就自动变化，是否词干变化要跟词一起记。规则针对本课的现在时入门，不可推广到所有时态。</div></div>
+<div class="note-section"><h3>2. The Boot &amp; Irregular Yo</h3><div class="grammar-rule">yo, tú, él/ella/usted, ellos/ellas/ustedes 变化；nosotros 保持原词干：duermo/dormimos · pido/pedimos · puedo/podemos · sueño/soñamos。<br>tener 同时有两类不规则：yo <strong>tengo</strong>；tú/él/ellos <strong>tienes/tiene/tienen</strong>；nosotros tenemos。不要造 *tieno。<br>sigo/consigo 不只是 e→i；yo 还发生拼写调整。</div></div>
+<div class="note-section"><h3>3. Classroom Examples</h3><div class="grammar-rule">Yo duermo de la una a las nueve. · Yo pienso que en Shanghái hace mucho calor. · Ella necesita ser más feliz. · Nosotros queremos jugar. · Ella comienza a cocinar.<br><br>Me despierto un poco en la noche 语义不清；“夜里偶尔醒”更自然：<strong>A veces me despierto durante la noche.</strong><br>Nosotros medimos qué tan grande… 是残句；补全：<strong>Medimos qué tan grande es la habitación.</strong> 嵌入问句仍写重音 qué。sueño 可能是 soñar 的 yo，也可能是名词睡意/梦；Tengo sueño = 我困。</div></div>
+<div class="note-section"><h3>4. G, GU, J &amp; Ü</h3><div class="grammar-rule">g 在 e/i 前常发类似西语 j 的 /x/：gente, girar。要保留硬 /g/ 写 gu，u 通常不发音：guerra, guitarra, seguir, conseguir。seguir/conseguir 的 yo 是 sigo/consigo；后面是 o，直接用 g，u 消失。若 u 要发音，写 ü：pingüino。jugar 始终是规范拼写；gugar 只是课堂错误对照。</div></div>
+<div class="note-section"><h3>5. Core Vocabulary</h3><div id="notes-vocab-l46"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l47">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 47 Notes</div><div class="hdr-sub">Reflexive Routines, Verb Chains &amp; Irregular Yo Forms</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Reflexive &amp; Pronominal Verbs</h3><div class="grammar-rule">despertarse→me despierto · dormirse→me duermo · sentirse→me siento · lavarse→me lavo · vestirse→me visto · acostarse→me acuesto · salir/salirse。<br><br>lavarse、vestirse 可表示动作作用于自己，是典型反身；salirse、regresarse、dormirse 常是代词式动词，se 改变语气或意义，不机械译成“自己……自己”。dormir = 睡觉；dormirse = 入睡：Me duermo a las once。</div></div>
+<div class="note-section"><h3>2. Verb Chains</h3><div class="grammar-rule">empezar/comenzar <strong>a + infinitivo</strong>：empiezo a estudiar。<br>salir <strong>a + infinitivo</strong>：salgo a hacer ejercicio。<br>tener <strong>que + infinitivo</strong>：tengo que ir。<br>seguir <strong>+ gerundio</strong>：sigo estudiando。<br>pensar/querer + seguir + gerundio：pienso seguir estudiando。</div></div>
+<div class="note-section"><h3>3. Participle &amp; Gerund</h3><div class="grammar-rule"><strong>-ado/-ido = participio:</strong> haber + participio → he estudiado, he comido。它不能单独等于“已经”；也可作形容词：La puerta está cerrada。<br><strong>-ando/-iendo = gerundio:</strong> estar/seguir + gerundio → estoy estudiando, sigo estudiando。gerundio 不能单独作完整谓语。<br>he estudiado = 已学习过/到现在学了；estoy estudiando = 正在学；sigo estudiando = 继续学。</div></div>
+<div class="note-section"><h3>4. Two Pronoun Positions</h3><div class="grammar-rule">Lo pienso/quiero seguir estudiando. = 代词放在变位动词前。<br>Pienso/Quiero seguir estudiándolo. = 代词附在 gerundio 后。<br>附在 gerundio 后常加重音以保持原重音：<strong>estudiándolo</strong>。</div></div>
+<div class="note-section"><h3>5. Irregular Yo Forms</h3><div class="grammar-rule">许多元音 + cer/cir 动词的 yo 用 -zco：conozco, produzco, reduzco, establezco, parezco；但不是普遍无例外规则：hacer→hago, decir→digo, vencer→venzo。<br>traer 及派生词 yo：traigo, atraigo, distraigo, contraigo；其他人称不套 -traigo。<br>dar→doy；dar un paseo por el parque = 穿过/绕着公园散步；en el parque = 人在公园里。</div></div>
+<div class="note-section"><h3>6. Routine Writing: Original → Better</h3><div class="grammar-rule"><strong>Original:</strong><br>Normalmente me despierto a las 8:45 de la mañana para la clase de español. Después me lavo y salgo a hacer ejercicio. Recientemente, empiezo a estudiar la batería. No tengo la batería en mi casa, entonces tengo que ir a un lugar para estudiar la batería. La clase no cuenta mucho. Eso es lo que pienso seguir estudiando.<br><br><strong>Revised:</strong><br>Normalmente me despierto a las ocho cuarenta y cinco de la mañana para asistir a la clase de español. Después me lavo y salgo a hacer ejercicio. Hace poco empecé a estudiar batería. No tengo una batería en casa, así que tengo que ir a otro lugar para practicar. La clase no dura mucho. Eso es lo que pienso seguir estudiando.<br><br>“最近开始了”用 Hace poco empecé；“最近一直在学”可用 Últimamente estoy aprendiendo a tocar la batería。若不是特定那套鼓，用 una batería。La clase no cuenta mucho 只有“课不重要/不太算数”时保留；若意思是“课不长”，用 no dura mucho，原语境不足时不能擅自合并。</div></div>
+<div class="note-section"><h3>7. Reading Vocabulary &amp; Questions</h3><div class="grammar-rule">compañeros · inmediatamente después · por su parte · ambos · domicilio / comida a domicilio · reunión/reuniones · en cambio · tesis · al terminar · profundamente / dormir profundamente。<br><br>¿A qué hora Carlos y Ana se despiertan? · ¿Cuándo se despiertan? · ¿A qué hora ambos empiezan a trabajar? · ¿Qué tiene Carlos por la tarde? · ¿Qué dice Ana antes de acostarse?<br><br><strong>¿A qué hora…?</strong> 问精确钟点；<strong>¿Cuándo…?</strong> 问更宽泛的时间、日期或时段。</div></div>
+<div class="note-section"><h3>8. Core Vocabulary</h3><div id="notes-vocab-l47"></div></div>
+</div></div>
+
+<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v44.1<br>Updated: 2026-08-27<br>Changes: safe PWA update prompt · versioned offline cache · stable manifest identity · persistent-storage status · 13 duplicate new-lesson cards removed · all v44.0 learning fixes retained</div>
+
 </body>
 </html>
