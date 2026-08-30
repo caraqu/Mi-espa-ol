@@ -250,6 +250,33 @@ body{max-width:480px;margin:0 auto;}
 .grammar-rule{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;line-height:1.5;}
 .grammar-rule strong{color:var(--purple);}
 
+/* ── GLOBAL LESSON SEARCH ── */
+.search-shell{background:var(--white);border-radius:18px;padding:14px;margin-bottom:14px;box-shadow:var(--shadow);position:relative;}
+.search-input-wrap{display:flex;align-items:center;gap:8px;border:2px solid var(--border);border-radius:14px;background:var(--bg);padding:0 10px;transition:border-color .15s,box-shadow .15s;}
+.search-input-wrap:focus-within{border-color:var(--purple-mid);box-shadow:0 0 0 3px rgba(123,94,167,.12);}
+.search-icon{font-size:17px;flex-shrink:0;}
+.search-input{flex:1;min-width:0;border:0;background:transparent;color:var(--text);font:inherit;font-size:14px;padding:12px 0;outline:0;}
+.search-input::placeholder{color:var(--muted);}
+.search-clear{display:none;border:0;background:var(--purple-light);color:var(--purple-dark);width:28px;height:28px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex-shrink:0;}
+.search-clear.show{display:block;}
+.search-help{font-size:11px;color:var(--muted);line-height:1.45;margin-top:8px;padding:0 2px;}
+.search-results{display:none;margin-bottom:14px;}
+.search-results.show{display:block;}
+.search-summary{font-size:12px;color:var(--muted);margin:2px 2px 10px;line-height:1.5;}
+.search-empty{background:var(--white);border-radius:16px;padding:20px;text-align:center;color:var(--muted);box-shadow:var(--shadow);font-size:13px;line-height:1.6;}
+.search-group{margin-bottom:15px;}
+.search-group-title{font-size:11px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:.75px;margin:0 3px 7px;}
+.search-result{width:100%;border:1.5px solid var(--border);background:var(--white);border-radius:14px;padding:12px 13px;margin-bottom:8px;text-align:left;color:var(--text);cursor:pointer;box-shadow:0 2px 8px rgba(72,51,115,.05);}
+.search-result:active{transform:scale(.985);background:var(--purple-light);}
+.search-result-top{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:5px;}
+.search-result-title{font-size:14px;font-weight:800;line-height:1.35;min-width:0;overflow-wrap:anywhere;}
+.search-result-badge{font-size:10px;font-weight:800;color:var(--purple-dark);background:var(--purple-light);border-radius:999px;padding:4px 7px;white-space:nowrap;}
+.search-result-snippet{font-size:12px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;}
+.search-result mark{background:#FFF0A8;color:inherit;border-radius:3px;padding:0 1px;}
+.home-main.hidden{display:none;}
+.search-focus{outline:3px solid var(--gold);outline-offset:3px;animation:searchPulse 1.8s ease-out;}
+@keyframes searchPulse{0%{background:#FFF9D9}100%{background:var(--white)}}
+
 /* ── MNEMONIC & CONJ ON FLASHCARD ── */
 .fc-mem{font-size:12px;color:var(--blue);background:var(--blue-bg);border:1px solid rgba(74,127,191,.2);border-radius:10px;padding:8px 12px;margin-top:10px;display:none;line-height:1.6;text-align:left;width:100%;}
 .fc-mem.show{display:block;}
@@ -367,6 +394,17 @@ body{max-width:480px;margin:0 auto;}
 <div class="hdr"><div><div class="hdr-title">Mi Español 💜</div><div class="hdr-sub">Let's practice!</div></div></div>
 <div style="padding:18px;">
 
+<div class="search-shell">
+<div class="search-input-wrap">
+<span class="search-icon">🔎</span>
+<input aria-label="Search lessons" autocomplete="off" class="search-input" id="global-search-input" oninput="handleGlobalSearch(this.value)" placeholder="Search Spanish, English, Chinese or a topic…" spellcheck="false" type="search"/>
+<button aria-label="Clear search" class="search-clear" id="global-search-clear" onclick="clearGlobalSearch()" type="button">×</button>
+</div>
+<div class="search-help">Try: irregular verb · antepresente · travel · 从什么时候</div>
+</div>
+<div aria-live="polite" class="search-results" id="global-search-results"></div>
+<div class="home-main" id="home-main-content">
+
 <div class="due-card hidden" id="due-card-es-en">
 <div class="due-icon">🇪🇸</div>
 <div class="due-text">
@@ -404,7 +442,7 @@ body{max-width:480px;margin:0 auto;}
 <div>
 <div class="lc-title">⭐ Master Review — Mixed Practice</div>
 <div class="lc-hint">dynamic skill cycle · forms, rules and error finding · context-aware explanations</div>
-<div class="lc-date">Updated through Lesson 47</div>
+<div class="lc-date">Updated through Lesson 50</div>
 </div>
 <div class="lc-badge">Daily 10 min</div>
 </div>
@@ -418,6 +456,36 @@ body{max-width:480px;margin:0 auto;}
 <button class="master-mini-btn" onclick="showMasterProgress()">📊 My Progress</button>
 </div>
 <div class="lc-hint" id="master-smart-hint" style="margin-top:12px;">Every active skill gets representative questions; mastered skills leave the regular cycle.</div>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 50 — Question Words, Since When &amp; Purpose</div><div class="lc-hint">qué / cuál / quién · desde / hasta cuándo · por qué vs para qué · duration and distance</div><div class="lc-date">Updated August 30, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l50')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l50')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l50')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l50')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l50')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 49 — Integrated Tenses, Pronouns &amp; Corrections</div><div class="lc-hint">routine vs current action · future alternatives · past contrasts · present perfect · object pronouns</div><div class="lc-date">Updated August 30, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l49')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l49')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l49')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l49')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l49')" style="margin-top:12px;">📖 View Class Notes</button>
+</div>
+
+<div class="lesson-card">
+<div class="lc-head"><div><div class="lc-title">Lesson 48 — Travel Plans, Vacations &amp; Future</div><div class="lc-hint">vacation vocabulary · ir a vs simple future · travel questions · llegar vs llevar</div><div class="lc-date">Updated August 30, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l48')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l48')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l48')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l48')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l48')" style="margin-top:12px;">📖 View Class Notes</button>
 </div>
 
 
@@ -1035,9 +1103,10 @@ body{max-width:480px;margin:0 auto;}
 <button class="secondary-btn" onclick="showMasteredVocabulary()" style="margin:-4px 0 14px;">✅ View Mastered Vocabulary</button>
 <input accept=".json" id="import-input" onchange="importProgress(this)" style="display:none;" type="file"/>
 <div style="text-align:center;color:var(--muted);font-size:11px;margin:10px 0 2px;line-height:1.5;">
-  Version 44.1 · Lessons 36–47 · Safe in-app updates · August 2026
+  Version 45.0 · Lessons 36–50 · Search &amp; navigation fixes · August 2026
 </div>
 
+</div>
 </div>
 </div>
 <!-- ══ FLASHCARD ══ -->
@@ -1063,9 +1132,9 @@ body{max-width:480px;margin:0 auto;}
 <div class="fc-review-tag" id="fc-review-tag">👀 Already answered — review only</div>
 </div>
 <div class="vbtn-row hidden" id="vbtn-row">
-<button class="vbtn great" onclick="verdict(5)">✓ Got it<span class="vbtn-hint">confirm tomorrow</span></button>
-<button class="vbtn ok" onclick="verdict(3)">🤔 Sort of<span class="vbtn-hint">tomorrow</span></button>
 <button class="vbtn no" onclick="verdict(1)">✗ Missed<span class="vbtn-hint">tomorrow</span></button>
+<button class="vbtn ok" onclick="verdict(3)">🤔 Sort of<span class="vbtn-hint">tomorrow</span></button>
+<button class="vbtn great" onclick="verdict(5)">✓ Got it<span class="vbtn-hint">Confirm tomorrow</span></button>
 </div>
 <div class="nav-row" style="margin-top:10px;">
 <button class="nav-btn" disabled="" id="flash-prev" onclick="prevCard()">← Previous</button>
@@ -2952,6 +3021,21 @@ body{max-width:480px;margin:0 auto;}
 <div class="grammar-rule"><strong>ser + participle + por</strong><br/><em>El libro fue escrito por Ana.</em></div>
 <div class="grammar-rule">Agreement matters:<br/><em>el libro escrito · la novela escrita</em></div>
 </div>
+<div class="note-section"><h3>✈️ Travel: destination, transport &amp; carrying</h3>
+<div class="grammar-rule"><strong>a + destination</strong>: <em>viajar a China · llegar a Shanghái</em><br><strong>en + transport</strong>: <em>en avión · en tren</em>；例外固定表达：<em>a pie</em>。</div>
+<div class="grammar-rule"><strong>llegar</strong> = 到达；<strong>llevar</strong> = 带去／携带。<br><em>El tren llegará a Beijing. Ana llevará un suéter.</em></div>
+</div>
+<div class="note-section"><h3>🔮 Two future forms</h3>
+<div class="grammar-rule"><strong>ir a + infinitivo</strong>: <em>Vamos a viajar.</em><br><strong>futuro simple</strong>: <em>Viajaremos.</em><br>两种都可表达未来；不能混成 <em>*vamos a viajaremos</em>。</div>
+</div>
+<div class="note-section"><h3>📅 Current time vs finished past</h3>
+<div class="grammar-rule"><strong>este año / esta semana</strong> 与现在相连时，材料使用 antepresente：<em>Nos hemos visto tres veces este año.</em><br><strong>ayer / el año pasado</strong> 指完成的时间：<em>Me llamó ayer. Viajamos el año pasado.</em></div>
+</div>
+<div class="note-section"><h3>❓ Since when, reason &amp; purpose</h3>
+<div class="grammar-rule"><strong>¿Desde cuándo…?</strong> 问起点；<strong>¿Hasta cuándo…?</strong> 问终点；<strong>¿Cuánto tiempo…?</strong> 问时长。</div>
+<div class="grammar-rule"><strong>¿Por qué…?</strong> 问原因，回答 <em>porque…</em>。<br><strong>¿Para qué…?</strong> 问目的，回答 <em>para + infinitivo</em>。</div>
+<div class="grammar-rule">持续到现在的能力：<em>¿Desde cuándo sabe que puede cantar?</em><br>过去发现的时刻：<em>¿Cuándo supo que podía cantar?</em></div>
+</div>
 </div></div>
 
 <!-- ══ NOTES L27 ══ -->
@@ -4098,7 +4182,7 @@ const CONV_L24 = [
   {ctx:'Class chat', q:'¿Te gusta más el español que hace dos meses?', q_en:'Do you like Spanish more than two months ago?', ans:'Sí, me gusta más que hace dos meses.', ans_en:'Yes, I like it more than two months ago.', note:'más que hace dos meses = more than two months ago.'},
 ];
 
-const APP_VERSION = 'v44.1';
+const APP_VERSION = 'v45.0';
 const PROGRESS_SCHEMA_VERSION = 3;
 const MYWORDS_KEY = 'mywords_espanol';
 function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
@@ -4449,10 +4533,21 @@ function getDueCards(dir) {
   ].map(x=>x.v);
   const maintLimit=DAILY_LIMIT-hardLimit; // 12
 
-  const selected=[
-    ...hardPool.slice(0, hardLimit),
-    ...maintPool.slice(0, maintLimit)
-  ];
+  // 80/20 is a priority target, not a hard quota. If either pool is short,
+  // borrow from the other pool until the daily limit is full.
+  const selectedHard=hardPool.slice(0, hardLimit);
+  const selectedMaint=maintPool.slice(0, maintLimit);
+  let remaining=DAILY_LIMIT-selectedHard.length-selectedMaint.length;
+  if(remaining>0){
+    const extraHard=hardPool.slice(selectedHard.length,selectedHard.length+remaining);
+    selectedHard.push(...extraHard);
+    remaining-=extraHard.length;
+  }
+  if(remaining>0){
+    const extraMaint=maintPool.slice(selectedMaint.length,selectedMaint.length+remaining);
+    selectedMaint.push(...extraMaint);
+  }
+  const selected=[...selectedHard,...selectedMaint];
 
   // Final shuffle: mix hard & maintenance so study order feels natural
   return shuffle(selected);
@@ -5519,6 +5614,119 @@ const CONV_L47=[
 {ctx:'Class duration',q:'¿La clase no dura mucho o no cuenta mucho?',q_en:'Does the class not last long, or does it not matter much?',ans:'Si hablo de la duración, digo “La clase no dura mucho”. Si hablo de la importancia, digo “No cuenta mucho”.',ans_en:'If I mean duration, I say La clase no dura mucho. If I mean importance, I say No cuenta mucho.',note:'原材料语境不足，两种意思不能擅自合并。'}
 ];
 
+const L48_VOCAB=[
+{es:'bucear',en:'to scuba dive'},
+{es:'nadar en la alberca',en:'to swim in the pool'},
+{es:'la cabaña',en:'cabin'},
+{es:'la posada',en:'inn / small guesthouse'},
+{es:'ir de compras',en:'to go shopping'},
+{es:'jugar tenis',en:'to play tennis'},
+{es:'la sombrilla',en:'umbrella / sun umbrella'},
+{es:'la sombra',en:'shade / shadow'},
+{es:'el otoño',en:'autumn / fall'},
+{es:'el rompevientos',en:'windbreaker'},
+{es:'turistear',en:'to sightsee / do tourist activities (informal)'},
+{es:'salir de vacaciones',en:'to go on vacation'},
+{es:'por cuánto tiempo',en:'for how long'},
+{es:'llegar a',en:'to arrive at / in'},
+{es:'llevar',en:'to take / bring / wear'}
+];
+const FILL_L48=[
+lessonQuiz('L48-FUTURE-01','L48-FUTURE-FORMS',48,'Near and simple future','IR A + INFINITIVE','El próximo mes vamos a ___ a Perú.', 'viajar',['viajar','viajaremos','viajando','viajamos a'],'下个月我们将去秘鲁旅行。','vamos a 后面必须接不定式 viajar。','不要在已经变位的 vamos a 后再使用 viajaremos。','也可独立说 El próximo mes viajaremos a Perú；两种未来表达都正确。'),
+lessonQuiz('L48-FUTURE-02','L48-FUTURE-FORMS',48,'Near and simple future','SIMPLE FUTURE','Después de cinco días, nosotros ___ a casa.', 'regresaremos',['regresaremos','regresamos ayer','regresar','regresábamos siempre'],'五天之后，我们将回家。','después de cinco días 指未来，regresaremos 是 futuro simple。','不要把未来计划误写成不带辅助结构的原形 regresar。','也可说 vamos a regresar；本题明确练习 futuro simple。'),
+lessonQuiz('L48-TRAVEL-VERB-03','L48-LLEGAR-LLEVAR',48,'Llegar vs llevar','LLEVAR','Ana debe ___ los suéteres porque hace frío.', 'llevar',['llevar','llegar','lleva a','llegando'],'安娜应该带上毛衣，因为天气很冷。','llevar 表示把东西带去；deber 后接不定式。','llegar 是“到达”，不能表示携带衣物。','llevar 还可表示“穿着”，具体意思由宾语和语境决定。'),
+lessonQuiz('L48-TRAVEL-VERB-04','L48-LLEGAR-LLEVAR',48,'Llegar vs llevar','LLEGAR A','El avión va a ___ a Shanghái por la mañana.', 'llegar',['llegar','llevar','llegará a','llegando'],'飞机将于早上抵达上海。','va a 后接不定式 llegar；llegar 表示到达。','不要混淆 llegar（到达）和 llevar（携带）。','若不用 va a，可说 El avión llegará a Shanghái。'),
+lessonQuiz('L48-PREP-05','L48-TRAVEL-PREPOSITIONS',48,'Travel prepositions','DESTINATION A','Ana va a viajar ___ China.', 'a',['a','en','de','por de'],'安娜要去中国旅行。','viajar 指向目的地时使用 a：viajar a China。','en China 表示人在中国旅行；不能在 viajar 后直接用 en 表目的地。','viajar por China 强调在中国各地游览。'),
+lessonQuiz('L48-PREP-06','L48-TRAVEL-PREPOSITIONS',48,'Travel prepositions','TRANSPORT EN','Va a Shanghái ___ avión y después a Beijing ___ tren.', 'en / en',['en / en','a / a','por / de','con / por'],'她乘飞机去上海，然后乘火车去北京。','交通工具通常使用 en：en avión、en tren。','目的地用 a，交通方式用 en；不要把两种 a 混在一起。','步行是特殊固定表达 a pie。'),
+lessonQuiz('L48-QUESTION-07','L48-TRAVEL-QUESTIONS',48,'Travel questions','SALIR DE VACACIONES','¿Vas a salir ___ vacaciones?', 'de',['de','a','por','en'],'你要去度假吗？','固定表达是 salir de vacaciones。','这里的 de 不是表示来源，而是短语的一部分。','ir de vacaciones 也很常用。'),
+lessonQuiz('L48-QUESTION-08','L48-TRAVEL-QUESTIONS',48,'Travel questions','DURATION','¿___ cuánto tiempo vas a viajar?', 'Por',['Por','Para','A','De'],'你要旅行多长时间？','询问一段持续时间可说 ¿Por cuánto tiempo…?。','para cuánto tiempo 在某些租用或安排语境可出现，但本课旅行持续时间使用 por。','更简洁也可问 ¿Cuánto tiempo vas a viajar?。'),
+lessonQuiz('L48-TIME-09','L48-DAY-TIME-QUESTIONS',48,'Day and clock-time questions','DAY','¿___ día vas a viajar?', 'Qué',['Qué','Cuál','A qué','Cuándo el'],'你哪一天出发旅行？','名词 día 前直接用 qué：¿Qué día…?。','回答具体星期可说 El lunes。','¿Cuándo…? 问法更宽泛，不一定要求具体日期。'),
+lessonQuiz('L48-TIME-10','L48-DAY-TIME-QUESTIONS',48,'Day and clock-time questions','CLOCK TIME','¿___ hora sale el tren?', 'A qué',['A qué','Qué','En cuál','Por qué'],'火车几点出发？','询问具体钟点使用 ¿A qué hora…?。','不要说 *¿Qué hora sale…?；¿Qué hora es? 是询问现在几点。','回答用 a la una / a las dos。')
+];
+const CONV_L48=[
+{ctx:'Vacation plan',q:'¿Vas a salir de vacaciones? ¿A dónde vas a ir?',q_en:'Are you going on vacation? Where are you going?',ans:'Sí. Voy a ir a Hong Kong y después viajaré a China.',ans_en:'Yes. I am going to Hong Kong, and afterward I will travel to China.',note:'salir de vacaciones；目的地前用 a。'},
+{ctx:'Transportation',q:'¿En qué transporte vas a viajar?',q_en:'What transportation are you going to use?',ans:'Voy a viajar en avión y después en tren.',ans_en:'I am going to travel by plane and then by train.',note:'交通工具使用 en：en avión、en tren。'},
+{ctx:'Clothing',q:'¿Qué tipo de ropa vas a llevar?',q_en:'What type of clothing are you going to take?',ans:'Voy a llevar suéteres, un abrigo, guantes y botas porque hará frío.',ans_en:'I am going to take sweaters, a coat, gloves, and boots because it will be cold.',note:'llevar = 带；hará frío = 天气会冷。'},
+{ctx:'Lodging and duration',q:'¿Dónde te vas a hospedar y por cuánto tiempo?',q_en:'Where will you stay, and for how long?',ans:'Me hospedaré en un hotel durante cinco días.',ans_en:'I will stay in a hotel for five days.',note:'hospedarse en + lugar；durante + 时间长度。'},
+{ctx:'Activities',q:'¿Qué actividades vas a hacer?',q_en:'What activities are you going to do?',ans:'Voy a turistear, ir de compras y jugar tenis.',ans_en:'I am going to sightsee, go shopping, and play tennis.',note:'三个动词共享前面的 voy a，后面保持不定式。'},
+{ctx:'Original to better',q:'¿Cómo corriges “Va a llegar en Shanghái en avión”?',q_en:'How do you correct Va a llegar en Shanghái en avión?',ans:'Digo: “Va a llegar a Shanghái en avión”.',ans_en:'I say: She is going to arrive in Shanghai by plane.',note:'到达目的地用 llegar a；交通工具仍用 en。'}
+];
+
+const L49_VOCAB=[
+{es:'el estudio de diseño',en:'design studio'},
+{es:'actualmente',en:'currently / at present'},
+{es:'investigar',en:'to research / investigate'},
+{es:'la cámara profesional',en:'professional camera'},
+{es:'el boleto de avión',en:'plane ticket'},
+{es:'me costó',en:'it was difficult for me / it cost me'},
+{es:'arreglar la laptop',en:'to fix the laptop'},
+{es:'inicialmente',en:'initially'},
+{es:'me propusieron matrimonio',en:'they proposed marriage to me / I was proposed to'},
+{es:'vibrante',en:'vibrant'},
+{es:'la marcha gay',en:'gay pride march'},
+{es:'por supuesto',en:'of course'},
+{es:'extrañar la casa',en:'to miss home'}
+];
+const FILL_L49=[
+lessonQuiz('L49-PROGRESSIVE-01','L49-PRESENT-PROGRESSIVE',49,'Routine vs current activity','CURRENTLY','Actualmente, ___ clases de francés.', 'estoy tomando',['estoy tomando','tomé ayer','tomaba de niña','tomaré el próximo año'],'目前我正在上法语课。','actualmente 在这里强调当前正在进行的活动，使用 estar + gerundio。','actualmente 不是“actually”；它表示 currently。','若只是陈述固定安排，也可用现在时 tomo clases。'),
+lessonQuiz('L49-PROGRESSIVE-02','L49-PRESENT-PROGRESSIVE',49,'Routine vs current activity','RIGHT NOW','En este momento, ___ sobre cámaras profesionales.', 'estoy investigando',['estoy investigando','investigué','investigaba siempre','investigaré ayer'],'此刻我正在研究专业相机。','en este momento 明确指正在发生，使用 estoy investigando。','不要把 gerundio 和 participio 混淆：investigando，不是 investigado。','Investigo sobre cámaras 描述一般或当前活动，但进行时更突出此刻。'),
+lessonQuiz('L49-FUTURE-03','L49-FUTURE-ALTERNATIVES',49,'Two future forms','TWO CORRECT FORMS','¿Qué dos formas completan correctamente “Nosotros ___ a Perú el próximo mes”?', 'vamos a viajar / viajaremos',['vamos a viajar / viajaremos','vamos a viajaremos','viajando / viajábamos','viajar / hemos viajado'],'“我们下个月去秘鲁旅行”可说 Vamos a viajar 或 Viajaremos。','ir a + infinitivo 和 futuro simple 都可表达未来。','不能把两个已变位形式叠在一起说 *vamos a viajaremos。','voy a… 在口语计划中很常见；futuro simple 也可表达预测或未来事实。'),
+lessonQuiz('L49-FUTURE-04','L49-FUTURE-ALTERNATIVES',49,'Two future forms','AFTER VAMOS A','Nosotros vamos a ___ Machu Picchu.', 'visitar',['visitar','visitaremos','visitando','visitamos ayer'],'我们将参观马丘比丘。','vamos a 后接不定式 visitar。','若选择 visitaremos，就必须去掉 vamos a。','Nosotros visitaremos Machu Picchu 也是完整且正确的另一种表达。'),
+lessonQuiz('L49-PRONOUN-05','L49-OBJECT-PRONOUNS',49,'Direct and indirect object pronouns','DIRECT OBJECT','Compré los boletos y ya ___ tengo en mi correo.', 'los',['los','les','lo','se'],'我买了机票，而且已经把它们存放在邮箱里。','los 代替阳性复数 los boletos，是直接宾语。','les 表示“给他们／您们”，不能代替物品 boletos。','若先行词是 la información，要使用 la。'),
+lessonQuiz('L49-PRONOUN-06','L49-OBJECT-PRONOUNS',49,'Direct and indirect object pronouns','INDIRECT OBJECT','A Lucía ___ envié la información.', 'le',['le','la','lo','las'],'我把信息发给了露西亚。','Lucía 是接收者，因此用间接宾语 le。','la información 是直接宾语；不要因为 Lucía 是女性就用 la。','也可说 Se la envié：le + la → se la。'),
+lessonQuiz('L49-PAST-07','L49-PAST-CONTRAST',49,'Completed event vs background','COMPLETED MEETING','Yo la ___ hace cinco años en la universidad.', 'conocí',['conocí','conocía siempre','he conocido mañana','conoceré ayer'],'我五年前在大学认识了她。','hace cinco años 指一个具体、完成的相识事件，使用 conocí。','conocía 表示当时已经认识或熟悉，不突出相识的那一刻。','La conocía de la universidad = 我当时从大学就认识她。'),
+lessonQuiz('L49-PAST-08','L49-PAST-CONTRAST',49,'Completed event vs background','BACKGROUND DESCRIPTION','En esa época, nosotras ___ muy diferentes.', 'éramos',['éramos','fuimos una vez','seremos','hemos sido ayer'],'那个时候，我们彼此非常不同。','en esa época 引出过去背景与状态，使用 imperfecto éramos。','fuimos 更容易把差异看成有边界的完整阶段；本句在铺陈背景。','Ella vivía en otra ciudad 同样是背景；若强调一段完整居住期，vivió 也可能成立。'),
+lessonQuiz('L49-PERFECT-09','L49-PRESENT-PERFECT',49,'Present perfect with current periods','THIS YEAR','Este año no nos ___ mucho.', 'hemos visto',['hemos visto','vimos el año pasado','veíamos siempre','veremos ayer'],'今年我们没有经常见面。','este año 与现在仍相连，使用 hemos visto。','不要因为是过去发生的见面就自动使用简单过去时。','如果说 el año pasado，则通常使用 no nos vimos mucho。'),
+lessonQuiz('L49-PERFECT-10','L49-PRESENT-PERFECT',49,'Present perfect with current periods','THIS WEEK','Esta semana ya ___ toda la ruta.', 'hemos planeado',['hemos planeado','planeamos el año pasado','planeábamos de niñas','planearemos ayer'],'这周我们已经规划好了整条路线。','esta semana 是仍与现在相连的时间段，ya 强调已经完成，使用 hemos planeado。','ayer 是已结束的具体时间，通常使用 llamó、planeó 等 pretérito。','部分地区口语也会用 esta semana planeamos；本课材料采用 antepresente。'),
+lessonQuiz('L49-SER-11','L49-FUTURE-CONDITIONAL-SER',49,'Será vs sería','FUTURE','El viaje de mañana ___ emocionante.', 'será',['será','sería','fue','era'],'明天的旅行会很令人兴奋。','mañana 指未来，ser 的 futuro simple 是 será。','重音不能省略；sera 不是正确的未来时拼写。','sería = 会是／本来会是，需要假设或礼貌语境。'),
+lessonQuiz('L49-SER-12','L49-FUTURE-CONDITIONAL-SER',49,'Será vs sería','CONDITIONAL','Con más tiempo, el viaje ___ más relajado.', 'sería',['sería','será','fue','es ayer'],'如果时间更多，旅行会更轻松。','con más tiempo 构成假设条件，使用 conditional sería。','será 表直接未来判断，不表达“如果条件不同会怎样”。','Si tuviéramos más tiempo, el viaje sería más relajado。')
+];
+const CONV_L49=[
+{ctx:'Current activity',q:'¿Qué estás haciendo actualmente?',q_en:'What are you doing currently?',ans:'Actualmente estoy tomando clases de francés y estoy investigando cámaras profesionales.',ans_en:'I am currently taking French classes and researching professional cameras.',note:'actualmente = currently；estar + gerundio 突出当前进行。'},
+{ctx:'Future alternatives',q:'¿Cómo puedes expresar tus próximos planes de dos maneras?',q_en:'How can you express your upcoming plans in two ways?',ans:'Puedo decir “Vamos a viajar a Perú” o “Viajaremos a Perú”.',ans_en:'I can say We are going to travel to Peru or We will travel to Peru.',note:'两种表达都正确；不要说 *vamos a viajaremos。'},
+{ctx:'Pronouns',q:'¿Qué hiciste con los boletos y la información?',q_en:'What did you do with the tickets and the information?',ans:'Los tengo en mi correo y le envié la información a Lucía.',ans_en:'I have them in my email, and I sent the information to Lucía.',note:'los = boletos；le = 给 Lucía。'},
+{ctx:'Past contrast',q:'¿Cuándo conociste a Lucía y cómo eran ustedes?',q_en:'When did you meet Lucía, and what were you like?',ans:'La conocí hace cinco años. En esa época, éramos muy diferentes.',ans_en:'I met her five years ago. At that time, we were very different.',note:'conocí 是事件；éramos 是背景状态。'},
+{ctx:'Current periods',q:'¿Qué han hecho esta semana?',q_en:'What have you done this week?',ans:'Esta semana ya hemos planeado toda la ruta de Perú.',ans_en:'This week we have already planned the whole Peru route.',note:'esta semana 仍与现在相连，材料采用 antepresente。'},
+{ctx:'Class corrections',q:'¿Qué diferencia hay entre “Fui de compras” y “Estaba de compras”?',q_en:'What is the difference between Fui de compras and Estaba de compras?',ans:'“Fui de compras” presenta la salida como un evento completo; “estaba de compras” describe lo que estaba haciendo en ese momento.',ans_en:'Fui de compras presents the outing as a completed event; estaba de compras describes what I was doing at that moment.',note:'同一活动根据叙述角度选择 pretérito 或 imperfecto。'}
+];
+
+const L50_VOCAB=[
+{es:'desde cuándo',en:'since when'},
+{es:'hasta cuándo',en:'until when'},
+{es:'a qué te dedicas',en:'what do you do for work / what are you engaged in'},
+{es:'a quién / a quiénes',en:'to whom (singular / plural)'},
+{es:'de quién',en:'whose / from whom'},
+{es:'con qué frecuencia',en:'how often'},
+{es:'a cuántos kilómetros',en:'how many kilometers away'},
+{es:'qué tan frecuente',en:'how frequent / how often'},
+{es:'cada quince días',en:'every two weeks / every fifteen days'},
+{es:'para qué',en:'what for; asks for a purpose'},
+{es:'darse cuenta de',en:'to realize / become aware of'},
+{es:'saber que puede',en:'to know that one can'}
+];
+const FILL_L50=[
+lessonQuiz('L50-QUE-01','L50-QUE-CUAL',50,'Qué vs cuál','CUÁL + SER','¿___ es tu canción favorita?', 'Cuál',['Cuál','Qué','Quién','Cuánto'],'你最喜欢的歌是哪一首？','cuál + ser 常用于从可能选项中询问“是哪一个”。','不要说 *¿Qué es tu canción favorita? 来询问具体是哪首歌。','如果名词紧跟疑问词，使用 ¿Qué canción es tu favorita?。'),
+lessonQuiz('L50-QUE-02','L50-QUE-CUAL',50,'Qué vs cuál','QUÉ + NOUN','¿___ canción es tu favorita?', 'Qué',['Qué','Cuál','Quién','Cómo'],'你最喜欢哪首歌？','疑问词后直接跟名词 canción 时使用 qué。','标准用法不说 *¿Cuál canción…?；改为 ¿Cuál es tu canción favorita?。','qué 问类别／具体内容；cuál 常与 ser 搭配选出一个。'),
+lessonQuiz('L50-PERSON-03','L50-PERSON-QUESTIONS',50,'Questions about people','RECIPIENT','¿A ___ le preguntaste la hora?', 'quién',['quién','quiénes','cuál','dónde'],'你向谁询问了时间？','a quién 询问动作的接收者；le 与单数接收者呼应。','疑问词 quién 带重音。','复数对象使用 ¿A quiénes les preguntaste…?。'),
+lessonQuiz('L50-PERSON-04','L50-PERSON-QUESTIONS',50,'Questions about people','POSSESSION','¿De ___ es esta guitarra?', 'quién',['quién','qué','cuánto','dónde'],'这把吉他是谁的？','de quién 询问所属关系。','a quién 是“对／给谁”，不能替代 de quién 的“谁的”。','复数所有者仍可根据语境说 ¿De quiénes…?。'),
+lessonQuiz('L50-TIME-05','L50-SINCE-UNTIL',50,'Since when and until when','SINCE WHEN','¿___ estudias español?', 'Desde cuándo',['Desde cuándo','Hasta cuándo','Cuánto','A qué hora de'],'你从什么时候开始学西语？','desde cuándo 询问从过去开始并延续到现在的起点。','cuándo 只问何时；desde 增加“从……开始”的含义。','可回答 Desde hace cuatro meses 或 Desde abril。'),
+lessonQuiz('L50-TIME-06','L50-SINCE-UNTIL',50,'Since when and until when','UNTIL WHEN','¿___ vas a estudiar esta noche?', 'Hasta cuándo',['Hasta cuándo','Desde cuándo','Por qué','De quién'],'你今晚要学到什么时候？','hasta cuándo 询问结束界限。','desde cuándo 问起点，不能替代终点。','回答可用 Hasta las once。'),
+lessonQuiz('L50-REASON-07','L50-POR-PARA',50,'Reason vs purpose questions','REASON','¿___ estudias español? — Porque vivo en México.', 'Por qué',['Por qué','Para qué','Cuánto','A quién'],'你为什么学西语？——因为我住在墨西哥。','por qué 询问原因或动机，回答通常用 porque。','不要把分开的疑问词 por qué 写成回答连接词 porque。','也可回答 Porque me gusta el idioma。'),
+lessonQuiz('L50-PURPOSE-08','L50-POR-PARA',50,'Reason vs purpose questions','PURPOSE','¿___ estudias español? — Para hablar con más personas.', 'Para qué',['Para qué','Por qué','Desde cuándo','Cuál'],'你学西语是为了什么？——为了和更多人交流。','para qué 询问目标或用途，回答常用 para + infinitivo。','por qué 更侧重导致这件事的原因；para qué 更侧重想达到的结果。','同一行为可以同时有 reason 和 goal，答案角度不同。'),
+lessonQuiz('L50-AMOUNT-09','L50-DURATION-DISTANCE',50,'Duration and distance','HOW LONG','¿___ has estudiado español?', 'Cuánto tiempo',['Cuánto tiempo','A cuánto tiempo','Cuántos kilómetros','Qué hora'],'你学习西语多长时间了？','cuánto tiempo 询问持续时长。','a cuánto tiempo 更常用于距离所需时间的表达，不用于已经学习多久。','回答：He estudiado durante cuatro meses / Estudio desde abril。'),
+lessonQuiz('L50-AMOUNT-10','L50-DURATION-DISTANCE',50,'Duration and distance','HOW FAR','¿___ está el banco?', 'A cuántos kilómetros',['A cuántos kilómetros','Cuánto tiempo has','Desde cuándo','A qué hora'],'银行距离这里多少公里？','a cuántos kilómetros 询问以公里计算的距离。','cuánto tiempo 问时长；若问路程耗时，可说 ¿A cuánto tiempo está…?，但不等于公里。','更通用的问法是 ¿Qué tan lejos está el banco?。'),
+lessonQuiz('L50-ABILITY-11','L50-KNOW-ABILITY',50,'Knowing an ongoing ability','CONTINUING ABILITY','¿Desde cuándo sabe que ___ cantar?', 'puede',['puede','pudo','podrá ayer','podía mañana'],'她从什么时候开始知道自己会唱歌？','能力延续到现在时，嵌入句使用现在时 puede。','pudo 把能力放在已结束的过去，不符合“现在仍会唱”的默认语境。','更自然也可问 ¿Desde cuándo sabe cantar?。'),
+lessonQuiz('L50-ABILITY-12','L50-KNOW-ABILITY',50,'Knowing an ongoing ability','PAST DISCOVERY','¿Cuándo ___ que podía cantar?', 'supo',['supo','ha sabido desde mañana','sabe ayer','sabrá antes'],'她什么时候发现自己会唱歌的？','询问过去某个发现时刻，主句使用 pretérito supo；从句用 podía 表示当时的能力。','若问持续到现在的认知，改用 ¿Desde cuándo sabe que puede cantar?。','¿Cuándo descubrió que podía cantar? 更直接自然。')
+];
+const CONV_L50=[
+{ctx:'Since when',q:'¿Desde cuándo estudias español y cuánto tiempo has estudiado?',q_en:'Since when have you studied Spanish, and how long have you studied?',ans:'Estudio español desde hace cuatro meses; he estudiado durante cuatro meses.',ans_en:'I have studied Spanish for four months.',note:'desde hace + 时长强调起点到现在；durante + 时长回答多久。'},
+{ctx:'Reason and goal',q:'¿Por qué estudias español y para qué lo estudias?',q_en:'Why do you study Spanish, and what do you study it for?',ans:'Lo estudio porque vivo en México y para comunicarme con más personas.',ans_en:'I study it because I live in Mexico and to communicate with more people.',note:'por qué = 原因；para qué = 目的。'},
+{ctx:'Work',q:'¿A qué te dedicas?',q_en:'What do you do for work?',ans:'Trabajo como analista de datos.',ans_en:'I work as a data analyst.',note:'dedicarse a 可问职业或主要从事的事情。'},
+{ctx:'People questions',q:'¿A quién le preguntaste y de quién era la respuesta?',q_en:'Whom did you ask, and whose answer was it?',ans:'Le pregunté a mi profesor y la respuesta era de él.',ans_en:'I asked my teacher, and the answer was his.',note:'a quién = 动作接收者；de quién = 所属。'},
+{ctx:'Distance and time',q:'¿Qué tan lejos está la biblioteca y hasta cuándo está abierta?',q_en:'How far away is the library, and until when is it open?',ans:'Está a dos kilómetros y está abierta hasta las nueve.',ans_en:'It is two kilometers away and is open until nine.',note:'距离可用 a + 数量；hasta 表终点。'},
+{ctx:'Singing ability',q:'¿Desde cuándo sabe que puede cantar?',q_en:'Since when has she known that she can sing?',ans:'Sabe que puede cantar desde que era niña.',ans_en:'She has known she can sing since she was a child.',note:'持续到现在的能力用 puede；问过去发现时刻可说 ¿Cuándo supo que podía cantar?。'}
+];
+
 const L35_VOCAB=[
 {es:'este año ha sido',en:'this year has been'},
 {es:'sabiduría',en:'wisdom'},
@@ -5615,7 +5823,10 @@ const LESSON_REGISTRY={
   44:{vocab:L44_VOCAB,fill:FILL_L44,conv:CONV_L44,title:'Time, Frequency & Daily Routines'},
   45:{vocab:L45_VOCAB,fill:FILL_L45,conv:CONV_L45,title:'Places, Weather & Core Predicates'},
   46:{vocab:L46_VOCAB,fill:FILL_L46,conv:CONV_L46,title:'Stem Changes & Spelling'},
-  47:{vocab:L47_VOCAB,fill:FILL_L47,conv:CONV_L47,title:'Reflexive Routines & Verb Chains'}
+  47:{vocab:L47_VOCAB,fill:FILL_L47,conv:CONV_L47,title:'Reflexive Routines & Verb Chains'},
+  48:{vocab:L48_VOCAB,fill:FILL_L48,conv:CONV_L48,title:'Travel Plans, Vacations & Future'},
+  49:{vocab:L49_VOCAB,fill:FILL_L49,conv:CONV_L49,title:'Integrated Tenses, Pronouns & Corrections'},
+  50:{vocab:L50_VOCAB,fill:FILL_L50,conv:CONV_L50,title:'Question Words, Since When & Purpose'}
 };
 const MAX_LESSON=Math.max(...Object.keys(LESSON_REGISTRY).map(Number));
 
@@ -5623,7 +5834,8 @@ const MAX_LESSON=Math.max(...Object.keys(LESSON_REGISTRY).map(Number));
 // let wording and translation improve without resetting existing progress.
 const MASTER_REVIEW_ADDITIONS=[
   ...FILL_L36,...FILL_L37,...FILL_L38,...FILL_L39,...FILL_L40,...FILL_L41,
-  ...FILL_L42,...FILL_L43,...FILL_L44,...FILL_L45,...FILL_L46,...FILL_L47
+  ...FILL_L42,...FILL_L43,...FILL_L44,...FILL_L45,...FILL_L46,...FILL_L47,
+  ...FILL_L48,...FILL_L49,...FILL_L50
 ];
 MASTER_REVIEW_BANK.push(...MASTER_REVIEW_ADDITIONS);
 normalizeMasterBank();
@@ -5663,17 +5875,201 @@ function shuffle(arr){
   return a;
 }
 
+// ══════════════ GLOBAL KNOWLEDGE SEARCH + HOME UI STATE ══════════════
+const HOME_UI_KEY='mi_espanol_home_ui_v1';
+let GLOBAL_SEARCH_INDEX=[];
+let GLOBAL_SEARCH_RESULTS=[];
+let homeUiState={scrollY:0,query:''};
+try{homeUiState={...homeUiState,...(JSON.parse(sessionStorage.getItem(HOME_UI_KEY))||{})};}catch(e){}
+
+const SEARCH_ALIASES={
+  'irregular verb':['irregular','verbo irregular','verbos irregulares','irregular yo','irregular preterite','irregular future'],
+  'irregular verbs':['irregular','verbo irregular','verbos irregulares','irregular yo','irregular preterite','irregular future'],
+  'verbo irregular':['irregular','verbos irregulares','irregular yo'],
+  'antepresentense':['antepresente','present perfect','preterito perfecto','preterito perfecto compuesto'],
+  'antepresente':['antepresente','present perfect','preterito perfecto','preterito perfecto compuesto'],
+  'present perfect':['antepresente','present perfect','preterito perfecto','preterito perfecto compuesto'],
+  'travel':['travel','viajar','viaje','vacaciones','turismo','transport'],
+  '从什么时候':['desde cuando','since when','desde hace'],
+  '多久':['cuanto tiempo','how long','duration'],
+  '为什么':['por que','why','reason'],
+  '为了什么':['para que','purpose','goal']
+};
+
+function normalizeSearchText(value){
+  return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
+    .replace(/[¿?¡!.,;:()[\]{}“”"'’/\\|_-]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function searchVariants(query){
+  const q=normalizeSearchText(query),variants=new Set(q?[q]:[]);
+  Object.entries(SEARCH_ALIASES).forEach(([key,values])=>{
+    const k=normalizeSearchText(key);
+    if(q===k||q.includes(k)||k.includes(q))values.forEach(v=>variants.add(normalizeSearchText(v)));
+  });
+  return [...variants].filter(Boolean);
+}
+function addSearchIndexItem(item){
+  const title=String(item.title||''),text=String(item.text||'');
+  GLOBAL_SEARCH_INDEX.push({...item,title,text,titleN:normalizeSearchText(title),textN:normalizeSearchText(`${title} ${text}`)});
+}
+function buildGlobalSearchIndex(){
+  GLOBAL_SEARCH_INDEX=[];
+  Object.entries(LESSON_REGISTRY).forEach(([lessonKey,entry])=>{
+    const lesson=Number(lessonKey),notesId=lesson===1?'s-notes':`s-notes-l${lesson}`;
+    const notesPage=document.getElementById(notesId);
+    addSearchIndexItem({group:'Topics & Notes',lesson,title:`Lesson ${lesson} — ${entry.title}`,text:entry.title,screenId:notesId,targetId:notesId});
+
+    (entry.vocab||[]).forEach(v=>addSearchIndexItem({
+      group:'Vocabulary',lesson,title:fmtEs(v),text:v.en||'',screenId:notesId,targetId:`notes-vocab-l${lesson}`
+    }));
+    (entry.fill||[]).forEach(q=>addSearchIndexItem({
+      group:'Practice Examples',lesson,title:q.topic||q.verb||'Rules & Errors Quiz',
+      text:`${q.sentence||''} ${q.answer||''} ${q.cn||q.en||''} ${q.why||''} ${q.mistake||''} ${q.alt||''}`,
+      mode:`fill-l${lesson}`
+    }));
+    (entry.conv||[]).forEach(q=>addSearchIndexItem({
+      group:'Practice Examples',lesson,title:q.ctx||'Dialogue Practice',
+      text:`${q.q||''} ${q.q_en||''} ${q.ans||''} ${q.ans_en||''} ${q.note||''}`,
+      mode:`conv-l${lesson}`
+    }));
+
+    if(notesPage){
+      notesPage.querySelectorAll('.note-section').forEach((section,index)=>{
+        if(!section.id)section.id=`search-l${lesson}-note-${index+1}`;
+        const heading=section.querySelector('h3')?.textContent?.trim()||`Lesson ${lesson} Notes`;
+        addSearchIndexItem({group:'Topics & Notes',lesson,title:heading,text:section.textContent||'',screenId:notesId,targetId:section.id});
+      });
+    }
+  });
+}
+function scoreSearchItem(item,variants){
+  let titleScore=0,bodyScore=0;
+  variants.forEach(v=>{
+    if(!v)return;
+    if(item.titleN===v)titleScore=Math.max(titleScore,130);
+    else if(item.titleN.startsWith(v))titleScore=Math.max(titleScore,105);
+    else if(item.titleN.includes(v))titleScore=Math.max(titleScore,90);
+    if(item.textN.includes(v))bodyScore=Math.max(bodyScore,55);
+    const tokens=v.split(' ').filter(t=>t.length>1);
+    if(tokens.length>1&&tokens.every(t=>item.textN.includes(t)))bodyScore=Math.max(bodyScore,45+tokens.length);
+  });
+  // A matching course or section heading is the best locator, followed by an
+  // exact vocabulary entry; body/example matches come afterward.
+  if(titleScore){
+    if(item.group==='Topics & Notes')titleScore+=55;
+    else if(item.group==='Vocabulary')titleScore+=6;
+    return titleScore;
+  }
+  if(!bodyScore)return 0;
+  if(item.group==='Topics & Notes')bodyScore+=12;
+  else if(item.group==='Vocabulary')bodyScore+=6;
+  return bodyScore;
+}
+function searchSnippet(item,query){
+  const raw=String(item.text||item.title||'').replace(/\s+/g,' ').trim();
+  if(!raw)return `Open Lesson ${item.lesson}`;
+  const q=String(query||'').toLowerCase(),lower=raw.toLowerCase();
+  let start=Math.max(0,lower.indexOf(q)-70);
+  if(lower.indexOf(q)<0)start=0;
+  const clipped=(start>0?'…':'')+raw.slice(start,start+240)+(start+240<raw.length?'…':'');
+  return clipped;
+}
+function renderSearchResults(query){
+  const container=document.getElementById('global-search-results');
+  const main=document.getElementById('home-main-content');
+  const clear=document.getElementById('global-search-clear');
+  if(!container||!main)return;
+  const trimmed=String(query||'').trim();
+  clear?.classList.toggle('show',!!trimmed);
+  if(!trimmed){
+    GLOBAL_SEARCH_RESULTS=[];container.classList.remove('show');container.innerHTML='';main.classList.remove('hidden');return;
+  }
+  main.classList.add('hidden');container.classList.add('show');
+  if(normalizeSearchText(trimmed).length<2){
+    GLOBAL_SEARCH_RESULTS=[];container.innerHTML='<div class="search-empty">Type at least two characters to search all lessons.</div>';return;
+  }
+  if(!GLOBAL_SEARCH_INDEX.length)buildGlobalSearchIndex();
+  const variants=searchVariants(trimmed);
+  const scored=GLOBAL_SEARCH_INDEX.map(item=>({...item,score:scoreSearchItem(item,variants)})).filter(x=>x.score>0)
+    .sort((a,b)=>b.score-a.score||b.lesson-a.lesson||a.title.localeCompare(b.title));
+  const limits={'Topics & Notes':12,'Vocabulary':10,'Practice Examples':8},counts={},dedupe=new Set();
+  GLOBAL_SEARCH_RESULTS=scored.filter(item=>{
+    const key=`${item.group}|${item.lesson}|${item.targetId||item.mode||''}|${item.titleN}`;
+    if(dedupe.has(key)||(counts[item.group]||0)>=(limits[item.group]||8))return false;
+    dedupe.add(key);counts[item.group]=(counts[item.group]||0)+1;return true;
+  });
+  if(!GLOBAL_SEARCH_RESULTS.length){
+    container.innerHTML='<div class="search-empty">No matching lesson content yet.<br>Try Spanish, English, Chinese, or a broader topic.</div>';return;
+  }
+  const groups=['Topics & Notes','Vocabulary','Practice Examples'];
+  let html=`<div class="search-summary">${GLOBAL_SEARCH_RESULTS.length} result${GLOBAL_SEARCH_RESULTS.length===1?'':'s'} across Lessons 1–${MAX_LESSON}</div>`;
+  groups.forEach(group=>{
+    const rows=GLOBAL_SEARCH_RESULTS.map((item,index)=>({item,index})).filter(x=>x.item.group===group);
+    if(!rows.length)return;
+    html+=`<div class="search-group"><div class="search-group-title">${group}</div>`+rows.map(({item,index})=>
+      `<button class="search-result" onclick="openGlobalSearchResult(${index})" type="button"><div class="search-result-top"><div class="search-result-title">${escapeHtml(item.title)}</div><span class="search-result-badge">Lesson ${item.lesson}</span></div><div class="search-result-snippet">${escapeHtml(searchSnippet(item,trimmed))}</div></button>`
+    ).join('')+'</div>';
+  });
+  container.innerHTML=html;
+}
+function handleGlobalSearch(value){
+  homeUiState.query=String(value||'');
+  try{sessionStorage.setItem(HOME_UI_KEY,JSON.stringify(homeUiState));}catch(e){}
+  renderSearchResults(value);
+}
+function clearGlobalSearch(){
+  const input=document.getElementById('global-search-input');
+  if(input)input.value='';
+  handleGlobalSearch('');
+  input?.focus();
+}
+function persistHomeUiState(){
+  homeUiState.scrollY=Math.max(0,window.scrollY||window.pageYOffset||0);
+  homeUiState.query=document.getElementById('global-search-input')?.value||'';
+  try{sessionStorage.setItem(HOME_UI_KEY,JSON.stringify(homeUiState));}catch(e){}
+}
+function restoreHomeUiState(){
+  const input=document.getElementById('global-search-input');
+  if(input)input.value=homeUiState.query||'';
+  renderSearchResults(homeUiState.query||'');
+}
+function openGlobalSearchResult(index){
+  const item=GLOBAL_SEARCH_RESULTS[index];
+  if(!item)return;
+  persistHomeUiState();
+  if(item.mode){startMode(item.mode);return;}
+  const screen=document.getElementById(item.screenId);
+  if(!screen)return;
+  show(item.screenId,{restoreHome:false});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const target=document.getElementById(item.targetId)||screen;
+    target.scrollIntoView({block:'start'});
+    target.classList.add('search-focus');
+    setTimeout(()=>target.classList.remove('search-focus'),1900);
+  }));
+}
+
 // ══════════════ NAVIGATION ══════════════
 
-function show(id){
+function show(id,options={}){
+  const current=document.querySelector('.scr.on');
+  if(current?.id==='s-home'&&id!=='s-home')persistHomeUiState();
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-  window.scrollTo(0,0);
+  const next=document.getElementById(id);
+  if(!next)return;
+  next.classList.add('on');
+  if(id==='s-home'&&options.restoreHome!==false){
+    restoreHomeUiState();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
+      window.scrollTo(0,Math.min(Number(homeUiState.scrollY)||0,max));
+    }));
+  }else window.scrollTo(0,0);
 }
 function goHome(){
   window.speechSynthesis&&window.speechSynthesis.cancel();
   saveSession(); // preserve current card position before leaving
-  refreshHome(); show('s-home');
+  refreshHome(); show('s-home',{restoreHome:true});
 }
 
 // ══════════════ MODE LAUNCHERS ══════════════
@@ -6165,7 +6561,7 @@ function renderFlash(){
   // Dynamic button hints based on current SR state
   { const srData=loadSR();
     const srCard=getSRCard(srKey(item.es,dir),srData);
-    document.querySelector('.vbtn.great .vbtn-hint').textContent=srCard.mastered?'stays mastered':(srCard.fullRecallStreak||0)>=1?'master after this':'confirm tomorrow';
+    document.querySelector('.vbtn.great .vbtn-hint').textContent=(srCard.mastered||(srCard.fullRecallStreak||0)>=1)?'Mastered':'Confirm tomorrow';
     document.querySelector('.vbtn.ok .vbtn-hint').textContent='tomorrow';
   }
 
@@ -6220,8 +6616,9 @@ function prevCard(){
 
 function skipCard(){
   if(!(S.idx in S.answered)){
-    // Not yet answered: unrevealed = perfect recall (5), revealed = Good (4)
-    verdict(S.revealed ? 4 : 5);
+    // Every visible Got it control has the same meaning. Revealing the answer
+    // first does not silently downgrade the user's explicit self-rating.
+    verdict(5);
     return;
   }
   // Already-answered card → just move forward
@@ -6797,6 +7194,8 @@ function renderNewLessonNotes(){
     el.innerHTML=arr.map(v=>`<div class="vocab-item"><div class="vocab-text"><div class="vocab-es">${v.article?v.article+' ':''}${v.es}</div><div class="vocab-en">${v.en}</div></div></div>`).join('');
   };
   Object.entries(LESSON_REGISTRY).forEach(([lesson,entry])=>render(`notes-vocab-l${lesson}`,entry.vocab||[]));
+  buildGlobalSearchIndex();
+  restoreHomeUiState();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',renderNewLessonNotes);
 else renderNewLessonNotes();
@@ -7042,7 +7441,129 @@ Llamo a mi amigo.
 <div class="note-section"><h3>8. Core Vocabulary</h3><div id="notes-vocab-l47"></div></div>
 </div></div>
 
-<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v44.1<br>Updated: 2026-08-27<br>Changes: safe PWA update prompt · versioned offline cache · stable manifest identity · persistent-storage status · 13 duplicate new-lesson cards removed · all v44.0 learning fixes retained</div>
+<div class="scr" id="s-notes-l48">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 48 Notes</div><div class="hdr-sub">Travel Plans, Vacations &amp; Future Forms</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Core Goal</h3><div class="grammar-rule">本课围绕<strong>旅行计划</strong>组织词汇与问题：去哪、怎么去、住哪里、带什么、做什么、去多久，以及如何在 <strong>ir a + infinitivo</strong> 和 <strong>futuro simple</strong> 之间表达未来。</div></div>
+<div class="note-section"><h3>2. Vacation Vocabulary by Category</h3>
+<div class="grammar-rule"><strong>Activities</strong><br>bucear · nadar en la alberca · andar en bicicleta · ir de compras · jugar tenis</div>
+<div class="grammar-rule"><strong>Transportation</strong><br>el autobús · el avión · el barco · el tren</div>
+<div class="grammar-rule"><strong>Places &amp; lodging</strong><br>el pueblo · la playa · la ciudad · el hotel · la cabaña · la posada</div>
+<div class="grammar-rule"><strong>Warm-weather clothing</strong><br>la playera · la blusa · las sandalias · los pantalones · el bloqueador solar · la sombrilla · la sombra · el vestido · el pantalón corto · el bikini · el traje de baño · la gorra</div>
+<div class="grammar-rule"><strong>Seasons &amp; cold-weather clothing</strong><br>la primavera · el verano · el otoño · el invierno · el suéter · la chamarra · el abrigo · el rompevientos · las botas · la bufanda · los guantes · el gorro</div>
+<div class="grammar-rule"><strong>Source spelling cleanup</strong><br>boluse → blouse · bycicle → bicycle · sueter → suéter · swim suit → swimsuit · windcoat → windbreaker / rompevientos。原截图中的英文与缺失重音被保留在逐字稿里；App 使用正确学习形式。</div>
+</div>
+<div class="note-section"><h3>3. Two Ways to Talk about the Future</h3>
+<div class="grammar-rule"><strong>ir a + infinitivo</strong><br>voy a comer · vas a comer · va a comer · vamos a comer · van a comer。口语中很常用于计划：<em>Vamos a viajar a Perú.</em></div>
+<div class="grammar-rule"><strong>Futuro simple</strong><br>在完整不定式后加：-é · -ás · -á · -emos · -án：<em>viajaré · viajarás · viajará · viajaremos · viajarán</em>。</div>
+<div class="grammar-rule"><strong>Both can be correct</strong><br><em>Vamos a visitar Machu Picchu</em> 与 <em>Visitaremos Machu Picchu</em> 都正确。不能叠加为 <em>*vamos a visitaremos</em>。</div>
+<div class="grammar-rule"><strong>Useful present-tense frames</strong><br>querer · necesitar · preferir · poder · gustar · tener que · deber + infinitivo：<em>Quiero ir a China. Debe llevar suéteres.</em></div>
+</div>
+<div class="note-section"><h3>4. Travel Questions</h3>
+<div class="grammar-rule"><strong>¿Vas a salir de vacaciones?</strong> 你要去度假吗？<br><strong>¿Cuándo vas a viajar?</strong> 你什么时候旅行？<br><strong>¿Con quién vas a viajar?</strong> 你和谁一起旅行？<br><strong>¿En qué transporte vas a viajar?</strong> 你乘什么交通工具？<br><strong>¿Qué tipo de ropa vas a llevar?</strong> 你要带什么衣服？<br><strong>¿Por cuánto tiempo vas a viajar?</strong> 你要旅行多久？<br><strong>¿Qué actividades vas a hacer?</strong> 你要做什么活动？<br><strong>¿Qué deportes vas a realizar?</strong> 你要做什么运动？<br><strong>¿Cuándo vas a regresar?</strong> 你什么时候回来？</div>
+<div class="grammar-rule"><strong>Qué día vs a qué hora</strong><br><em>¿Qué día viajas?</em> → <em>El lunes.</em><br><em>¿A qué hora sale el tren?</em> → <em>A las ocho.</em></div>
+</div>
+<div class="note-section"><h3>5. Travel Prepositions &amp; Verb Pairs</h3>
+<div class="grammar-rule"><strong>Destination: a</strong><br>viajar a China · llegar a Shanghái · ir a Hong Kong</div>
+<div class="grammar-rule"><strong>Transportation: en</strong><br>en avión · en tren · en autobús；特殊固定表达：a pie。</div>
+<div class="grammar-rule"><strong>Other frames</strong><br>salir de vacaciones · hospedarse en un hotel · viajar por diez días / durante diez días · ¿por cuánto tiempo…?</div>
+<div class="grammar-rule"><strong>llegar vs llevar</strong><br><em>llegar</em> = 到达；<em>llevar</em> = 带去／携带／穿着。<br><em>El avión va a llegar a Shanghái.</em><br><em>Ana debe llevar los suéteres.</em></div>
+</div>
+<div class="note-section"><h3>6. Original → Better: Ana’s Trip</h3>
+<div class="grammar-rule"><strong>Original classroom text:</strong><br>Ana va a viajar en china. Viajara por 10 días. Ella quiere visitar Shanghai y Beijing . Va a llegar A Shanghai en avion, despues llegara A Beijing en tren. Esta pensando llevar que ropa. Pienso Que Ella debe llevar Los sueteres porque hace mucho frío en S.</div>
+<div class="grammar-rule"><strong>Revised:</strong><br><em>Ana va a viajar a China. Viajará durante diez días. Quiere visitar Shanghái y Beijing. Llegará a Shanghái en avión y después llegará a Beijing en tren. Está pensando qué ropa llevar. Pienso que debe llevar suéteres porque hace mucho frío allí.</em></div>
+<div class="grammar-rule"><strong>Changes explained</strong><br><em>viajar a China / llegar a una ciudad</em> 使用目的地 a；<em>en avión / en tren</em> 使用交通方式 en；未来时补重音：viajará、llegará；<em>Está pensando qué ropa llevar</em> 是自然的间接疑问；句中普通代词 ella 和冠词 los 不需要无故大写。</div>
+</div>
+<div class="note-section"><h3>7. Integrated Challenge Preview</h3><div class="grammar-rule">课堂综合题要求根据语境自行选择：现在时、现在进行时、pretérito、imperfecto、antepresente、两种未来、conditional、ser / estar / tener / hay、直接／间接宾语代词、物主词、冠词和介词。完整答案与逐项解释在 Lesson 49。</div></div>
+<div class="note-section"><h3>8. Core Vocabulary</h3><div id="notes-vocab-l48"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l49">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 49 Notes</div><div class="hdr-sub">Integrated Tenses, Pronouns &amp; Classroom Corrections</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Core Goal</h3><div class="grammar-rule">本课完成 Lesson 48 的 A1–A2 综合题。重点不是只认词，而是根据<strong>时间范围、动作功能、宾语角色和句型结构</strong>选择正确形式。</div></div>
+<div class="note-section"><h3>2. Presentation &amp; Description: Answers 1–5</h3>
+<div class="grammar-rule"><strong>1 tengo</strong> 28 años：年龄用 tener。<br><strong>2 soy</strong> arquitecta：身份／职业用 ser。<br><strong>3 mis</strong> dos gatos：复数物主词。<br><strong>4 está</strong> en el sur：地点用 estar。<br><strong>5 hay</strong> muchos parques：表示“有／存在”用 hay。</div>
+</div>
+<div class="note-section"><h3>3. Routine &amp; Schedule: Answers 6–12</h3>
+<div class="grammar-rule"><strong>Source answers:</strong> El · me despierto · a · de · a · hago · trabajo。<br><em>Me despierto a las 6:30. Trabajo de las 8:00 a las 15:00. Siempre hago ejercicio. Los fines de semana nunca trabajo.</em></div>
+<div class="grammar-rule"><strong>El lunes y miércoles vs Los lunes y miércoles</strong><br>课堂答案保留了 <em>El</em>。若表达每周固定习惯，更自然、明确的是 <em>Los lunes y miércoles</em>；若指具体的这个星期一和星期三，可根据上下文用单数冠词。</div>
+</div>
+<div class="note-section"><h3>4. Likes &amp; Current Activity: Answers 13–15</h3>
+<div class="grammar-rule"><strong>A mí ME gusta</strong> tomar fotografías y escuchar música：me 与体验者呼应，后面的不定式短语作为单数概念。<br><strong>Actualmente estoy tomando</strong> clases de francés。<br><strong>En este momento estoy investigando</strong> sobre cámaras profesionales。</div>
+<div class="grammar-rule"><strong>actualmente ≠ actually</strong><br>actualmente = currently / 目前；英语 actually 通常对应 en realidad / de hecho。</div>
+</div>
+<div class="note-section"><h3>5. Future Plans &amp; Pronouns: Answers 16–20</h3>
+<div class="grammar-rule"><strong>16 vamos a viajar / viajaremos</strong>：两种未来都正确。<br><strong>17 vamos a visitar / visitaremos</strong>：同样成立。<br><strong>18 vamos a llevar</strong> ropa de mucho frío。<br><strong>19 los</strong> = los boletos de avión。<br><strong>20 LE</strong> = a Lucía，表示信息的接收者。</div>
+<div class="grammar-rule"><strong>Direct vs indirect</strong><br><em>Los tengo</em>：los 替代物品 boletos。<br><em>Le envié la información</em>：le 替代接收者 Lucía。<br>合并时可说 <em>Se la envié</em>。</div>
+</div>
+<div class="note-section"><h3>6. Remembering the Past: Answers 21–30</h3>
+<div class="grammar-rule"><strong>21 conocí</strong>：五年前相识的完成事件。<br><strong>22 éramos</strong>：当时的背景状态。<br><strong>23 vivió / vivía</strong>：两者都能成立；vivía 把居住当背景，vivió 把它看成有边界的完整时期。<br><strong>24 viajamos</strong>：去年完成的旅行。<br><strong>25 fue</strong>：对完整经历作总结。</div>
+<div class="grammar-rule"><strong>26 nos hemos visto · 27 ha estado · 28 su · 29 hemos planeado · 30 llamó</strong><br><em>este año / esta semana</em> 与现在相连，因此材料使用 antepresente；<em>ayer</em> 是完成的具体时间，因此使用 llamó。</div>
+</div>
+<div class="note-section"><h3>7. Desire: Answer 31</h3><div class="grammar-rule"><strong>me gustaría + infinitivo</strong><br><em>Después de Perú, me gustaría visitar Japón o ir a la playa para relajarme.</em><br>秘鲁之后，我想去日本或去海边放松。</div></div>
+<div class="note-section"><h3>8. Classroom Corrections &amp; Useful Contrasts</h3>
+<div class="grammar-rule"><strong>como sea / de cualquier forma</strong> = anyway。逐字稿中的 <em>de cualquiera forma</em> 应改为性数一致的 <em>de cualquier forma</em>。</div>
+<div class="grammar-rule"><strong>Time sequence</strong><br>después · luego · más tarde。<br><em>Fui a tocar la batería durante dos horas y después arreglé mi laptop.</em> 比片段 <em>A tocar la batería por dos horas</em> 更完整。</div>
+<div class="grammar-rule"><strong>Me costó</strong> = 这对我很难／这花了我……。<br><em>Me costó arreglar mi laptop.</em></div>
+<div class="grammar-rule"><strong>Fui de compras</strong> = 把购物当完成事件。<br><strong>Estaba de compras</strong> = 描写当时正在购物。<br><em>Mientras estaba esperando…</em> 用 imperfecto 提供进行中的背景。</div>
+<div class="grammar-rule"><strong>Será vs sería</strong><br>será = will be；sería = would be。两者都有重音，不能写成 <em>sera</em>。</div>
+<div class="grammar-rule"><strong>Relationship events</strong><br><em>Me comprometí</em> = 我订婚了／我作出承诺。<br><em>Me propusieron matrimonio</em> = 有人向我求婚。</div>
+<div class="grammar-rule"><strong>*Serado is not a form</strong><br><em>He estado</em> 描写到目前为止的状态／地点；<em>he sido</em> 描写身份、特征或经历中的“曾经是”。</div>
+<div class="grammar-rule"><strong>Other class language</strong><br>igual que tú · inicialmente · visitar el volcán · la montaña · limpio · vibrante · la Copa del Mundo · las fiestas de la Copa del Mundo · la marcha gay · por supuesto · extraño mi casa y a mis gatos · intento · algo。</div>
+<div class="grammar-rule"><strong>Incomplete source fragment</strong><br><em>Como es condesa y que hay?</em> 在材料中没有足够上下文，无法可靠判断原意，因此不把它编造成语法结论或测验题。</div>
+</div>
+<div class="note-section"><h3>9. Vocabulary Prompts from Chat</h3><div class="grammar-rule">聊天中记录了：to beg → rogar · to buy → comprar · to pay → pagar；另有 to write / to repeat / cost / to remember 的英文提示，但没有保存对应回答。标准对应为 escribir / repetir / costar / recordar；这里不声称它们是课堂已记录答案。</div></div>
+<div class="note-section"><h3>10. Core Vocabulary</h3><div id="notes-vocab-l49"></div></div>
+</div></div>
+
+<div class="scr" id="s-notes-l50">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 50 Notes</div><div class="hdr-sub">Question Words, Duration, Reason &amp; Purpose</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Core Goal</h3><div class="grammar-rule">本课把常见疑问词按功能分开：问事物、选择、人、所属、地点、起点、终点、时长、距离、原因和目的。重点是<strong>疑问词本身、所需介词以及回答角度</strong>。</div></div>
+<div class="note-section"><h3>2. Qué, Cuál &amp; People Questions</h3>
+<div class="grammar-rule"><strong>qué + noun</strong><br><em>¿Qué canción es tu favorita?</em> 你最喜欢哪首歌？<br><strong>cuál + ser</strong><br><em>¿Cuál es tu canción favorita?</em> 你最喜欢的歌是哪首？</div>
+<div class="grammar-rule"><strong>quién / quiénes</strong><br>¿Quién? 问单数的人；¿Quiénes? 问复数的人。</div>
+<div class="grammar-rule"><strong>a quién + le / a quiénes + les</strong><br><em>¿A quién le dijiste?</em> 你对谁说了？<br><em>¿A quiénes les preguntaste?</em> 你问了哪些人？</div>
+<div class="grammar-rule"><strong>de quién</strong><br><em>¿De quién es esta guitarra?</em> 这把吉他是谁的？</div>
+</div>
+<div class="note-section"><h3>3. Dónde, Adónde, A Qué Hora &amp; Qué Día</h3>
+<div class="grammar-rule"><strong>Location</strong><br><em>¿Dónde estudias?</em> 你在哪里学习？<br><em>¿En qué lugar nos vemos?</em> 我们在哪个地方见？</div>
+<div class="grammar-rule"><strong>Destination</strong><br>课堂白板划掉了 <em>¿A dónde?</em> 并注明 a 可省。实际标准西语中，表示方向时 <em>¿Adónde viajas?</em>、<em>¿A dónde viajas?</em> 和许多地区使用的 <em>¿Dónde viajas?</em> 都可见；本课回答按老师偏好使用 <em>¿Dónde viajarás?</em>，但不把 adónde 判成绝对错误。</div>
+<div class="grammar-rule"><strong>Time and date</strong><br><em>¿A qué hora estudias?</em> 问具体钟点。<br><em>¿Qué día viajas?</em> 问哪一天。<br>不要用 <em>*¿A qué lugar…?</em> 问地点，也不要用 <em>*¿A qué fecha…?</em> 代替 qué día。</div>
+</div>
+<div class="note-section"><h3>4. Cuándo, Desde Cuándo &amp; Hasta Cuándo</h3>
+<div class="grammar-rule"><strong>cuándo</strong> = when；<strong>cuánto</strong> = how much / how many。拼写和发音中的 d / t 不同，两个词不能互换。</div>
+<div class="grammar-rule"><strong>¿Desde cuándo estudias español?</strong><br>你从什么时候开始学西语？现在时最自然地表达“从过去开始、现在仍在继续”。</div>
+<div class="grammar-rule"><strong>¿Desde cuándo has estudiado español?</strong><br>课堂白板也列出 antepresente。语法上可理解，但在许多语境中不如现在时自然；更常见的是 <em>¿Cuánto tiempo has estudiado español?</em> 或 <em>¿Desde cuándo estudias español?</em>。</div>
+<div class="grammar-rule"><strong>¿Hasta cuándo…?</strong> 问结束界限：<em>¿Hasta cuándo vas a estudiar?</em> → <em>Hasta las once.</em></div>
+</div>
+<div class="note-section"><h3>5. Cuánto: Amount, Duration &amp; Distance</h3>
+<div class="grammar-rule"><strong>cuánto / cuánta / cuántos / cuántas</strong> 跟随名词性数：<em>¿Cuántos estudiantes tienes?</em></div>
+<div class="grammar-rule"><strong>¿Cuánto tiempo…?</strong> = 多久：<em>¿Cuánto tiempo has estudiado español?</em></div>
+<div class="grammar-rule"><strong>¿A cuántos kilómetros está el banco?</strong> = 银行距离多少公里？<br><strong>¿Qué tan lejos está el banco?</strong> = 银行有多远？</div>
+<div class="grammar-rule">白板中的 <em>¿A cuánto tiempo está la biblioteca?</em> 能表达按时间计算的距离；更自然还可说 <em>¿A cuánto tiempo queda la biblioteca?</em> 或 <em>¿Cuánto se tarda en llegar?</em></div>
+</div>
+<div class="note-section"><h3>6. Por Qué vs Para Qué</h3>
+<div class="grammar-rule"><strong>¿Por qué…?</strong> 问原因／动机，回答用 <em>porque</em>：<br><em>¿Por qué estudias español? — Porque vivo en México.</em></div>
+<div class="grammar-rule"><strong>¿Para qué…?</strong> 问目标／用途，回答用 <em>para + infinitivo</em>：<br><em>¿Para qué estudias español? — Para comunicarme mejor.</em></div>
+</div>
+<div class="note-section"><h3>7. Interview Questions: Corrected Set</h3>
+<div class="grammar-rule">¿Cómo te llamas? · ¿De dónde eres? · ¿Cuántos años tienes? · ¿A qué te dedicas? · ¿Cuántos estudiantes tienes? · ¿Desde cuándo enseñas español? · ¿A qué hora descansas? · ¿Dónde viajarás el próximo año? · ¿Cómo estuvo tu viaje a Virginia? · ¿Cuánto tiempo estuviste en Virginia? · ¿Con quién viajaste? · ¿Cuántos hermanos tienes? · ¿A qué se dedica tu hermana? · ¿Dónde está tu hermana?</div>
+<div class="grammar-rule"><strong>Frequency</strong><br>白板：<em>¿Qué tan frecuente visitas a tu hermana?</em><br>更自然：<em>¿Con qué frecuencia visitas a tu hermana?</em> / <em>¿Qué tan frecuentemente visitas a tu hermana?</em><br>回答：<em>Probablemente cada quince días.</em></div>
+<div class="grammar-rule"><strong>Last time</strong><br><em>¿Cuándo fue la última vez que visitaste a tu hermana?</em><br>修正回答：<em>El fin de semana pasado fue la última vez que visité a mi hermana.</em></div>
+</div>
+<div class="note-section"><h3>8. Knowing You Can Sing</h3>
+<div class="grammar-rule"><strong>Continuing knowledge</strong><br><em>¿Desde cuándo sabe que puede cantar?</em> = 她从什么时候开始知道自己会唱歌？能力持续到现在，所以用 <strong>puede</strong>。</div>
+<div class="grammar-rule"><strong>Present perfect option</strong><br><em>¿Desde cuándo ha sabido que puede cantar?</em> 语法上可以，但许多语境里简单现在时 <em>sabe</em> 更自然。不能因为主句使用 ha sabido，就机械把从句改成 <em>pudo</em>。</div>
+<div class="grammar-rule"><strong>Past discovery</strong><br><em>¿Cuándo supo que podía cantar?</em> / <em>¿Cuándo descubrió que podía cantar?</em> = 她什么时候发现自己会唱歌？这里问过去的发现时刻。</div>
+<div class="grammar-rule"><strong>Childhood habit</strong><br>白板：<em>¿Cuando era una niña, cantaba normalmente?</em><br>修正：<em>¿Cuando era niña, cantaba normalmente?</em>；更自然可问 <em>¿Cuando era niña, cantaba con frecuencia?</em></div>
+</div>
+<div class="note-section"><h3>9. Additional Class Fragments</h3><div class="grammar-rule"><strong>Tocaba la batería</strong> = 当时经常／正在打鼓（imperfecto）。<br><strong>No pude</strong> = 我没能做到／没成功（pretérito，表示一次有结果的尝试）。</div></div>
+<div class="note-section"><h3>10. Core Vocabulary</h3><div id="notes-vocab-l50"></div></div>
+</div></div>
+
+<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v45.0<br>Updated: 2026-08-30<br>Changes: Lessons 48–50 · offline global search · restored home/search position · daily-review backfill · Missed → Sort of → Got it order · identical Got it scoring · Mastered status on second full recall</div>
 
 </body>
 </html>
