@@ -1,4 +1,4 @@
-const APP_VERSION = 'v47.0';
+const APP_VERSION = 'v47.2';
 const LEGACY_CACHE_NAME = 'mi-espanol';
 const CACHE_PREFIX = 'mi-espanol-';
 const CACHE_NAME = `${CACHE_PREFIX}${APP_VERSION}`;
