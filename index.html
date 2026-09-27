@@ -442,7 +442,7 @@ body{max-width:480px;margin:0 auto;}
 <div>
 <div class="lc-title">⭐ Master Review — Mixed Practice</div>
 <div class="lc-hint">dynamic skill cycle · forms, rules and error finding · context-aware explanations</div>
-<div class="lc-date">Updated through Lesson 63</div>
+<div class="lc-date">Updated through Lesson 64</div>
 </div>
 <div class="lc-badge">Daily 10 min</div>
 </div>
@@ -456,6 +456,16 @@ body{max-width:480px;margin:0 auto;}
 <button class="master-mini-btn" onclick="showMasterProgress()">📊 My Progress</button>
 </div>
 <div class="lc-hint" id="master-smart-hint" style="margin-top:12px;">Every active skill gets representative questions; mastered skills leave the regular cycle.</div>
+</div>
+
+<div class="lesson-card" style="border:2px solid var(--gold);background:linear-gradient(135deg,#FFFDF3 0%,#FFFFFF 70%);">
+<div class="lc-head"><div><div class="lc-title">Lesson 64 — Nested Opinions, Mulan &amp; Si vs Cuando</div><div class="lc-hint">nested mood · fact vs negated fact · indefinite relative clause · si indicative vs cuando subjunctive</div><div class="lc-date">Updated September 27, 2026</div></div><div class="lc-badge">New ✨</div></div>
+<div class="mode-grid">
+<div class="mbtn" onclick="startMode('es-en-l64')"><div class="mbtn-icon">🇪🇸→🇺🇸</div><div class="mbtn-label">Spanish → English</div></div>
+<div class="mbtn" onclick="startMode('en-es-l64')"><div class="mbtn-icon">🇺🇸→🇪🇸</div><div class="mbtn-label">English → Spanish</div></div>
+<div class="mbtn" onclick="startMode('fill-l64')"><div class="mbtn-icon">🧠</div><div class="mbtn-label">Rules &amp; Errors Quiz</div></div>
+<div class="mbtn" onclick="startMode('conv-l64')"><div class="mbtn-icon">🎙️</div><div class="mbtn-label">Dialogue Practice</div></div>
+</div><button class="secondary-btn" onclick="show('s-notes-l64')" style="margin-top:12px;">📖 View Class Notes</button>
 </div>
 
 <div class="lesson-card">
@@ -4312,7 +4322,7 @@ const CONV_L24 = [
   {ctx:'Class chat', q:'¿Te gusta más el español que hace dos meses?', q_en:'Do you like Spanish more than two months ago?', ans:'Sí, me gusta más que hace dos meses.', ans_en:'Yes, I like it more than two months ago.', note:'más que hace dos meses = more than two months ago.'},
 ];
 
-const APP_VERSION = 'v48.0';
+const APP_VERSION = 'v49.0';
 const PROGRESS_SCHEMA_VERSION = 4;
 const MYWORDS_KEY = 'mywords_espanol';
 function loadMyWords() { try{return JSON.parse(localStorage.getItem(MYWORDS_KEY))||[];}catch(e){return[];} }
@@ -4647,8 +4657,13 @@ function seededShuffle(arr, seed) {
 // The 20 % maintenance slice rotates daily, so you always get a fresh sample.
 // Final card list is shuffled so the study order feels natural (not all-hard
 // at the start).
+function isDailyReviewEligible(v){
+  // BUG-014: complete lesson vocabulary and active memorization are different layers.
+  // Existing entries remain eligible by default; explicit recognition/topic entries stay in Notes/course practice only.
+  return !['recognition-only','topic-specific','incidental'].includes(v?.learningValue);
+}
 function getAllReviewVocab() {
-  return [...Object.values(LESSON_REGISTRY).flatMap(lesson=>lesson.vocab||[]),...loadMyWords()];
+  return [...Object.values(LESSON_REGISTRY).flatMap(lesson=>(lesson.vocab||[]).filter(isDailyReviewEligible)),...loadMyWords()];
 }
 
 function getDueCards(dir) {
@@ -4752,6 +4767,7 @@ function priorityShuffle(items,seed){
   return seededShuffle(items,seed).sort((a,b)=>vocabularyPriorityRank(a)-vocabularyPriorityRank(b));
 }
 const DAILY_DIRECTION_STRATEGY_VERSION=2;
+const DAILY_ELIGIBILITY_VERSION=1;
 function assignDailyDirections(entries,wp){
   const counts={es_en:0,en_es:0};
   return entries.map((x,index)=>{
@@ -4775,6 +4791,15 @@ function buildDailyPlan(){
   migrateWordProgressV4();
   const today=localDateKey(),existing=loadDailyPlan();
   if(existing?.localDate===today&&Array.isArray(existing.items)){
+    if(existing.eligibilityVersion!==DAILY_ELIGIBILITY_VERSION){
+      // BUG-014 migration: remove newly recognition-only/topic-specific cards from today's saved queue
+      // without rebuilding the day or resurfacing words already answered today.
+      existing.items=existing.items.filter(x=>isDailyReviewEligible(x.vocab||{}));
+      existing.eligibilityVersion=DAILY_ELIGIBILITY_VERSION;
+      saveDailyPlan(existing);
+      localStorage.removeItem('session_espanol_es-en-review');
+      localStorage.removeItem('session_espanol_en-es-review');
+    }
     if(existing.directionStrategyVersion!==DAILY_DIRECTION_STRATEGY_VERSION){
       const wp=loadWordProgress();
       existing.items=assignDailyDirections(existing.items,wp);
@@ -4814,7 +4839,7 @@ function buildDailyPlan(){
   }),wp);
   const plan={schemaVersion:4,localDate:today,timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone||'local',
     createdAt:new Date().toISOString(),sessionId:createVocabSessionId(),todaySeenWordIds:[],
-    directionStrategyVersion:DAILY_DIRECTION_STRATEGY_VERSION,items};
+    directionStrategyVersion:DAILY_DIRECTION_STRATEGY_VERSION,eligibilityVersion:DAILY_ELIGIBILITY_VERSION,items};
   saveDailyPlan(plan);return plan;
 }
 function getDueCards(dir){
@@ -5721,6 +5746,29 @@ const CONV_L41=[
 ];
 
 const L42_VOCAB=[
+{es:'alto/a',en:'tall',priority:'active-core'},
+{es:'bajo/a',en:'short; low',priority:'active-core'},
+{es:'gordo/a',en:'fat / heavy',priority:'active-supporting'},
+{es:'delgado/a',en:'thin / slim',priority:'active-core'},
+{es:'guapo/a',en:'good-looking / handsome / pretty',priority:'active-core'},
+{es:'bonito/a',en:'pretty / nice / beautiful',priority:'active-core'},
+{es:'hermoso/a',en:'beautiful / gorgeous',priority:'active-supporting'},
+{es:'inteligente',en:'intelligent / smart',priority:'active-core'},
+{es:'honesto/a',en:'honest',priority:'active-core'},
+{es:'responsable',en:'responsible',priority:'active-core'},
+{es:'tímido/a',en:'shy',priority:'active-core'},
+{es:'extrovertido/a',en:'extroverted / outgoing',priority:'active-supporting'},
+{es:'cálido/a',en:'warm',priority:'active-supporting'},
+{es:'bueno/a',en:'good',priority:'active-core'},
+{es:'malo/a',en:'bad',priority:'active-core'},
+{es:'feo/a',en:'ugly / unattractive',priority:'active-core'},
+{es:'pequeño/a',en:'small',priority:'active-core'},
+{es:'grande',en:'big / large',priority:'active-core'},
+{es:'el cuerpo',en:'body',priority:'active-core'},
+{es:'la nariz',en:'nose',priority:'active-core'},
+{es:'la boca',en:'mouth',priority:'active-core'},
+{es:'los ojos',en:'eyes',priority:'active-core'},
+{es:'las orejas',en:'ears',priority:'active-supporting'},
 {es:'empático/a',en:'empathetic'},
 {es:'maduro/a',en:'mature'},
 {es:'amable',en:'kind / friendly'},
@@ -6337,7 +6385,8 @@ const L57_VOCAB=[
 {es:'en cuanto a',en:'regarding / as for',priority:'supporting'},
 {es:'la estancia',en:'stay',priority:'supporting'},
 {es:'aprovechar el tiempo',en:'to make good use of time',priority:'supporting'},
-{es:'el teatro / las funciones',en:'the theater / performances',priority:'supporting'},
+{es:'el teatro',en:'theater',priority:'supporting',learningValue:'active-supporting'},
+{es:'la función',en:'performance / show',priority:'supporting',learningValue:'active-supporting'},
 {es:'seguro que',en:'surely / I am sure that',priority:'supporting'},
 {es:'igual que yo',en:'just like me',priority:'supporting'},
 {es:'enriquecer',en:'to enrich',priority:'supporting'},{es:'valioso/a',en:'valuable',priority:'supporting'},
@@ -6369,17 +6418,33 @@ const CONV_L57=[
 ];
 
 const L58_VOCAB=[
-{es:'desear / necesitar / preferir que + subjuntivo',en:'wish / need / prefer that + subjunctive',priority:'core-trigger'},
-{es:'sugerir / recomendar / pedir que + subjuntivo',en:'suggest / recommend / ask that + subjunctive',priority:'core-trigger'},
-{es:'permitir / prohibir / rogar que + subjuntivo',en:'allow / forbid / beg that + subjunctive',priority:'core-trigger'},
-{es:'querer / dejar / esperar que + subjuntivo',en:'want / let / hope that + subjunctive',priority:'core-trigger'},
+{es:'desear que + subjuntivo',en:'to wish that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'necesitar que + subjuntivo',en:'to need that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'preferir que + subjuntivo',en:'to prefer that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'sugerir que + subjuntivo',en:'to suggest that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'recomendar que + subjuntivo',en:'to recommend that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'pedir que + subjuntivo',en:'to ask that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'permitir que + subjuntivo',en:'to allow that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'prohibir que + subjuntivo',en:'to forbid that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'rogar que + subjuntivo',en:'to beg that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'querer que + subjuntivo',en:'to want that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'dejar que + subjuntivo',en:'to let / allow that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'esperar que + subjuntivo',en:'to hope that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
 {es:'ojalá + subjuntivo',en:'hopefully + subjunctive',priority:'core-trigger'},
-{es:'creer / pensar que + indicativo',en:'believe / think that + indicative',priority:'core-trigger'},
-{es:'no creer / no pensar que + subjuntivo',en:'not believe / not think that + subjunctive',priority:'core-trigger'},
-{es:'sentir / suponer / considerar que',en:'feel / suppose / consider that',priority:'core-trigger'},
+{es:'creer que + indicativo',en:'to believe that + indicative',priority:'core-trigger',learningValue:'active-core'},
+{es:'pensar que + indicativo',en:'to think that + indicative',priority:'core-trigger',learningValue:'active-core'},
+{es:'no creer que + subjuntivo',en:'not to believe that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'no pensar que + subjuntivo',en:'not to think that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'sentir que',en:'to feel that',priority:'core-trigger',learningValue:'active-core'},
+{es:'suponer que',en:'to suppose that',priority:'core-trigger',learningValue:'active-core'},
+{es:'considerar que',en:'to consider that',priority:'core-trigger',learningValue:'active-core'},
 {es:'me parece que / no me parece que',en:'it seems to me that / it does not seem to me that',priority:'core-trigger'},
-{es:'me alegra / enoja / frustra que + subjuntivo',en:'it makes me happy / angry / frustrated that + subjunctive',priority:'core-trigger'},
-{es:'me sorprende / asusta / da miedo que + subjuntivo',en:'it surprises / scares / frightens me that + subjunctive',priority:'core-trigger'},
+{es:'me alegra que + subjuntivo',en:'it makes me happy that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'me enoja que + subjuntivo',en:'it makes me angry that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'me frustra que + subjuntivo',en:'it frustrates me that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'me sorprende que + subjuntivo',en:'it surprises me that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'me asusta que + subjuntivo',en:'it scares me that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'me da miedo que + subjuntivo',en:'it frightens me that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
 {es:'me / te / le / nos / les + verbo de reacción',en:'reaction verbs change the affected-person pronoun',priority:'core-form'},
 {es:'COMER vs que COMAS',en:'same subject infinitive vs different subject subjunctive',priority:'core-form'},
 {es:'me pidas',en:'you ask me — subjunctive with required me',priority:'core-form'},
@@ -6435,8 +6500,10 @@ const L59_VOCAB=[
 {es:'la salud mental',en:'mental health',priority:'supporting'},
 {es:'el apoyo',en:'support',priority:'supporting'},
 {es:'permitirse cometer errores',en:'to allow oneself to make mistakes',priority:'supporting'},
-{es:'la responsabilidad / la irresponsabilidad',en:'responsibility / irresponsibility',priority:'supporting'},
-{es:'responsable / irresponsable',en:'responsible / irresponsible',priority:'supporting'},
+{es:'la responsabilidad',en:'responsibility',priority:'supporting',learningValue:'active-supporting'},
+{es:'la irresponsabilidad',en:'irresponsibility',priority:'supporting',learningValue:'active-supporting'},
+{es:'responsable',en:'responsible',priority:'supporting',learningValue:'active-supporting'},
+{es:'irresponsable',en:'irresponsible',priority:'supporting',learningValue:'active-supporting'},
 {es:'hijo único / hija única',en:'only son / only daughter',priority:'supporting'},
 {es:'ambos',en:'both',priority:'supporting'},
 {es:'estéticamente',en:'aesthetically',priority:'supporting'},
@@ -6482,8 +6549,10 @@ const L60_VOCAB=[
 {es:'nos mudamos',en:'we move / we moved — form shared by present and preterite',priority:'supporting'},
 {es:'llegar de sorpresa',en:'to arrive as a surprise',priority:'supporting'},
 {es:'el cumpleaños / el cumple',en:'birthday / birthday (informal)',priority:'supporting'},
-{es:'el ajolote',en:'axolotl',priority:'supporting'},
-{es:'innegable / indudable / evidente',en:'undeniable / unquestionable / evident',priority:'supporting'},
+{es:'el ajolote',en:'axolotl',priority:'supporting',learningValue:'recognition-only'},
+{es:'innegable',en:'undeniable',priority:'supporting',learningValue:'active-supporting'},
+{es:'indudable',en:'unquestionable / beyond doubt',priority:'supporting',learningValue:'active-supporting'},
+{es:'evidente',en:'evident / obvious',priority:'supporting',learningValue:'active-supporting'},
 {es:'la fotografía con sentimiento',en:'photography with feeling',priority:'supporting'},
 {es:'tomar fotografías',en:'to take photographs',priority:'supporting'}
 ];
@@ -6520,15 +6589,18 @@ const L61_VOCAB=[
 {es:'estar enamorado/a',en:'to be in love',priority:'supporting'},
 {es:'la creencia',en:'belief',priority:'supporting'},
 {es:'la vida después de la muerte',en:'life after death',priority:'supporting'},
-{es:'el congreso / la clausura',en:'conference / closing session',priority:'supporting'},
+{es:'el congreso',en:'conference / congress',priority:'supporting',learningValue:'active-supporting'},
+{es:'la clausura',en:'closing / closing session',priority:'supporting',learningValue:'recognition-only'},
 {es:'asistir a',en:'to attend',priority:'supporting'},
-{es:'los especialistas / las ramas de la ciencia',en:'experts / branches of science',priority:'supporting'},
-{es:'procedente de',en:'coming from / originating in',priority:'supporting'},
+{es:'el/la especialista',en:'specialist / expert',priority:'supporting',learningValue:'active-supporting'},
+{es:'la rama de la ciencia',en:'branch of science',priority:'supporting',learningValue:'recognition-only'},
+{es:'procedente de',en:'coming from / originating in',priority:'supporting',learningValue:'recognition-only'},
 {es:'con el fin de',en:'with the goal of',priority:'supporting'},
-{es:'tras varias jornadas',en:'after several sessions / days',priority:'supporting'},
-{es:'la civilización del antiguo Shu',en:'the ancient Shu civilization',priority:'supporting'},
-{es:'la máscara / el árbol divino de bronce',en:'the bronze mask / divine bronze tree',priority:'supporting'},
-{es:'las fosas sacrificiales',en:'sacrificial pits',priority:'supporting'},
+{es:'tras varias jornadas',en:'after several sessions / days',priority:'supporting',learningValue:'recognition-only'},
+{es:'la civilización del antiguo Shu',en:'the ancient Shu civilization',priority:'supporting',learningValue:'topic-specific'},
+{es:'la máscara de bronce',en:'bronze mask',priority:'supporting',learningValue:'topic-specific'},
+{es:'el árbol divino de bronce',en:'divine bronze tree',priority:'supporting',learningValue:'topic-specific'},
+{es:'las fosas sacrificiales',en:'sacrificial pits',priority:'supporting',learningValue:'topic-specific'},
 {es:'iba a / me dijo / he visto',en:'I was going to / she told me / I have seen',priority:'supporting'},
 {es:'me sentiría / tendría',en:'I would feel / I would have',priority:'supporting'}
 ];
@@ -6566,7 +6638,9 @@ const L62_VOCAB=[
 {es:'me parece que es / no me parece que sea',en:'it seems to me it is / it does not seem to me it is',priority:'core-form'},
 {es:'me parece bueno que sea',en:'it seems good to me that it be',priority:'core-form'},
 {es:'vuelva / me sentiré / buscaré',en:'return — subjunctive / I will feel / I will look for',priority:'core-form'},
-{es:'me alegra / me enoja / me aburre',en:'it makes me happy / angry / bored',priority:'supporting'},
+{es:'me alegra',en:'it makes me happy',priority:'supporting',learningValue:'active-supporting'},
+{es:'me enoja',en:'it makes me angry',priority:'supporting',learningValue:'active-supporting'},
+{es:'me aburre',en:'it bores me',priority:'supporting',learningValue:'active-supporting'},
 {es:'por un largo tiempo',en:'for a long time',priority:'supporting'},
 {es:'no se lo he dicho',en:'I have not told them it',priority:'supporting'},
 {es:'explorar el mundo a solas',en:'to explore the world alone',priority:'supporting'},
@@ -6611,15 +6685,18 @@ const L63_VOCAB=[
 {es:'la sociedad en general',en:'society in general',priority:'supporting'},
 {es:'a corto / largo plazo',en:'in the short / long term',priority:'supporting'},
 {es:'tomar decisiones',en:'to make decisions',priority:'supporting'},
-{es:'me entristece / me pone triste',en:'it saddens me / it makes me sad',priority:'supporting'},
+{es:'me entristece',en:'it saddens me',priority:'supporting',learningValue:'active-supporting'},
+{es:'me pone triste',en:'it makes me sad',priority:'supporting',learningValue:'active-supporting'},
 {es:'las ventajas',en:'advantages',priority:'supporting'},
 {es:'chismear',en:'to gossip / chat',priority:'supporting'},
 {es:'ahorrar',en:'to save money',priority:'supporting'},
-{es:'disfrutar / apreciar',en:'to enjoy / appreciate',priority:'supporting'},
+{es:'disfrutar',en:'to enjoy',priority:'supporting',learningValue:'active-supporting'},
+{es:'apreciar',en:'to appreciate',priority:'supporting',learningValue:'active-supporting'},
 {es:'aunque',en:'although / even though',priority:'supporting'},
-{es:'pan / mermelada de arándanos',en:'blueberry bread / jam',priority:'supporting'},
-{es:'huevos a la mexicana',en:'Mexican-style eggs',priority:'supporting'},
-{es:'una taza de yogur con mango y nuez',en:'a cup of yogurt with mango and walnut',priority:'supporting'}
+{es:'pan de arándanos',en:'blueberry bread',priority:'supporting',learningValue:'recognition-only'},
+{es:'mermelada de arándanos',en:'blueberry jam',priority:'supporting',learningValue:'recognition-only'},
+{es:'huevos a la mexicana',en:'Mexican-style eggs',priority:'supporting',learningValue:'recognition-only'},
+{es:'una taza de yogur con mango y nuez',en:'a cup of yogurt with mango and walnut',priority:'supporting',learningValue:'recognition-only'}
 ];
 const FILL_L63=[
 lessonQuiz('L63-Q-01','L63-OPINION-QUESTIONS',63,'Opinion questions','NEUTRAL QUESTION','¿Piensas que ___ feliz?','vives',['vives','vivas','vivirás que','vivieras'],'你觉得自己生活得幸福吗？','中性的肯定意见问句 ¿Piensas que…? 通常用直陈式 vives。','原 chat 的 *Pienses 应为 piensas；虚拟式问句可能表达怀疑或距离感，但不是默认选择。','也可自然地问 ¿Crees que eres feliz?。'),
@@ -6700,6 +6777,40 @@ const CONV_L34=[
 // One registry drives every shared lesson feature: launch, navigation, resume,
 // vocabulary aggregation and integrity checks. Adding a lesson in one place
 // prevents the partial-wiring bug that affected Lessons 37 and 38.
+const L64_VOCAB=[
+{es:'es importante que no pienses que + subjuntivo',en:'it is important that you do not think that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'es importante que pienses que + indicativo',en:'it is important that you think that + indicative',priority:'core-trigger',learningValue:'active-core'},
+{es:'me alegra que + subjuntivo',en:'I am glad that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'es verdad que + indicativo',en:'it is true that + indicative',priority:'core-trigger',learningValue:'active-core'},
+{es:'no es verdad que + subjuntivo',en:'it is not true that + subjunctive',priority:'core-trigger',learningValue:'active-core'},
+{es:'espero que haya… que tenga…',en:'I hope there is… that has… — desired/indefinite referent',priority:'core-trigger',learningValue:'active-core'},
+{es:'si + presente de indicativo',en:'if + present indicative for a real/open condition',priority:'core-trigger',learningValue:'active-core'},
+{es:'cuando + presente de subjuntivo (futuro)',en:'when + present subjunctive for a future event',priority:'core-trigger',learningValue:'active-core'},
+{es:'pienses / sea / esté / haya / tenga',en:'think / be / be / there be / have — present subjunctive forms',priority:'core-form',learningValue:'active-core'},
+{es:'iré al gimnasio',en:'I will go to the gym',priority:'supporting',learningValue:'active-supporting'},
+{es:'ser fuerte',en:'to be strong',priority:'supporting',learningValue:'active-supporting'},
+{es:'ser popular',en:'to be popular',priority:'supporting',learningValue:'active-supporting'},
+{es:'una película de acción real / live action',en:'a live-action movie',priority:'supporting',learningValue:'recognition-only'}
+];
+const FILL_L64=[
+lessonQuiz('L64-NEST-01','L64-NESTED-OPINION',64,'Nested opinion','NEGATED INNER BELIEF','Es importante que no ___ que Mulán ___ débil.','pienses / sea',['pienses / sea','piensas / es','pienses / es','piensas / sea'],'重要的是你不要认为花木兰很软弱。','外层 es importante que 使 pienses 用虚拟式；内层 no pienses que 是否定观点，因此其内容也用虚拟式 sea。','两个 que 属于不同层级，不能只看最近的 que。','课堂速记写成 “Es importante que NO pienses que + subjuntivo”。'),
+lessonQuiz('L64-NEST-02','L64-NESTED-OPINION',64,'Nested opinion','AFFIRMATIVE INNER BELIEF','Es importante que ___ que Mulán ___ una mujer muy fuerte.','pienses / es',['pienses / es','piensas / sea','pienses / sea','piensas / es'],'重要的是你认为花木兰是一位很坚强的女性。','es importante que 仍要求 pienses 为虚拟式；但肯定的 pienses que 把内层内容作为观点陈述，课堂规则用直陈式 es。','“pienses”本身不是 indicativo；截图中的 “PIENSES + indicativo” 指的是 pienses que 后面的从句。','对比上一题的 no pienses que + subjuntivo。'),
+lessonQuiz('L64-MULAN-03','L64-FACT-EMOTION',64,'Mulan examples','AFFIRMATIVE OPINION','Creo que Mulán ___ una mujer muy fuerte.','es',['es','sea','esté','ser'],'我认为花木兰是一位很坚强的女性。','肯定 creo que 通常使用直陈式 es。','不要因为本课在学虚拟式就把所有 que 后面都改成虚拟式。','课堂原句：Creo que Mulan es una mujer muy fuerte。'),
+lessonQuiz('L64-MULAN-04','L64-FACT-EMOTION',64,'Mulan examples','EMOTION','Me alegra que Mulán ___ popular en México.','sea',['sea','es','será','fue'],'我很高兴花木兰在墨西哥很受欢迎。','me alegra que 表达情绪反应，使用虚拟式 sea。','事实是否真实不改变情绪触发结构。','课堂原句保留 Mulán / México 的重音规范。'),
+lessonQuiz('L64-TRUTH-05','L64-TRUTH-CONTRAST',64,'Truth expressions','ES VERDAD','Es verdad que Mushu ___ muy interesante en la película.','es',['es','sea','esté','fuera'],'Mushu 在电影里确实很有意思。','肯定 es verdad que 把内容作为事实陈述，使用直陈式 es。','与 no es verdad que + subjuntivo 成对记忆。','课堂用 Mushu 对比肯定事实与否定事实。'),
+lessonQuiz('L64-TRUTH-06','L64-TRUTH-CONTRAST',64,'Truth expressions','NO ES VERDAD','No es verdad que Mushu ___ en la película de acción real.','esté',['esté','está','estará','estuvo'],'Mushu 并没有出现在真人版电影里。','no es verdad que 否定命题，使用虚拟式 esté。','这里 estar 表示“在/出现于”某部电影中。','课堂原句用 live action；Notes 同时给出 película de acción real。'),
+lessonQuiz('L64-REL-07','L64-INDEFINITE-RELATIVE',64,'Desired referent','HAYA + QUE TENGA','Espero que ___ una película de acción real que ___ a Mushu.','haya / tenga',['haya / tenga','hay / tiene','haya / tiene','habrá / tendrá'],'我希望能有一部包含 Mushu 的真人电影。','espero que 触发 haya；所希望的电影尚未确定/存在，因此描述它的关系从句用 tenga。','若说一部已经明确存在的电影，可用 que tiene。','课堂原句 “Espero que haya una película live action que tenga A mushu” 中人名作直接宾语时写 a Mushu。'),
+lessonQuiz('L64-SI-08','L64-SI-VS-CUANDO',64,'Si vs cuando','REAL CONDITION','Si ___ tiempo, iré al gimnasio.','tengo',['tengo','tenga','tendré','tuviera'],'如果我有时间，我会去健身房。','现实/开放条件使用 si + presente de indicativo：si tengo。','现代西语中这种 si 从句不用现在虚拟式 *si tenga。','截图绿色下划线标出 Si tengo，并写 “SI NUNCA permite el subjuntivo presente”。'),
+lessonQuiz('L64-CUANDO-09','L64-SI-VS-CUANDO',64,'Si vs cuando','FUTURE TIME','Cuando ___ tiempo, iré al gimnasio.','tenga',['tenga','tengo','tendré','tuviera'],'等我有时间时，我会去健身房。','指向未来、尚未发生的 cuando 从句使用现在虚拟式 tenga。','这是时间从句，不是 si 条件句。','与 Si tengo tiempo, iré… 形成课堂核心对比。'),
+lessonQuiz('L64-SI-10','L64-SI-VS-CUANDO',64,'Si vs cuando','ERROR FINDING','哪一句不适合表达现实未来条件？','*Si tenga tiempo, iré al gimnasio.',['*Si tenga tiempo, iré al gimnasio.','Si tengo tiempo, iré al gimnasio.','Cuando tenga tiempo, iré al gimnasio.','Si tengo tiempo, voy al gimnasio.'],'哪一句不适合表达现实未来条件？','*si tenga 错在现实条件的 si 后使用了现在虚拟式。','反事实条件以后会使用 si tuviera + condicional，但那不是现在虚拟式。','本课只固定 real/open condition 与 future cuando 的对比。')
+];
+const CONV_L64=[
+{ctx:'Mulan opinion',q:'¿Qué piensas de Mulán?',q_en:'What do you think about Mulan?',ans:'Creo que Mulán es una mujer muy fuerte y me alegra que sea popular en México.',ans_en:'I think Mulan is a very strong woman, and I am glad that she is popular in Mexico.',note:'creo que es = 肯定观点；me alegra que sea = 情绪触发。'},
+{ctx:'Mushu',q:'¿Qué esperas de una futura película?',q_en:'What do you hope for in a future movie?',ans:'Espero que haya una película de acción real que tenga a Mushu.',ans_en:'I hope there is a live-action movie that has Mushu in it.',note:'espero que haya；尚未确定的 desired referent → que tenga。'},
+{ctx:'Gym condition',q:'¿Irás al gimnasio si tienes tiempo?',q_en:'Will you go to the gym if you have time?',ans:'Sí. Si tengo tiempo, iré al gimnasio.',ans_en:'Yes. If I have time, I will go to the gym.',note:'si + presente de indicativo；现实条件不用 presente de subjuntivo。'},
+{ctx:'Gym future time',q:'¿Qué harás cuando tengas tiempo?',q_en:'What will you do when you have time?',ans:'Cuando tenga tiempo, iré al gimnasio.',ans_en:'When I have time, I will go to the gym.',note:'未来尚未发生的 cuando + presente de subjuntivo。'}
+];
+
 const LESSON_REGISTRY={
   1:{vocab:VOCAB,fill:FILL_EXERCISES,conv:CONVERSATIONS,title:'Foundations'},
   2:{vocab:VOCAB_L2,fill:FILL_L2,conv:CONV_L2,title:'AR / ER / IR'},
@@ -6753,7 +6864,8 @@ const LESSON_REGISTRY={
   60:{vocab:L60_VOCAB,fill:FILL_L60,conv:CONV_L60,title:'Nested Opinions & Future Triggers'},
   61:{vocab:L61_VOCAB,fill:FILL_L61,conv:CONV_L61,title:'Facts, Uncertainty & First Conditional'},
   62:{vocab:L62_VOCAB,fill:FILL_L62,conv:CONV_L62,title:'Subjunctive Time Frames & Sequence'},
-  63:{vocab:L63_VOCAB,fill:FILL_L63,conv:CONV_L63,title:'Opinions, Relationships & Real-Life Debate'}
+  63:{vocab:L63_VOCAB,fill:FILL_L63,conv:CONV_L63,title:'Opinions, Relationships & Real-Life Debate'},
+  64:{vocab:L64_VOCAB,fill:FILL_L64,conv:CONV_L64,title:'Nested Opinions, Mulan & Si vs Cuando'}
 };
 const MAX_LESSON=Math.max(...Object.keys(LESSON_REGISTRY).map(Number));
 
@@ -6764,7 +6876,7 @@ const MASTER_REVIEW_ADDITIONS=[
   ...FILL_L42,...FILL_L43,...FILL_L44,...FILL_L45,...FILL_L46,...FILL_L47,
   ...FILL_L48,...FILL_L49,...FILL_L50,...FILL_L51,...FILL_L52,...FILL_L53,...FILL_L54,
   ...FILL_L55,...FILL_L56,...FILL_L57,...FILL_L58,...FILL_L59,
-  ...FILL_L60,...FILL_L61,...FILL_L62,...FILL_L63
+  ...FILL_L60,...FILL_L61,...FILL_L62,...FILL_L63,...FILL_L64
 ];
 MASTER_REVIEW_BANK.push(...MASTER_REVIEW_ADDITIONS);
 normalizeMasterBank();
@@ -8801,7 +8913,18 @@ Llamo a mi amigo.
 <div class="note-section"><h3>8. Source Coverage &amp; Complete Vocabulary</h3><div class="grammar-rule">本课没有单独 PNG 白板；内容来自 9 月 24 日 Zoom chat。此前 9 月 23 日累计段已归 Lesson 62。共覆盖食物 8 项（含括号三种配料）、3 个原始问题、讨论词汇、关系／交友软件句链、所有大写形式与最后的 YO 对比。</div><div id="notes-vocab-l63"></div></div>
 </div></div>
 
-<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v48.0<br>Updated: 2026-09-25<br>Changes: added Lessons 60–63 from whiteboards and Zoom chat · preserved uppercase, color, arrows and correction chains · prioritized lesson-objective triggers and forms · expanded Master Review with stable skill IDs</div>
+<div class="scr" id="s-notes-l64">
+<div class="hdr"><button class="back" onclick="goHome()">‹</button><div><div class="hdr-title">Lesson 64 Notes</div><div class="hdr-sub">Nested Opinions, Mulan &amp; Si vs Cuando</div></div></div>
+<div style="padding:18px">
+<div class="note-section"><h3>1. Nested Mood: “Es importante que…”</h3><div class="grammar-rule"><em>Es importante que <strong>NO pienses que</strong> + subjuntivo.</em><br><em>Es importante que <strong>PIENSES que</strong> + indicativo.</em><br><strong>关键：</strong><em>pienses</em> 本身两句都由外层 <em>es importante que</em> 触发，所以都是现在虚拟式。截图第二行的 “PIENSES + indicativo” 指的是 <em>pienses que</em> 后面的<strong>内层从句</strong>：肯定“你认为……”时通常用直陈式；<em>no pienses que</em> 否定观点时，内层通常用虚拟式。</div></div>
+<div class="note-section"><h3>2. Mulan — Opinion vs Emotion</h3><div class="grammar-rule"><em>Creo que Mulán <strong>es</strong> una mujer muy fuerte.</em> — 肯定观点 → indicativo。<br><em>Me alegra que Mulán <strong>sea</strong> popular en México.</em> — 情绪反应 → subjuntivo。</div></div>
+<div class="note-section"><h3>3. Mushu — Truth vs Negated Truth</h3><div class="grammar-rule"><em>Es verdad que Mushu <strong>es</strong> muy interesante en la película.</em> — 肯定事实 → indicativo。<br><em>No es verdad que Mushu <strong>esté</strong> en la película live action.</em> — 否定命题 → subjuntivo。<br>更自然的西语可说 <em>película de acción real</em>；Notes 保留课堂的 <em>live action</em> 原表达。</div></div>
+<div class="note-section"><h3>4. Desired / Indefinite Referent</h3><div class="grammar-rule"><em>Espero que <strong>haya</strong> una película live action que <strong>tenga a Mushu</strong>.</em><br><em>Espero que</em> 触发 <em>haya</em>；这部电影还是希望中的、未确定的对象，所以描述它的关系从句用 <em>que tenga…</em>。截图中的 “A mushu” 规范为 <em>a Mushu</em>。</div></div>
+<div class="note-section"><h3>5. SI vs CUANDO — Core Contrast</h3><div class="grammar-rule"><em><strong>Si tengo</strong> tiempo, iré al gimnasio.</em><br>现实／开放条件：<strong>si + presente de indicativo</strong>。本课要避免 *<em>si tenga</em>；现在虚拟式不用于这种 si 条件从句。<br><br><em><strong>Cuando tenga</strong> tiempo, iré al gimnasio.</em><br>未来尚未发生的时间从句：<strong>cuando + presente de subjuntivo</strong>。这正是截图绿色下划线强调的对比。</div></div>
+<div class="note-section"><h3>6. Vocabulary Selection under BUG-014</h3><div class="grammar-rule">Lesson 64 的 Daily Review 只主动背本课高复用 B1 结构：nested opinion、truth/negated truth、emotion trigger、desired referent、<em>si</em> vs <em>cuando</em>。<em>película de acción real / live action</em> 作为课堂主题词保留在 Notes，但标记为 recognition-only，不占默认每日 60 词容量。</div><div id="notes-vocab-l64"></div></div>
+</div></div>
+
+<div style="padding:20px;text-align:center;font-size:12px;color:#9B8EC4">Index Version: v49.2<br>Updated: 2026-09-27<br>Changes: audited vocabulary across Lessons 1–64 · split distinct lexical items into one-card-per-item · retained morphology/grammar contrasts as grouped grammar cards · BUG-014 active-vs-recognition eligibility remains enforced · expanded Master Review through Lesson 64</div>
 
 </body>
 </html>
